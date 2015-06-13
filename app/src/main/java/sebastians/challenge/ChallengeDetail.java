@@ -21,6 +21,7 @@ public class ChallengeDetail extends ActionBarActivity {
         mAssociatedChallengeDatabaseId = getIntent().getLongExtra(INTENT_CHALLENGE_ID, -1);
         if (mAssociatedChallengeDatabaseId == -1)
             throw new IllegalArgumentException("No challenge database ID provided.");
+        setTitle("Challenge title");
     }
 
 

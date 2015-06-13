@@ -8,5 +8,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/challenge_list"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+    />
+
+    <ImageButton
+        style="@style/FAB.Final"
+        android:id="@+id/addChallengeButton"
+    />
 </RelativeLayout>

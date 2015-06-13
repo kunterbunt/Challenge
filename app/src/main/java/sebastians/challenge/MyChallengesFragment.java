@@ -37,13 +37,16 @@ public class MyChallengesFragment extends Fragment {
         mChallengeList = new ArrayList<>();
         mChallengeList.add(new Challenge("Test", 1));
 
-        DatabaseHelper db = new DatabaseHelper(getActivity().getApplicationContext());
-        mChallengeList.addAll(db.getAllChallenges());
+//        DatabaseHelper db = new DatabaseHelper(getActivity().getApplicationContext());
+//        mChallengeList.addAll(db.getAllChallenges());
 
+        // Set challenge list view adapter.
         challengeList.setAdapter(new ChallengeAdapter(getActivity().getApplicationContext(), mChallengeList));
         challengeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // When a challenge card is clicked, start its detail activity.
+                // For that, pass the corresponding database id to the detail activity.
                 Intent intent = new Intent(getActivity().getApplicationContext(), ChallengeDetail.class);
                 intent.putExtra(ChallengeDetail.INTENT_CHALLENGE_ID, mChallengeList.get(position).getDatabaseId());
                 startActivity(intent);
