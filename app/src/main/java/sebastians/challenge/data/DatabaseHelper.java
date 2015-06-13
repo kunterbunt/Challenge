@@ -19,6 +19,7 @@ import sebastians.challenge.data.interfaces.TitleDescriptionColumns;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "challenge_db";
     public static final String LOG_TAG = "DB";
 
     private SQLiteDatabase writableDatabase;
@@ -28,7 +29,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
-
+    private DatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        writableDatabase = super.getWritableDatabase();
+        readableDatabase = super.getReadableDatabase();
+    }
 
     public Challenge getChallenge(int id){
         return null;
