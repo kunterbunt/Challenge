@@ -87,6 +87,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public List<ChallengeItem> getChallengeItemsForChallengeId(long id){
         List<ChallengeItem> challengeItems = new ArrayList<>();
         Cursor cursor = readableDatabase.query(
@@ -187,6 +192,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv = new ContentValues();
         cv.put(Contract.ChallengeItemEntry.CHALLENGE,id);
         cv.put(Contract.ChallengeItemEntry.TITLE,"DAY ONE");
+        cv.put(Contract.ChallengeItemEntry.DESCRIPTION,"DAY ONE DESC");
         cv.put(Contract.ChallengeItemEntry.ORDER, 0);
         cv.put(Contract.ChallengeItemEntry.TIME_AFTER_PREV,0);
         long itemId = writableDatabase.insert(Contract.ChallengeItemEntry.TABLE_NAME,null,cv);
