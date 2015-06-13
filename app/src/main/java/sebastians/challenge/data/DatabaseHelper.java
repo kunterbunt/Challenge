@@ -1,9 +1,12 @@
 package sebastians.challenge.data;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+
+import sebastians.challenge.data.interfaces.TitleDescriptionColumns;
 
 /**
  * Created by sebastian on 13/06/15.
@@ -35,9 +38,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * populate 
+     * populate database with default Challenges etc.
      */
     private void createDefaultData(){
+        ContentValues cv = new ContentValues();
+        cv.put(Contract.ChallengeEntry.TITLE, "Smoothie Challenge");
+        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Smoothie Challenge <b>Description</b>");
+        long id = writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME,null,cv);
 
     }
 
@@ -45,7 +52,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+
+        db.execSQL(Contract.SQL_DROP_TABLE_CHALLENGES);
 
     }
 
@@ -63,22 +72,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
+        // Challenges
+
 
         protected static final String SQL_CREATE_TABLE_CHALLENGES =
                 "CREATE TABLE " + ChallengeEntry.TABLE_NAME + " (" +
                         ChallengeEntry._ID + " INTEGER PRIMARY KEY, " +
-                        ChallengeEntry.COLUMN_NAME_TITLE + TYPE_TEXT + NOT_NULL  + COMMA_SEP +
-                        ChallengeEntry.COLUMN_NAME_DESCRIPTION + TYPE_TEXT + NOT_NULL  +
+                        ChallengeEntry.TITLE + TYPE_TEXT + NOT_NULL  + COMMA_SEP +
+                        ChallengeEntry.DESCRIPTION + TYPE_TEXT + NOT_NULL  +
                         " )";
 
         protected static final String SQL_DROP_TABLE_CHALLENGES =
                 "DROP TABLE IF EXISTS " + ChallengeEntry.TABLE_NAME;
 
-        protected static abstract class ChallengeEntry implements BaseColumns {
-            public static final String TABLE_NAME = "challenge";
-            public static final String COLUMN_NAME_TITLE = "title";
-            public static final String COLUMN_NAME_DESCRIPTION = "title";
+        protected static abstract class ChallengeEntry implements BaseColumns, TitleDescriptionColumns {
+            public static final String TABLE_NAME = "challenges";
+
         }
+
+        //ChallengeItem
+
+        protected static abstract class ChallengeItemEntry implements BaseColumns, TitleDescriptionColumns {
+            public static final String TABLE_NAME = "challengeitems";
+        }
+
+
+
+
     }
 
 
