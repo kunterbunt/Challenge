@@ -5,4 +5,5 @@
     <string name="name">Name</string>
     <string name="title_activity_challenge_detail">Challenge</string>
     <string name="description">Description</string>
+    <string name="title_activity_photo_test">PhotoTest</string>
 </resources>
