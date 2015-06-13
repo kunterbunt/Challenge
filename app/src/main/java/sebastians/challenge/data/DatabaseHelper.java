@@ -19,7 +19,7 @@ import sebastians.challenge.data.interfaces.TitleDescriptionColumns;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "challenge_db";
     public static final String LOG_TAG = "DB";
 
@@ -38,7 +38,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (instance == null) {
             instance = new DatabaseHelper(context);
 
-            instance.createDefaultData();
+            if(instance.getAllChallenges().size() == 0)
+                instance.createDefaultData();
             Log.i(LOG_TAG, "Database instantiated.");
         } else
             Log.e(LOG_TAG, "Attempted to re-instantiate database.");
