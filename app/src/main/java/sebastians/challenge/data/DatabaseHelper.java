@@ -87,6 +87,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return challenges;
     }
 
+    /**
+     * request challenge by id
+     * @param id
+     * @return challenge object from database
+     */
+    public Challenge getChallengeById(long id){
+        Cursor cursor = readableDatabase.query(
+                Contract.ChallengeEntry.TABLE_NAME,
+                new String[]{Contract.ChallengeEntry._ID,Contract.ChallengeEntry.TITLE},
+                Contract.ChallengeItemEntry.CHALLENGE + " = ?",
+                new String[]{String.valueOf(id)},
+                null,
+                null,
+                null);
+
+            Challenge challenge;
+            long challengeDbId = cursor.getColumnIndexOrThrow(Contract.ChallengeEntry._ID);
+            challenge = new Challenge(
+                    cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.TITLE)),
+                    challengeDbId,
+                    this.getChallengeItemsForChallengeId(challengeDbId)
+            );
+
+        return challenge;
+    }
+
 
     /**
      *
