@@ -111,7 +111,7 @@
             <!-- Button pressed -->
             <item>
                 <shape android:shape="oval">
-                    <solid android:color="@color/app_color_dark"/>
+                    <solid android:color="@color/dark_gray"/>
                 </shape>
             </item>
         </layer-list>

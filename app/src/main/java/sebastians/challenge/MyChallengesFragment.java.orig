@@ -37,12 +37,18 @@ public class MyChallengesFragment extends Fragment {
         mChallengeList = new ArrayList<>();
         mChallengeList.add(new Challenge("Test", 1));
 
+<<<<<<< HEAD
         DatabaseHelper.init(getActivity().getApplicationContext());
 
         DatabaseHelper db = DatabaseHelper.getInstance();
 
         mChallengeList.addAll(db.getAllChallenges());
+=======
+//        DatabaseHelper db = new DatabaseHelper(getActivity().getApplicationContext());
+//        mChallengeList.addAll(db.getAllChallenges());
+>>>>>>> ef0b472d8ca7bbbef60d5311973735b2586d2df0
 
+        // Set challenge list view adapter.
         challengeList.setAdapter(new ChallengeAdapter(getActivity().getApplicationContext(), mChallengeList));
         challengeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
