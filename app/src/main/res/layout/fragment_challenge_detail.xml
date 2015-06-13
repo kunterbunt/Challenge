@@ -50,6 +50,7 @@
                 android:layout_height="fill_parent"
                 android:gravity="bottom|center_horizontal">
 
+
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
