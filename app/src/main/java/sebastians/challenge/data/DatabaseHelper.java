@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.media.Image;
 import android.provider.BaseColumns;
 
 import sebastians.challenge.data.interfaces.TitleDescriptionColumns;
@@ -31,6 +32,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //create tables:
         db.execSQL(Contract.SQL_CREATE_TABLE_CHALLENGES);
+        db.execSQL(Contract.SQL_CREATE_TABLE_CHALLENGEITEMS);
+        db.execSQL(Contract.SQL_CREATE_TABLE_IMAGES);
 
 
         this.createDefaultData();
@@ -50,7 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     /**
-     * TODO add some logic 
+     * TODO add some logic
      * @param db
      * @param i
      * @param i1
@@ -60,6 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL(Contract.SQL_DROP_TABLE_CHALLENGES);
         db.execSQL(Contract.SQL_DROP_TABLE_CHALLENGEITEMS);
+        db.execSQL(Contract.SQL_DROP_TABLE_IMAGES);
 
         this.onCreate(db);
 
@@ -69,9 +73,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     private static class Contract {
+
         private static final String TYPE_TEXT = " TEXT ";
         private static final String TYPE_INTEGER = " INTEGER ";
         private static final String TYPE_FLOAT = " FLOAT ";
+        private static final String TYPE_PRIMARY = " INTEGER PRIMARY KEY ";
         private static final String COMMA_SEP = ",";
         private static final String DEFAULT = " DEFAULT ";
         private static final String NOT_NULL = " NOT NULL ";
@@ -81,10 +87,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // Challenges
 
+        protected static abstract class ChallengeEntry implements BaseColumns, TitleDescriptionColumns {
+            public static final String TABLE_NAME = "challenges";
+
+        }
 
         protected static final String SQL_CREATE_TABLE_CHALLENGES =
                 "CREATE TABLE " + ChallengeEntry.TABLE_NAME + " (" +
-                        ChallengeEntry._ID + " INTEGER PRIMARY KEY, " +
+                        ChallengeEntry._ID + TYPE_PRIMARY + ", " +
                         ChallengeEntry.TITLE + TYPE_TEXT + NOT_NULL  + COMMA_SEP +
                         ChallengeEntry.DESCRIPTION + TYPE_TEXT + NOT_NULL  +
                         " )";
@@ -92,10 +102,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         protected static final String SQL_DROP_TABLE_CHALLENGES =
                 "DROP TABLE IF EXISTS " + ChallengeEntry.TABLE_NAME;
 
-        protected static abstract class ChallengeEntry implements BaseColumns, TitleDescriptionColumns {
-            public static final String TABLE_NAME = "challenges";
 
-        }
 
         //ChallengeItem
 
@@ -110,7 +117,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         protected static final String SQL_CREATE_TABLE_CHALLENGEITEMS =
                 "CREATE TABLE " + ChallengeItemEntry.TABLE_NAME + "(" +
-                        ChallengeItemEntry._ID + " INTEGER PRIMARY KEY, " +
+                        ChallengeItemEntry._ID + TYPE_PRIMARY + ", " +
                         ChallengeItemEntry.TITLE + TYPE_TEXT + NOT_NULL + COMMA_SEP +
                         ChallengeItemEntry.DESCRIPTION + TYPE_TEXT + NOT_NULL + COMMA_SEP +
                         ChallengeItemEntry.CHALLENGE + TYPE_INTEGER + NOT_NULL + COMMA_SEP +
@@ -120,9 +127,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         ChallengeItemEntry.DONE + TYPE_INTEGER + DEFAULT + " 0 " + COMMA_SEP +
                         "FOREIGN KEY (" + ChallengeItemEntry.CHALLENGE + ") REFERENCES " + ChallengeEntry.TABLE_NAME + "(" + ChallengeEntry ._ID + ")"  +
                         ")";
+
         protected static final String SQL_DROP_TABLE_CHALLENGEITEMS =
                 "DROP TABLE IF EXISTS " + ChallengeItemEntry.TABLE_NAME;
 
+
+        //images
+
+        protected static abstract class ImageEntry implements BaseColumns {
+            public static final String TABLE_NAME = "images";
+            public static final String PATH = "path";
+
+        }
+
+        protected static final String SQL_CREATE_TABLE_IMAGES =
+                "CREATE TABLE " + ImageEntry.TABLE_NAME + "(" +
+                        ImageEntry._ID + TYPE_PRIMARY + ", " +
+                        ImageEntry.PATH + TYPE_TEXT +
+                ")";
+
+        protected static final String SQL_DROP_TABLE_IMAGES =
+                "DROP TABLE IF EXISTS " + ImageEntry.TABLE_NAME;
+
+
+        protected static abstract class Item2ImageEntry implements BaseColumns {
+            public static final String TABLE_NAME = "items2images";
+            public static final String IMAGE = "imageid";
+            public static final String CHALLENGEITEM = "itemid";
+        }
+
+        protected static final String SQL_CREATE_TABLE_ITEMS2IMAGES =
+                "CREATE TABLE " + Item2ImageEntry.TABLE_NAME + "(" +
+                        Item2ImageEntry._ID + TYPE_PRIMARY + ", " +
+                        Item2ImageEntry.IMAGE + TYPE_INTEGER + NOT_NULL + COMMA_SEP +
+                        Item2ImageEntry.CHALLENGEITEM + TYPE_INTEGER + NOT_NULL + COMMA_SEP +
+                        "FOREIGN KEY (" + Item2ImageEntry.IMAGE + ") REFERENCES " + ImageEntry.TABLE_NAME + "(" + ImageEntry ._ID + "),"  +
+                        "FOREIGN KEY (" + Item2ImageEntry.CHALLENGEITEM + ") REFERENCES " + ChallengeItemEntry.TABLE_NAME + "(" + ChallengeItemEntry ._ID + ")"  +
+                        ")";
 
 
     }
