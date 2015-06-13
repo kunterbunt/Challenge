@@ -37,7 +37,10 @@ public class MyChallengesFragment extends Fragment {
         mChallengeList = new ArrayList<>();
         mChallengeList.add(new Challenge("Test", 1));
 
-        DatabaseHelper db = new DatabaseHelper(getActivity().getApplicationContext());
+        DatabaseHelper.init(getActivity().getApplicationContext());
+
+        DatabaseHelper db = DatabaseHelper.getInstance();
+
         mChallengeList.addAll(db.getAllChallenges());
 
         challengeList.setAdapter(new ChallengeAdapter(getActivity().getApplicationContext(), mChallengeList));

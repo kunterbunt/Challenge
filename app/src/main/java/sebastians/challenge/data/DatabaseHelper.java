@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.media.Image;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +25,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private SQLiteDatabase writableDatabase;
     private SQLiteDatabase readableDatabase;
+    public static DatabaseHelper instance = null;
 
 
-    public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
-    }
-    public DatabaseHelper(Context context) {
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         writableDatabase = super.getWritableDatabase();
         readableDatabase = super.getReadableDatabase();
+    }
+
+    public static void init(Context context) {
+        if (instance == null) {
+            instance = new DatabaseHelper(context);
+
+            instance.createDefaultData();
+            Log.i(LOG_TAG, "Database instantiated.");
+        } else
+            Log.e(LOG_TAG, "Attempted to re-instantiate database.");
+    }
+
+    public static DatabaseHelper getInstance() {
+        return instance;
+    }
+
+    public static void stop() {
+        instance.writableDatabase.close();
+        instance.readableDatabase.close();
+        Log.i(LOG_TAG, "Database connection closed.");
     }
 
     public Challenge getChallenge(int id){
@@ -48,7 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Challenge> challenges = new ArrayList<>();
         Cursor cursor = readableDatabase.query(
                 Contract.ChallengeEntry.TABLE_NAME,
-                null,
+                new String[]{Contract.ChallengeEntry._ID,Contract.ChallengeEntry.TITLE},
                 null,
                 null,
                 null,
@@ -56,12 +75,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null);
         while (cursor.moveToNext()) {
             Challenge challenge;
-            long _id = cursor.getLong(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry._ID));
-            String title = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.TITLE));
-
+            long challengeDbId = cursor.getColumnIndexOrThrow(Contract.ChallengeEntry._ID);
             challenge = new Challenge(
                     cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.TITLE)),
-                    cursor.getLong(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry._ID))
+                    challengeDbId,
+                    this.getChallengeItemsForChallengeId(challengeDbId)
                     );
             challenges.add(challenge);
         }
@@ -69,12 +87,79 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public List<ChallengeItem> getChallengeItemsForChallengeId(long id){
+        List<ChallengeItem> challengeItems = new ArrayList<>();
+        Cursor cursor = readableDatabase.query(
+                Contract.ChallengeItemEntry.TABLE_NAME,
+                new String[]{Contract.ChallengeItemEntry._ID,
+                        Contract.ChallengeItemEntry.TITLE,
+                        Contract.ChallengeItemEntry.DESCRIPTION,
+
+                },
+                Contract.ChallengeItemEntry.CHALLENGE + " = ?",
+                new String[]{String.valueOf(id)},
+                null,
+                null,
+                Contract.ChallengeItemEntry.ORDER);
+
+        while (cursor.moveToNext()) {
+
+            List<ImagePath> imagePaths = new ArrayList<>();
+            long itemId = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry._ID));
+
+            Cursor imgsIdsCursor = readableDatabase.query(
+                    Contract.Item2ImageEntry.TABLE_NAME,
+                    new String[]{Contract.Item2ImageEntry.CHALLENGEITEM,
+                            Contract.Item2ImageEntry.IMAGE,
+                    },
+                    Contract.Item2ImageEntry.CHALLENGEITEM + " = ?",
+                    new String[]{String.valueOf(itemId)},
+                    null,
+                    null,
+                    null);
+
+
+            while (imgsIdsCursor.moveToNext()){
+                long imageId  = imgsIdsCursor.getInt(cursor.getColumnIndexOrThrow(Contract.Item2ImageEntry.IMAGE));
+                Cursor imgsCursor = readableDatabase.query(
+                        Contract.ImageEntry.TABLE_NAME,
+                        new String[]{Contract.ImageEntry.PATH
+                        },
+                        Contract.ImageEntry._ID + " = ?",
+                        new String[]{String.valueOf(imageId)},
+                        null,
+                        null,
+                        null);
+
+                String imgPath = imgsCursor.getString(cursor.getColumnIndexOrThrow(Contract.ImageEntry.PATH));
+                long imgDbId = imgsCursor.getInt(cursor.getColumnIndexOrThrow(Contract.ImageEntry._ID));
+                ImagePath imagePath = new ImagePath(imgPath,imgDbId);
+                imagePaths.add(imagePath);
+            }
+
+
+
+            ChallengeItem challengeItem = new ChallengeItem(
+                    cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry.TITLE)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry._ID)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry.TIME_AFTER_PREV)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry.ORDER)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry.DONE)) > 0,
+                    new ImagePath(cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry.SELFIE))),
+                    imagePaths);
+
+            challengeItems.add(challengeItem);
+
+        }
+
+        return challengeItems;
+    }
+
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        writableDatabase = super.getWritableDatabase();
-        readableDatabase = super.getReadableDatabase();
+
 
         //create tables:
         db.execSQL(Contract.SQL_CREATE_TABLE_CHALLENGES);
@@ -83,7 +168,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(Contract.SQL_CREATE_TABLE_ITEMS2IMAGES);
 
 
-        this.createDefaultData();
+
 
     }
 
@@ -91,10 +176,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * populate database with default Challenges etc.
      */
     private void createDefaultData(){
+
+        //add first challenge to database
         ContentValues cv = new ContentValues();
         cv.put(Contract.ChallengeEntry.TITLE, "Smoothie Challenge");
         cv.put(Contract.ChallengeEntry.DESCRIPTION, "Smoothie Challenge <b>Description</b>");
         long id = writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME,null,cv);
+
+        //add item to challenge
+        cv = new ContentValues();
+        cv.put(Contract.ChallengeItemEntry.CHALLENGE,id);
+        cv.put(Contract.ChallengeItemEntry.TITLE,"DAY ONE");
+        cv.put(Contract.ChallengeItemEntry.ORDER, 0);
+        cv.put(Contract.ChallengeItemEntry.TIME_AFTER_PREV,0);
+        long itemId = writableDatabase.insert(Contract.ChallengeItemEntry.TABLE_NAME,null,cv);
+
+        //add image to challenge item
+        cv = new ContentValues();
+        cv.put(Contract.ImageEntry.PATH,"IMAGEPATH1");
+        long imageId = writableDatabase.insert(Contract.ImageEntry.TABLE_NAME,null,cv);
+
+        //link challenge item and image!
+        cv = new ContentValues();
+        cv.put(Contract.Item2ImageEntry.IMAGE,imageId);
+        cv.put(Contract.Item2ImageEntry.CHALLENGEITEM,itemId);
+        writableDatabase.insert(Contract.Item2ImageEntry.TABLE_NAME, null,cv);
+
+
 
     }
 
