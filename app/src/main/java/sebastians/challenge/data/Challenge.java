@@ -7,6 +7,13 @@ import android.database.Cursor;
  */
 public class Challenge {
 
+    private String mName;
+    private long mDatabaseId;
+
+    public Challenge(String name, long databaseId) {
+        mName = name;
+        mDatabaseId = databaseId;
+    }
     /**
      * parse Challenge Object from Cursor
      * @param cursor
@@ -14,5 +21,21 @@ public class Challenge {
     public Challenge(Cursor cursor){
 
 
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(String mName) {
+        this.mName = mName;
+    }
+
+    public long getDatabaseId() {
+        return mDatabaseId;
+    }
+
+    public void setDatabaseId(long mDatabaseId) {
+        this.mDatabaseId = mDatabaseId;
     }
 }
