@@ -24,6 +24,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sebastians.challenge.MyChallenges" />
         </activity>
+        <activity
+            android:name=".AddChallenge"
+            android:label="@string/title_activity_add_challenge"
+            android:parentActivityName=".MyChallenges" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sebastians.challenge.MyChallenges" />
+        </activity>
     </application>
 
 </manifest>

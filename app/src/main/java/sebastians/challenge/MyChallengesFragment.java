@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -33,16 +34,13 @@ public class MyChallengesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_challenges, container, false);
+        // Get ListView.
         ListView challengeList = (ListView) view.findViewById(R.id.challenge_list);
-        mChallengeList = new ArrayList<>();
-        mChallengeList.add(new Challenge("Test", 1));
-
+        // Initialize database connection.
         DatabaseHelper.init(getActivity().getApplicationContext());
-
         DatabaseHelper db = DatabaseHelper.getInstance();
-
-        mChallengeList.addAll(db.getAllChallenges());
-
+        // Load challenges from database.
+        mChallengeList = db.getAllChallenges();
         challengeList.setAdapter(new ChallengeAdapter(getActivity().getApplicationContext(), mChallengeList));
         challengeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -52,6 +50,13 @@ public class MyChallengesFragment extends Fragment {
                 Intent intent = new Intent(getActivity().getApplicationContext(), ChallengeDetail.class);
                 intent.putExtra(ChallengeDetail.INTENT_CHALLENGE_ID, mChallengeList.get(position).getDatabaseId());
                 startActivity(intent);
+            }
+        });
+        // Set add challenge button listener.
+        ((ImageButton) view.findViewById(R.id.addChallengeButton)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity().getApplicationContext(), AddChallenge.class));
             }
         });
         return view;

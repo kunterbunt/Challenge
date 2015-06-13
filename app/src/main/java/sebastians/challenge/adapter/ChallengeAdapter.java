@@ -15,7 +15,7 @@ import sebastians.challenge.data.Challenge;
 /**
  * Created by kunterbunt on 13.06.15.
  */
-public class ChallengeAdapter extends ArrayAdapter<Challenge> {
+public class ChallengeAdapter extends ListAdapter<Challenge> {
 
     private static final int resource = R.layout.listitem_challenge;
 
@@ -24,12 +24,7 @@ public class ChallengeAdapter extends ArrayAdapter<Challenge> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Inflate.
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View view = inflater.inflate(resource, parent, false);
-        // Set name.
+    public void style(View view, int position) {
         ((TextView) view.findViewById(R.id.name)).setText(getItem(position).getName());
-        return view;
     }
 }
