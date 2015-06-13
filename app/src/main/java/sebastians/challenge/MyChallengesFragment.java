@@ -16,6 +16,7 @@ import java.util.List;
 
 import sebastians.challenge.adapter.ChallengeAdapter;
 import sebastians.challenge.data.Challenge;
+import sebastians.challenge.data.DatabaseHelper;
 
 
 /**
@@ -35,6 +36,10 @@ public class MyChallengesFragment extends Fragment {
         ListView challengeList = (ListView) view.findViewById(R.id.challenge_list);
         mChallengeList = new ArrayList<>();
         mChallengeList.add(new Challenge("Test", 1));
+
+        DatabaseHelper db = new DatabaseHelper(getActivity().getApplicationContext());
+        mChallengeList.addAll(db.getAllChallenges());
+
         challengeList.setAdapter(new ChallengeAdapter(getActivity().getApplicationContext(), mChallengeList));
         challengeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

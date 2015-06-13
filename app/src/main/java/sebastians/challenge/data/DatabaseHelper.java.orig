@@ -26,14 +26,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private SQLiteDatabase readableDatabase;
 
 
+<<<<<<< HEAD
+
+    private DatabaseHelper(Context context) {
+=======
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
     public DatabaseHelper(Context context) {
+>>>>>>> 641a132e608bcdf1d9b870d13d37bc8e4582ed38
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         writableDatabase = super.getWritableDatabase();
         readableDatabase = super.getReadableDatabase();
     }
+
 
     public Challenge getChallenge(int id){
         return null;
