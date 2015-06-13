@@ -49,12 +49,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-
+    /**
+     * TODO add some logic 
+     * @param db
+     * @param i
+     * @param i1
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
 
         db.execSQL(Contract.SQL_DROP_TABLE_CHALLENGES);
+        db.execSQL(Contract.SQL_DROP_TABLE_CHALLENGEITEMS);
+
+        this.onCreate(db);
 
     }
 
@@ -94,8 +101,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         protected static abstract class ChallengeItemEntry implements BaseColumns, TitleDescriptionColumns {
             public static final String TABLE_NAME = "challengeitems";
+            public static final String CHALLENGE = "challengeid";
+            public static final String TIME_AFTER_PREV = "timeafterprev";
+            public static final String ORDER = "position";
+            public static final String SELFIE = "selfie";
+            public static final String DONE = "done";
         }
 
+        protected static final String SQL_CREATE_TABLE_CHALLENGEITEMS =
+                "CREATE TABLE " + ChallengeItemEntry.TABLE_NAME + "(" +
+                        ChallengeItemEntry._ID + " INTEGER PRIMARY KEY, " +
+                        ChallengeItemEntry.TITLE + TYPE_TEXT + NOT_NULL + COMMA_SEP +
+                        ChallengeItemEntry.DESCRIPTION + TYPE_TEXT + NOT_NULL + COMMA_SEP +
+                        ChallengeItemEntry.CHALLENGE + TYPE_INTEGER + NOT_NULL + COMMA_SEP +
+                        ChallengeItemEntry.TIME_AFTER_PREV + TYPE_INTEGER  + COMMA_SEP +
+                        ChallengeItemEntry.ORDER + TYPE_INTEGER + NOT_NULL + COMMA_SEP +
+                        ChallengeItemEntry.SELFIE + TYPE_TEXT  + COMMA_SEP +
+                        ChallengeItemEntry.DONE + TYPE_INTEGER + DEFAULT + " 0 " + COMMA_SEP +
+                        "FOREIGN KEY (" + ChallengeItemEntry.CHALLENGE + ") REFERENCES " + ChallengeEntry.TABLE_NAME + "(" + ChallengeEntry ._ID + ")"  +
+                        ")";
+        protected static final String SQL_DROP_TABLE_CHALLENGEITEMS =
+                "DROP TABLE IF EXISTS " + ChallengeItemEntry.TABLE_NAME;
 
 
 
