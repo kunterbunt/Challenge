@@ -14,14 +14,7 @@ public class Challenge {
         mName = name;
         mDatabaseId = databaseId;
     }
-    /**
-     * parse Challenge Object from Cursor
-     * @param cursor
-     */
-    public Challenge(Cursor cursor){
 
-
-    }
 
     public String getName() {
         return mName;

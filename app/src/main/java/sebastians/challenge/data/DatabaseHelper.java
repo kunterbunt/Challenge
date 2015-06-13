@@ -2,10 +2,14 @@ package sebastians.challenge.data;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.media.Image;
 import android.provider.BaseColumns;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import sebastians.challenge.data.interfaces.TitleDescriptionColumns;
 
@@ -25,6 +29,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, name, factory, version);
     }
 
+
+    public Challenge getChallenge(int id){
+        return null;
+    }
+
+    /**
+     * Fetch alle Challenges from database
+     * @return List of Challenges
+     */
+    public List<Challenge> getAllChallenges(){
+
+        List<Challenge> challenges = new ArrayList<>();
+        Cursor cursor = readableDatabase.query(
+                Contract.ChallengeEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+        while (cursor.moveToNext()) {
+            Challenge challenge;
+            long _id = cursor.getLong(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry._ID));
+            String title = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.TITLE));
+
+            challenge = new Challenge(
+                    cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.TITLE)),
+                    cursor.getLong(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry._ID))
+                    );
+            challenges.add(challenge);
+        }
+        return challenges;
+    }
+
+
+
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         writableDatabase = super.getWritableDatabase();
@@ -34,6 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(Contract.SQL_CREATE_TABLE_CHALLENGES);
         db.execSQL(Contract.SQL_CREATE_TABLE_CHALLENGEITEMS);
         db.execSQL(Contract.SQL_CREATE_TABLE_IMAGES);
+        db.execSQL(Contract.SQL_CREATE_TABLE_ITEMS2IMAGES);
 
 
         this.createDefaultData();
@@ -64,6 +106,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(Contract.SQL_DROP_TABLE_CHALLENGES);
         db.execSQL(Contract.SQL_DROP_TABLE_CHALLENGEITEMS);
         db.execSQL(Contract.SQL_DROP_TABLE_IMAGES);
+        db.execSQL(Contract.SQL_DROP_TABLE_ITEMS2IMAGES);
+
 
         this.onCreate(db);
 
@@ -164,6 +208,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "FOREIGN KEY (" + Item2ImageEntry.IMAGE + ") REFERENCES " + ImageEntry.TABLE_NAME + "(" + ImageEntry ._ID + "),"  +
                         "FOREIGN KEY (" + Item2ImageEntry.CHALLENGEITEM + ") REFERENCES " + ChallengeItemEntry.TABLE_NAME + "(" + ChallengeItemEntry ._ID + ")"  +
                         ")";
+
+        protected static final String SQL_DROP_TABLE_ITEMS2IMAGES =
+                "DROP TABLE IF EXISTS " + Item2ImageEntry.TABLE_NAME;
 
 
     }
