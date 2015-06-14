@@ -1,6 +1,7 @@
 package sebastians.challenge.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,7 +16,7 @@ import sebastians.challenge.data.ChallengeItem;
 public class ChallengeItemAdapter extends ListAdapter<ChallengeItem> {
 
     public ChallengeItemAdapter(Context context, List<ChallengeItem> objects) {
-        super(context, R.layout.listitem_subchallenge, objects);
+        super(context, R.layout.listitem_task, objects);
     }
 
     @Override

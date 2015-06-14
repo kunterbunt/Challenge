@@ -2,12 +2,16 @@ package sebastians.challenge.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import java.util.List;
 
@@ -39,16 +43,17 @@ public abstract class ViewPagerAdapterWithAddButton extends ViewPagerAdapter {
         if (position < getCount() - 1)
             return super.instantiateItem(container, position);
         else {
-            ImageButton addButton = new ImageButton(context, null, R.style.FAB_Final);
-            addButton.setBackgroundResource(R.drawable.button_fab);
+            ImageButton addButton = new ImageButton(context);
+            addButton.setImageDrawable(context.getResources().getDrawable(R.mipmap.fab_ic_add));
+            addButton.setColorFilter(context.getResources().getColor(R.color.dark_gray));
+            addButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onAddButtonPressed();
                 }
             });
-//            addButton.setImageDrawable(context.getResources().getDrawable(R.drawable.button_fab));
-
             container.addView(addButton, 0);
             return addButton;
         }

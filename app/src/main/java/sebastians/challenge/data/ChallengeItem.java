@@ -70,4 +70,24 @@ public class ChallengeItem {
     public ImagePath getSelfie(){
         return this.selfie;
     }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public void setTimeAfterPrev(int timeAfterPrev) {
+        this.timeAfterPrev = timeAfterPrev;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
+    }
 }
