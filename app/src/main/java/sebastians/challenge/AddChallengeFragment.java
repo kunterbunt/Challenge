@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.util.List;
 import sebastians.challenge.adapter.ChallengeItemAdapter;
 import sebastians.challenge.adapter.ListAdapter;
 import sebastians.challenge.adapter.ViewPagerAdapter;
+import sebastians.challenge.adapter.ViewPagerAdapterWithAddButton;
 import sebastians.challenge.data.ChallengeItem;
 import sebastians.challenge.data.ImagePath;
 
@@ -70,10 +72,14 @@ public class AddChallengeFragment extends Fragment {
             timeAfterPreviousSpinner.setAdapter(adapter);
             // Populate image pager.
             ViewPager imageSwiper = (ViewPager) rootView.findViewById(R.id.imageSwiper);
-            List<String> imagePaths = new ArrayList<>();
-//            imagePaths.add(Uri.parse());
-            imagePaths.add("drawable://" + R.drawable.rubicscube_up);
-            imageSwiper.setAdapter(new ViewPagerAdapter(getActivity().getApplicationContext(), imagePaths));
+            List<Uri> imagePaths = new ArrayList<>();
+            imagePaths.add(Uri.parse("android.resource://sebastians.challenge/drawable/rubicscube_left"));
+            imageSwiper.setAdapter(new ViewPagerAdapterWithAddButton(getActivity().getApplicationContext(), imagePaths) {
+                @Override
+                public void onAddButtonPressed() {
+                    Log.i("TEST", "pressed");
+                }
+            });
         }
         return rootView;
     }

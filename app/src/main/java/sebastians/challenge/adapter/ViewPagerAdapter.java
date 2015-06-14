@@ -1,9 +1,9 @@
 package sebastians.challenge.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,22 +18,25 @@ import sebastians.challenge.R;
  */
 public class ViewPagerAdapter extends PagerAdapter {
 
+    public static final String LOG_TAG = "ViewPagerAdapter";
+
     private int[] mImages = new int[] {
             R.drawable.rubicscube_up,
             R.drawable.rubicscube_left
     };
 
-    private List<String> mImagePaths = null;
+    protected List<Uri> mImageUris = null;
 
-    private Context context;
+    protected Context context;
 
     public ViewPagerAdapter(Context context){
+        Log.i(LOG_TAG, "Using test-mode of ViewPagerAdapter. Use other constructor for own images.");
         this.context = context;
     }
 
-    public ViewPagerAdapter(Context context, List<String> imagePaths) {
+    public ViewPagerAdapter(Context context, List<Uri> imageUris) {
         this.context = context;
-        mImagePaths = imagePaths;
+        mImageUris = imageUris;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return mImagePaths == null ? mImages.length : mImagePaths.size();
+        return mImageUris == null ? mImages.length : mImageUris.size();
     }
 
     @Override
@@ -53,12 +56,10 @@ public class ViewPagerAdapter extends PagerAdapter {
                 R.dimen.padding_medium);
         imageView.setPadding(padding, padding, padding, padding);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        if (mImagePaths == null) {
-            Log.i("asd", "nooo");
+        if (mImageUris == null) {
             imageView.setImageResource(mImages[position]);
         } else {
-            Log.i("asd", "YEAH");
-            imageView.setImageURI(Uri.parse(mImagePaths.get(position)));
+            imageView.setImageURI(mImageUris.get(position));
         }
         container.addView(imageView, 0);
         return imageView;

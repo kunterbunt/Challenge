@@ -12,6 +12,7 @@ public class MyChallenges extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_challenges);
+        setTitle(getResources().getString(R.string.overview_title));
     }
 
 
