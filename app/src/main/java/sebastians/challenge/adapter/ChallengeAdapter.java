@@ -32,9 +32,9 @@ public class ChallengeAdapter extends ListAdapterHeader<Challenge> {
     @Override
     public void styleHeader(View view, boolean active) {
         if(active){
-            ((TextView) view.findViewById(R.id.name)).setText("Active");
+            ((TextView) view.findViewById(R.id.name)).setText("Active Challenges");
         }else{
-            ((TextView) view.findViewById(R.id.name)).setText("InActive");
+            ((TextView) view.findViewById(R.id.name)).setText("Inactive Challenges");
         }
     }
 }
