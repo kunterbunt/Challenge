@@ -19,7 +19,7 @@ import sebastians.challenge.data.interfaces.TitleDescriptionColumns;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 8;
     public static final String DATABASE_NAME = "challenge_db";
     public static final String LOG_TAG = "DB";
 
@@ -55,9 +55,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.i(LOG_TAG, "Database connection closed.");
     }
 
-    public Challenge getChallenge(int id){
-        return null;
-    }
 
     /**
      * Fetch alle Challenges from database
@@ -189,6 +186,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ChallengeItem challengeItem = new ChallengeItem(
                     cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry.TITLE)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry._ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry.DESCRIPTION)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry.TIME_AFTER_PREV)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry.ORDER)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry.DONE)) > 0,
@@ -202,6 +200,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return challengeItems;
     }
 
+    /**
+     * save new Challenge entry in database
+     * @param challenge
+     * @return created id!
+     */
+    public Challenge create(Challenge challenge){
+
+        //create challenge in database
+        ContentValues cv = new ContentValues();
+        cv.put(Contract.ChallengeEntry.TITLE, challenge.getName());
+        cv.put(Contract.ChallengeEntry.DESCRIPTION, challenge.getDescription());
+        cv.put(Contract.ChallengeEntry.ACTIVE,0);
+        long challengeId = writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
+
+        //create challenge itemss
+        for(int i = 0; i < challenge.getChallengeItemList().size(); i++){
+            ChallengeItem challengeItem = challenge.getChallengeItemList().get(i);
+            cv = new ContentValues();
+            cv.put(Contract.ChallengeItemEntry.CHALLENGE,challengeId);
+            cv.put(Contract.ChallengeItemEntry.TITLE,challengeItem.getTitle());
+            cv.put(Contract.ChallengeItemEntry.DESCRIPTION,challengeItem.getDescription());
+            cv.put(Contract.ChallengeItemEntry.ORDER, challengeItem.getOrder());
+            cv.put(Contract.ChallengeItemEntry.TIME_AFTER_PREV,challengeItem.getTimeAfterPrev());
+            cv.put(Contract.ChallengeItemEntry.SELFIE,challengeItem.getSelfie().getPath());
+            long itemId = writableDatabase.insert(Contract.ChallengeItemEntry.TABLE_NAME,null,cv);
+
+            for(int j = 0; j < challengeItem.getImagePaths().size(); j++){
+                //insert all image paths to database
+                ImagePath imagePath = challengeItem.getImagePaths().get(j);
+                cv = new ContentValues();
+                cv.put(Contract.ImageEntry.PATH,imagePath.getPath());
+                long imageId = writableDatabase.insert(Contract.ImageEntry.TABLE_NAME,null,cv);
+
+                cv = new ContentValues();
+                cv.put(Contract.Item2ImageEntry.IMAGE,imageId);
+                cv.put(Contract.Item2ImageEntry.CHALLENGEITEM,itemId);
+                writableDatabase.insert(Contract.Item2ImageEntry.TABLE_NAME, null, cv);
+            }
+
+        }
+
+
+        return this.getChallengeById(challengeId);
+    }
 
 
     @Override
@@ -225,11 +267,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void createDefaultData(){
 
         //add first challenge to database
+
+        Challenge smoothieChallenge = new Challenge("Smoothie Challenge");
+
+        //add some ChallengeItems
+        ArrayList<ChallengeItem> challengeItems = new ArrayList<>();
+
+        ChallengeItem challengeItem;
+        challengeItem = new ChallengeItem("Day 1", "Stuff to do");
+        ArrayList<ImagePath> imgs = new ArrayList<>();
+        imgs.add(new ImagePath("d1img1"));
+        imgs.add(new ImagePath("d1img2"));
+        challengeItem.setImagePaths(imgs);
+        challengeItems.add(challengeItem);
+
+        challengeItem = new ChallengeItem("Day 2", "Stuff to do");
+        imgs = new ArrayList<>();
+        imgs.add(new ImagePath("d2img1"));
+        imgs.add(new ImagePath("d2img2"));
+        challengeItem.setImagePaths(imgs);
+        challengeItems.add(challengeItem);
+
+        this.create(smoothieChallenge);
+
+
         ContentValues cv = new ContentValues();
-        cv.put(Contract.ChallengeEntry.TITLE, "Smoothie Challenge");
-        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Smoothie Challenge <b>Description</b>");
-        cv.put(Contract.ChallengeEntry.ACTIVE,1);
-        long id = writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME,null,cv);
 
         cv = new ContentValues();
         cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge");
@@ -289,25 +351,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME,null,cv);
 
 
-        //add item to challenge
-        cv = new ContentValues();
-        cv.put(Contract.ChallengeItemEntry.CHALLENGE,id);
-        cv.put(Contract.ChallengeItemEntry.TITLE,"DAY ONE");
-        cv.put(Contract.ChallengeItemEntry.DESCRIPTION,"DAY ONE DESC");
-        cv.put(Contract.ChallengeItemEntry.ORDER, 0);
-        cv.put(Contract.ChallengeItemEntry.TIME_AFTER_PREV,0);
-        long itemId = writableDatabase.insert(Contract.ChallengeItemEntry.TABLE_NAME,null,cv);
-
-        //add image to challenge item
-        cv = new ContentValues();
-        cv.put(Contract.ImageEntry.PATH,"IMAGEPATH1");
-        long imageId = writableDatabase.insert(Contract.ImageEntry.TABLE_NAME,null,cv);
-
-        //link challenge item and image!
-        cv = new ContentValues();
-        cv.put(Contract.Item2ImageEntry.IMAGE,imageId);
-        cv.put(Contract.Item2ImageEntry.CHALLENGEITEM,itemId);
-        writableDatabase.insert(Contract.Item2ImageEntry.TABLE_NAME, null,cv);
 
 
 

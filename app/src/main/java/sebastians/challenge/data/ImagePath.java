@@ -19,6 +19,10 @@ public class ImagePath {
         this.path = path;
     }
 
+    public ImagePath(){
+        this("");
+    }
+
     public String getPath(){
         return this.path;
     }

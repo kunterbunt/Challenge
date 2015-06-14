@@ -24,6 +24,11 @@ public class Challenge {
         mActive = active;
     }
 
+    public Challenge(String name){
+        this(name,-1,"",false,new ArrayList<ChallengeItem>());
+    }
+
+
     public boolean isActive(){
         return this.mActive;
     }

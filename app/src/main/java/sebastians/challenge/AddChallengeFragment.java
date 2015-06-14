@@ -51,7 +51,7 @@ public class AddChallengeFragment extends Fragment {
             rootView = inflater.inflate(R.layout.fragment_add_challenge_overview, container, false);
             // Set subchallenge list view adapter.
             final List<ChallengeItem> challengeItemList = new ArrayList<>();
-            challengeItemList.add(new ChallengeItem("title", 1, 1, 1, false, new ImagePath("path", 1), new ArrayList<ImagePath>()));
+            challengeItemList.add(new ChallengeItem("title", "desc"));
             ((ListView) rootView.findViewById(R.id.subchallenge_list)).setAdapter(new ChallengeItemAdapter(getActivity(), challengeItemList));
             // Set button listener to add subchallenge.
             ((ImageButton) rootView.findViewById(R.id.addSubchallengeButton)).setOnClickListener(new View.OnClickListener() {
