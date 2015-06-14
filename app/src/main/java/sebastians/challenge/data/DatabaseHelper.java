@@ -238,7 +238,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cv.put(Contract.ChallengeItemEntry.TITLE, task.getTitle());
             cv.put(Contract.ChallengeItemEntry.DESCRIPTION, task.getDescription());
             cv.put(Contract.ChallengeItemEntry.ORDER, task.getOrder());
-            cv.put(Contract.ChallengeItemEntry.TIME_AFTER_PREV, task.getTimeAfterPrev());
+            cv.put(Contract.ChallengeItemEntry.TIME_AFTER_PREV, task.getDurationValidity());
             cv.put(Contract.ChallengeItemEntry.SELFIE, task.getSelfie().getPath());
             long itemId = writableDatabase.insert(Contract.ChallengeItemEntry.TABLE_NAME,null,cv);
 
@@ -305,7 +305,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         imgs.add(new ImagePath("d2img2"));
         task.setImagePaths(imgs);
         task.setOrder(1);
-        task.setTimeAfterPrev(86400);
+        task.setDurationValidity(86400);
         tasks.add(task);
 
         smoothieChallenge.setTaskList(tasks);

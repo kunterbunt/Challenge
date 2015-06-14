@@ -11,18 +11,19 @@ public class Task {
     private String title;
     private String description;
     private long databaseId;
-    private int timeAfterPrev;
+    /** How long, in seconds, is this task valid. */
+    private int durationValidity;
     private int order;
     private boolean done;
     private ImagePath selfie;
     private List<ImagePath> imagePaths;
 
 
-    public Task(String title, long databaseId, String description, int timeAfterPrev, int order, boolean done, ImagePath selfie,
+    public Task(String title, long databaseId, String description, int durationValidity, int order, boolean done, ImagePath selfie,
                 List<ImagePath> images){
         this.title = title;
         this.databaseId = databaseId;
-        this.timeAfterPrev = timeAfterPrev;
+        this.durationValidity = durationValidity;
         this.order = order;
         this.done = done;
         this.selfie = selfie;
@@ -46,8 +47,8 @@ public class Task {
         return this.databaseId;
     }
 
-    public int getTimeAfterPrev(){
-        return this.timeAfterPrev;
+    public int getDurationValidity(){
+        return this.durationValidity;
     }
 
     public boolean isDone(){
@@ -86,10 +87,10 @@ public class Task {
 
     /**
      * time after prev has to be in SECONDS
-     * @param timeAfterPrev
+     * @param durationValidity
      */
-    public void setTimeAfterPrev(int timeAfterPrev) {
-        this.timeAfterPrev = timeAfterPrev;
+    public void setDurationValidity(int durationValidity) {
+        this.durationValidity = durationValidity;
     }
 
     public void setDone(boolean done) {
@@ -101,7 +102,7 @@ public class Task {
         string += "title:" + getTitle() + "\n";
         string += "description:" + getDescription() + "\n";
         string += "order:" + getOrder() + "\n";
-        string += "time:" + getTimeAfterPrev() + "\n";
+        string += "time:" + getDurationValidity() + "\n";
         return string;
     }
 }

@@ -63,7 +63,7 @@ public class Challenge {
         for(int i = 0; i < mTaskList.size(); i++){
             Task task = mTaskList.get(i);
 
-            accumulatedTs += task.getTimeAfterPrev();
+            accumulatedTs += task.getDurationValidity();
 
             if(accumulatedTs > currentTs){
                 return mTaskList.get(i - 1);

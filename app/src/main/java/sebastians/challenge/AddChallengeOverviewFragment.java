@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +61,7 @@ public class AddChallengeOverviewFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), AddChallengeTaskDetail.class);
                 intent.putExtra(AddChallengeTaskDetail.INTENT_TITLE, task.getTitle());
                 intent.putExtra(AddChallengeTaskDetail.INTENT_DESCRIPTION, task.getDescription());
-                intent.putExtra(AddChallengeTaskDetail.INTENT_TIMEAFTERPREV, task.getTimeAfterPrev());
+                intent.putExtra(AddChallengeTaskDetail.INTENT_TIMEAFTERPREV, task.getDurationValidity());
                 startActivityForResult(intent, AddChallengeTaskDetail.REQUEST_SET_DETAIL);
             }
         });
@@ -79,7 +78,7 @@ public class AddChallengeOverviewFragment extends Fragment {
                     Task task = mTaskList.get(mPositionOfLastEditedTask);
                     task.setTitle(data.getStringExtra(AddChallengeTaskDetail.INTENT_TITLE));
                     task.setDescription(data.getStringExtra(AddChallengeTaskDetail.INTENT_DESCRIPTION));
-                    task.setTimeAfterPrev(data.getIntExtra(AddChallengeTaskDetail.INTENT_TIMEAFTERPREV, 1));
+                    task.setDurationValidity(data.getIntExtra(AddChallengeTaskDetail.INTENT_TIMEAFTERPREV, 1));
 
                     mTaskListAdapter.notifyDataSetChanged();
                 }

@@ -41,13 +41,17 @@ public class AddChallengeTaskDetailFragment extends Fragment {
         // Change title when user changed this field's text.
         nameField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 getCastedActivity().setTaskTitle("" + s);
             }
+
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         // Populate spinner.
@@ -56,7 +60,7 @@ public class AddChallengeTaskDetailFragment extends Fragment {
                 R.array.timeAfterPreviousChoices, android.R.layout.simple_spinner_item);
         timeChoiceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         timeChoiceSpinner.setAdapter(timeChoiceAdapter);
-        
+
         // Change timeAfterPrev when user changed the value.
         EditText timeChoiceField = (EditText) getView().findViewById(R.id.timeAfterPreviousField);
         timeChoiceField.addTextChangedListener(new TextWatcher() {
@@ -70,7 +74,7 @@ public class AddChallengeTaskDetailFragment extends Fragment {
                         int time = Integer.parseInt(s.toString());
                         if (timeChoiceSpinner.getSelectedItemId() == 1)
                             time *= 24;
-                        getCastedActivity().setTaskTimeAfterPrevious(time);
+                        getCastedActivity().setTaskTimeAfterPrevious(time * 3600);
                     } catch (NumberFormatException ex) {
                         Log.e(getCastedActivity().LOG_TAG, ex.toString());
                     }
@@ -79,9 +83,18 @@ public class AddChallengeTaskDetailFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {}
         });
-        if (getCastedActivity().getTaskTimeAfterPrevious() > 0)
+        // Time in seconds.
+        int time = getCastedActivity().getTaskTimeAfterPrevious();
+        if (time > 0) {
+            // Time in hours.
+            time /= 3600;
+            // Dividable by 24 hours?
+            if (time % 24 == 0) {
+                timeChoiceSpinner.setSelection(1);
+                time /= 24;
+            }
             timeChoiceField.setText("" + getCastedActivity().getTaskTimeAfterPrevious());
-        else
+        } else
             timeChoiceField.setText("" + 1);
 
         // Set description field watcher.
