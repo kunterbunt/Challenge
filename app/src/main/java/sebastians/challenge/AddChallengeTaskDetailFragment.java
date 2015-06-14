@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -17,6 +18,8 @@ import android.widget.Spinner;
  * A placeholder fragment containing a simple view.
  */
 public class AddChallengeTaskDetailFragment extends Fragment {
+
+    private boolean initializedTimeField = false;
 
     public AddChallengeTaskDetailFragment() {
     }
@@ -54,6 +57,24 @@ public class AddChallengeTaskDetailFragment extends Fragment {
             }
         });
 
+        // Set description field watcher.
+        EditText descriptionField = (EditText) getView().findViewById(R.id.description);
+        descriptionField.setText(getCastedActivity().getTaskDescription());
+        descriptionField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                getCastedActivity().setTaskDescription("" + s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
         // Populate spinner.
         final Spinner timeChoiceSpinner = (Spinner) getView().findViewById(R.id.timeAfterPreviousSpinner);
         ArrayAdapter<CharSequence> timeChoiceAdapter = ArrayAdapter.createFromResource(getActivity(),
@@ -61,54 +82,75 @@ public class AddChallengeTaskDetailFragment extends Fragment {
         timeChoiceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         timeChoiceSpinner.setAdapter(timeChoiceAdapter);
 
+        // Time in seconds.
+        final EditText timeChoiceField = (EditText) getView().findViewById(R.id.timeAfterPreviousField);
+        int secondsInitial = getCastedActivity().getTaskDuration();
+        Log.i("test", "initial = " + secondsInitial);
+        if (secondsInitial > 0) {
+            int hours = secondsInitial / 3600;
+            // Dividable by 24 hours?
+            if (hours % 24 == 0) {
+                timeChoiceSpinner.setSelection(1, false);
+                hours /= 24;
+            }
+            timeChoiceField.setText("" + hours);
+        } else
+            timeChoiceField.setText("" + 1);
+
         // Change timeAfterPrev when user changed the value.
-        EditText timeChoiceField = (EditText) getView().findViewById(R.id.timeAfterPreviousField);
         timeChoiceField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
                     try {
-                        int time = Integer.parseInt(s.toString());
+                        int hours = Integer.parseInt(s.toString());
+                        // If days was selected convert those to hours.
                         if (timeChoiceSpinner.getSelectedItemId() == 1)
-                            time *= 24;
-                        getCastedActivity().setTaskTimeAfterPrevious(time * 3600);
+                            hours *= 24;
+                        // Convert to seconds.
+                        getCastedActivity().setTaskDuration(hours * 3600);
+                        Log.i("Test", "Time in seconds=" + getCastedActivity().getTaskDuration());
                     } catch (NumberFormatException ex) {
                         Log.e(getCastedActivity().LOG_TAG, ex.toString());
                     }
                 }
             }
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-        // Time in seconds.
-        int time = getCastedActivity().getTaskTimeAfterPrevious();
-        if (time > 0) {
-            // Time in hours.
-            time /= 3600;
-            // Dividable by 24 hours?
-            if (time % 24 == 0) {
-                timeChoiceSpinner.setSelection(1);
-                time /= 24;
-            }
-            timeChoiceField.setText("" + getCastedActivity().getTaskTimeAfterPrevious());
-        } else
-            timeChoiceField.setText("" + 1);
 
-        // Set description field watcher.
-        EditText descriptionField = (EditText) getView().findViewById(R.id.description);
-        descriptionField.setText(getCastedActivity().getTaskDescription());
-        descriptionField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                getCastedActivity().setTaskDescription("" + s);
+            public void afterTextChanged(Editable s) {
             }
+        });
+
+        // Convert to other time unit if spinner selection changes.
+        timeChoiceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!initializedTimeField) {
+                    initializedTimeField = true;
+                    return;
+                }
+                // Day(s) selected.
+                if (id == 1) {
+                    int hours = Integer.parseInt(timeChoiceField.getText().toString());
+                    int days = hours / 24;
+                    timeChoiceField.setText("" + (days > 0 ? days : 1));
+                    // Hour(s) selected.
+                    Log.i("Test", "converted to days");
+                } else if (id == 0) {
+                    int days = Integer.parseInt(timeChoiceField.getText().toString());
+                    timeChoiceField.setText("" + (days * 24));
+                    Log.i("Test", "converted to hours");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
     }
 }

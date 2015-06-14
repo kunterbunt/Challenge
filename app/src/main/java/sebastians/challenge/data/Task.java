@@ -32,7 +32,7 @@ public class Task {
     }
 
     public Task(String title, String description){
-        this(title,-1,description,0,0,false,new ImagePath(), new ArrayList<ImagePath>());
+        this(title, -1, description, 3600, 0, false, new ImagePath(), new ArrayList<ImagePath>());
     }
 
     public void setImagePaths(List<ImagePath> imagePaths){
