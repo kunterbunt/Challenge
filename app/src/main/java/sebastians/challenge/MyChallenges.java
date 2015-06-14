@@ -49,4 +49,5 @@ public class MyChallenges extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

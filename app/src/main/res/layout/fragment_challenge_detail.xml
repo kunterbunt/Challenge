@@ -22,14 +22,13 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.33" />
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
+    <sebastians.challenge.views.ProgressView
         android:layout_width="fill_parent"
         android:layout_height="48dp"
         android:id="@+id/progressBar"
-        android:indeterminate="false"
-        android:max="100"
-        android:progress="25" />
+
+        android:clickable="true"
+        />
 
     <ScrollView
         android:layout_width="match_parent"

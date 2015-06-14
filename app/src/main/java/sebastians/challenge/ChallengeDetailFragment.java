@@ -3,6 +3,7 @@ package sebastians.challenge;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
@@ -22,6 +24,7 @@ import sebastians.challenge.data.Challenge;
 import sebastians.challenge.data.DatabaseHelper;
 import sebastians.challenge.data.OnSwipeListener;
 import sebastians.challenge.data.Task;
+import sebastians.challenge.views.ProgressView;
 
 public class ChallengeDetailFragment extends Fragment {
     ChallengeDetail mActivity;
@@ -50,6 +53,21 @@ public class ChallengeDetailFragment extends Fragment {
 
         final ImageButton addTaskButton = (ImageButton) view.findViewById(R.id.toggleChallengeActivityButton);
 
+        final ProgressView progressView = (ProgressView) view.findViewById(R.id.progressBar);
+
+        final TextView description = (TextView) view.findViewById(R.id.description);
+        progressView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int taskId = progressView.getClosestPointIdToTouch();
+                Log.i("POINT", taskId + "");
+                Challenge curChallenge = mActivity.getChallenge();
+                Task selectedTask = curChallenge.getChallengeItemList().get(taskId);
+                description.setText(Html.fromHtml(selectedTask.getDescription()));
+                //TODO ADD IMAGE STUFF
+
+            }
+        });
 
 
 
@@ -60,7 +78,7 @@ public class ChallengeDetailFragment extends Fragment {
             public void onClick(View v) {
                 //get current challenge from activity
                 Challenge curChallenge = mActivity.getChallenge();
-
+                curChallenge.resetDismissedForTasks();
 
                 if(curChallenge.isActive()){
                     curChallenge.setActive(false);

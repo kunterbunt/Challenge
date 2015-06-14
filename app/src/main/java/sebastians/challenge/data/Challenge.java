@@ -61,6 +61,15 @@ public class Challenge {
      * @return  null if there is no due task at the moment otherwise return Task Object
      */
     public Task getDueTask(){
+       int dueTaskId = getDueTaskId();
+        if(dueTaskId == -1)
+            return null;
+        return mTaskList.get(dueTaskId);
+
+
+    }
+
+    public int getDueTaskId(){
         long activatedTs = this.mActivatedTs;
         long accumulatedTs= activatedTs;
 
@@ -72,17 +81,23 @@ public class Challenge {
             accumulatedTs += task.getDurationValidity();
 
             if(accumulatedTs > currentTs){
-                return mTaskList.get(i);
+                return i;
             }
         }
 
-            return null;
+        return -1;
 
 
     }
 
     public void setActive(boolean value){
         this.mActive = value;
+    }
+
+    public void resetDismissedForTasks(){
+        for(int i = 0; i < mTaskList.size(); i++){
+            mTaskList.get(i).setDismissed(false);
+        }
     }
 
     public String getDescription(){
