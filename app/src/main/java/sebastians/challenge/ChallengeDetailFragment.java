@@ -13,13 +13,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import sebastians.challenge.adapter.ViewPagerAdapter;
 import sebastians.challenge.data.OnSwipeListener;
 
-
-/**
- * A placeholder fragment containing a simple view.
- */
 public class ChallengeDetailFragment extends Fragment {
 
     public ChallengeDetailFragment() {
@@ -30,7 +29,9 @@ public class ChallengeDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_challenge_detail, container, false);
         ViewPager imageSwiper = (ViewPager) view.findViewById(R.id.imageSwiper);
-        imageSwiper.setAdapter(new ViewPagerAdapter(getActivity().getApplicationContext()));
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity());
+
+        imageSwiper.setAdapter(adapter);
         return view;
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -37,7 +38,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return view == ((ImageView) object);
+        return view == object;
     }
 
     @Override
@@ -52,16 +53,19 @@ public class ViewPagerAdapter extends PagerAdapter {
                 R.dimen.padding_medium);
         imageView.setPadding(padding, padding, padding, padding);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        if (mImagePaths == null)
+        if (mImagePaths == null) {
+            Log.i("asd", "nooo");
             imageView.setImageResource(mImages[position]);
-        else
+        } else {
+            Log.i("asd", "YEAH");
             imageView.setImageURI(Uri.parse(mImagePaths.get(position)));
-        ((ViewPager) container).addView(imageView, 0);
+        }
+        container.addView(imageView, 0);
         return imageView;
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        ((ViewPager) container).removeView((ImageView) object);
+        container.removeView((ImageView) object);
     }
 }

@@ -27,6 +27,7 @@
         <activity
             android:name=".AddChallenge"
             android:label="@string/title_activity_add_challenge"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MyChallenges" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
