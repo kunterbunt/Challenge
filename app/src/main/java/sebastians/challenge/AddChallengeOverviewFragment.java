@@ -15,7 +15,7 @@ import java.util.List;
 
 import sebastians.challenge.adapter.ChallengeItemAdapter;
 import sebastians.challenge.data.Challenge;
-import sebastians.challenge.data.ChallengeItem;
+import sebastians.challenge.data.Task;
 
 
 /**
@@ -24,7 +24,7 @@ import sebastians.challenge.data.ChallengeItem;
 public class AddChallengeOverviewFragment extends Fragment {
 
     private ListView taskListView;
-    private List<ChallengeItem> taskList;
+    private List<Task> taskList;
     private ChallengeItemAdapter taskListAdapter;
     private Challenge challenge;
 
@@ -47,7 +47,7 @@ public class AddChallengeOverviewFragment extends Fragment {
         addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                taskList.add(new ChallengeItem("Task " + (taskList.size() + 1), "no description"));
+                taskList.add(new Task("Task " + (taskList.size() + 1), "no description"));
                 taskListAdapter.notifyDataSetChanged();
             }
         });
