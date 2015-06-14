@@ -19,7 +19,7 @@ import android.widget.Spinner;
  */
 public class AddChallengeTaskDetailFragment extends Fragment {
 
-    private boolean initializedTimeField = false;
+    private int previousSpinnerItemSelected;
 
     public AddChallengeTaskDetailFragment() {
     }
@@ -85,17 +85,18 @@ public class AddChallengeTaskDetailFragment extends Fragment {
         // Time in seconds.
         final EditText timeChoiceField = (EditText) getView().findViewById(R.id.timeAfterPreviousField);
         int secondsInitial = getCastedActivity().getTaskDuration();
-        Log.i("test", "initial = " + secondsInitial);
         if (secondsInitial > 0) {
             int hours = secondsInitial / 3600;
             // Dividable by 24 hours?
             if (hours % 24 == 0) {
                 timeChoiceSpinner.setSelection(1, false);
                 hours /= 24;
-            }
+            } else
+                timeChoiceSpinner.setSelection(0, false);
             timeChoiceField.setText("" + hours);
         } else
             timeChoiceField.setText("" + 1);
+        previousSpinnerItemSelected = timeChoiceSpinner.getSelectedItemPosition();
 
         // Change timeAfterPrev when user changed the value.
         timeChoiceField.addTextChangedListener(new TextWatcher() {
@@ -113,7 +114,6 @@ public class AddChallengeTaskDetailFragment extends Fragment {
                             hours *= 24;
                         // Convert to seconds.
                         getCastedActivity().setTaskDuration(hours * 3600);
-                        Log.i("Test", "Time in seconds=" + getCastedActivity().getTaskDuration());
                     } catch (NumberFormatException ex) {
                         Log.e(getCastedActivity().LOG_TAG, ex.toString());
                     }
@@ -129,22 +129,17 @@ public class AddChallengeTaskDetailFragment extends Fragment {
         timeChoiceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (!initializedTimeField) {
-                    initializedTimeField = true;
-                    return;
-                }
                 // Day(s) selected.
-                if (id == 1) {
+                if (id == 1 && previousSpinnerItemSelected != 1) {
                     int hours = Integer.parseInt(timeChoiceField.getText().toString());
                     int days = hours / 24;
                     timeChoiceField.setText("" + (days > 0 ? days : 1));
-                    // Hour(s) selected.
-                    Log.i("Test", "converted to days");
-                } else if (id == 0) {
+                // Hour(s) selected.
+                } else if (id == 0 && previousSpinnerItemSelected != 0) {
                     int days = Integer.parseInt(timeChoiceField.getText().toString());
                     timeChoiceField.setText("" + (days * 24));
-                    Log.i("Test", "converted to hours");
                 }
+                previousSpinnerItemSelected = timeChoiceSpinner.getSelectedItemPosition();
             }
 
             @Override
