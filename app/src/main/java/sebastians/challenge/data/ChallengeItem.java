@@ -36,10 +36,6 @@ public class ChallengeItem {
         this.imagePaths = imagePaths;
     }
 
-    public void setOrder(int order){
-        this.order = order;
-    }
-
     public String getTitle(){
         return this.title;
     }
