@@ -50,6 +50,12 @@ public class Challenge {
         mTaskList = new ArrayList<Task>();
     }
 
+    public void startNow(){
+        this.setActivatedTs(System.currentTimeMillis() / 1000);
+        this.setActive(true);
+
+    }
+
     /**
      *
      * @return  null if there is no due task at the moment otherwise return Task Object
@@ -66,14 +72,13 @@ public class Challenge {
             accumulatedTs += task.getDurationValidity();
 
             if(accumulatedTs > currentTs){
-                return mTaskList.get(i - 1);
+                return mTaskList.get(i);
             }
         }
 
-        if(mTaskList.size() == 0)
             return null;
 
-        return mTaskList.get(mTaskList.size() - 1);
+
     }
 
     public void setActive(boolean value){
