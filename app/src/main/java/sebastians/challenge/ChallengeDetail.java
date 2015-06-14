@@ -2,9 +2,14 @@ package sebastians.challenge;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import sebastians.challenge.data.Challenge;
+import sebastians.challenge.data.DatabaseHelper;
 
 
 public class ChallengeDetail extends ActionBarActivity {
@@ -13,15 +18,31 @@ public class ChallengeDetail extends ActionBarActivity {
     public static final String INTENT_CHALLENGE_ID = "CHALLENGE_ID";
     public static final String LOG_TAG = "ChallengeDetail";
     private long mAssociatedChallengeDatabaseId;
+    private DatabaseHelper db;
+    private Challenge mChallenge;
+
+    //views:
+    private TextView description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenge_detail);
+
+        DatabaseHelper.init(getApplicationContext());
+        db = DatabaseHelper.getInstance();
+
+        description = (TextView) findViewById(R.id.description);
+
         mAssociatedChallengeDatabaseId = getIntent().getLongExtra(INTENT_CHALLENGE_ID, -1);
+
+
+        mChallenge = db.getChallengeById(mAssociatedChallengeDatabaseId);
+
         if (mAssociatedChallengeDatabaseId == -1)
             throw new IllegalArgumentException("No challenge database ID provided.");
-        setTitle("Challenge title");
+        setTitle(mChallenge.getName());
+        description.setText(Html.fromHtml(mChallenge.getDescription()));
     }
 
 

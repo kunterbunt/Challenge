@@ -12,13 +12,20 @@ public class Challenge {
 
     private String mName;
     private long mDatabaseId;
-
+    private String mDescription;
     private List<ChallengeItem> mChallengeItemList;
+    private boolean mActive = false;
 
-    public Challenge(String name, long databaseId, List<ChallengeItem> challengeItemList) {
+    public Challenge(String name, long databaseId, String description, boolean active, List<ChallengeItem> challengeItemList) {
         mName = name;
         mDatabaseId = databaseId;
         mChallengeItemList = challengeItemList;
+        mDescription = description;
+        mActive = active;
+    }
+
+    public boolean isActive(){
+        return this.mActive;
     }
 
     public Challenge(String name, long databaseId) {
@@ -28,6 +35,9 @@ public class Challenge {
     }
 
 
+    public String getDescription(){
+        return this.mDescription;
+    }
 
     public List<ChallengeItem> getChallengeItemList(){
         return mChallengeItemList;
