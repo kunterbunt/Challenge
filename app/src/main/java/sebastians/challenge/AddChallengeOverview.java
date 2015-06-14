@@ -1,19 +1,27 @@
 package sebastians.challenge;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import sebastians.challenge.data.Challenge;
+
 
 public class AddChallengeOverview extends ActionBarActivity {
+
+    public static final String LOG_TAG = "AddChallengeOverview";
+
+    private Challenge challenge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_challenge_overview);
+        challenge = new Challenge("no name");
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -35,5 +43,13 @@ public class AddChallengeOverview extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public Challenge getChallenge() {
+        return challenge;
+    }
+
+    public void setChallenge(Challenge challenge) {
+        this.challenge = challenge;
     }
 }

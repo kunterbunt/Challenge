@@ -7,6 +7,7 @@ import java.util.List;
  * Created by sebastian on 13/06/15.
  */
 public class Task {
+
     private String title;
     private String description;
     private long databaseId;
@@ -17,7 +18,8 @@ public class Task {
     private List<ImagePath> imagePaths;
 
 
-    public Task(String title, long databaseId, String description, int timeAfterPrev, int order, boolean done, ImagePath selfie, List<ImagePath> images){
+    public Task(String title, long databaseId, String description, int timeAfterPrev, int order, boolean done, ImagePath selfie,
+                List<ImagePath> images){
         this.title = title;
         this.databaseId = databaseId;
         this.timeAfterPrev = timeAfterPrev;

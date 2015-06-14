@@ -12,9 +12,9 @@ import sebastians.challenge.data.Task;
 /**
  * Created by kunterbunt on 14.06.15.
  */
-public class ChallengeItemAdapter extends ListAdapter<Task> {
+public class TaskListAdapter extends ListAdapter<Task> {
 
-    public ChallengeItemAdapter(Context context, List<Task> objects) {
+    public TaskListAdapter(Context context, List<Task> objects) {
         super(context, R.layout.listitem_task, objects);
     }
 
