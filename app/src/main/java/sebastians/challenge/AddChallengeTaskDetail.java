@@ -4,11 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import sebastians.challenge.data.Task;
 
 
 public class AddChallengeTaskDetail extends ActionBarActivity {
@@ -47,11 +44,11 @@ public class AddChallengeTaskDetail extends ActionBarActivity {
         this.task_description = task_description;
     }
 
-    public int getTaskTimeAfterPrevious() {
+    public int getTaskDuration() {
         return task_timeAfterPrevious;
     }
 
-    public void setTaskTimeAfterPrevious(int task_timeAfterPrevious) {
+    public void setTaskDuration(int task_timeAfterPrevious) {
         this.task_timeAfterPrevious = task_timeAfterPrevious;
     }
 
@@ -74,7 +71,7 @@ public class AddChallengeTaskDetail extends ActionBarActivity {
             Intent sendBackIntent = new Intent();
             sendBackIntent.putExtra(INTENT_TITLE, getTaskTitle());
             sendBackIntent.putExtra(INTENT_DESCRIPTION, getTaskDescription());
-            sendBackIntent.putExtra(INTENT_TIMEAFTERPREV, getTaskTimeAfterPrevious());
+            sendBackIntent.putExtra(INTENT_TIMEAFTERPREV, getTaskDuration());
             setResult(Activity.RESULT_OK, sendBackIntent);
             finish();
         }

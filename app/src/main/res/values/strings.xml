@@ -17,7 +17,7 @@
         <item>hour(s)</item>
         <item>day(s)</item>
     </array>
-    <string name="timeAfterPrevious">after previous task</string>
+    <string name="timeAfterPrevious">task duration</string>
 
 
 <!-- TODO: Remove or change this placeholder text -->
