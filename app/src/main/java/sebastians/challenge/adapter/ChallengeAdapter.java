@@ -15,7 +15,7 @@ import sebastians.challenge.data.Challenge;
 /**
  * Created by kunterbunt on 13.06.15.
  */
-public class ChallengeAdapter extends ListAdapter<Challenge> {
+public class ChallengeAdapter extends ListAdapterHeader<Challenge> {
 
     private static final int resource = R.layout.listitem_challenge;
     private static final int resource2 = R.layout.listitem_challenge_header;
