@@ -15,6 +15,7 @@ public class Challenge {
     private String mDescription;
     private List<ChallengeItem> mChallengeItemList;
     private boolean mActive = false;
+    private long activatedTs = 0;
 
     public Challenge(String name, long databaseId, String description, boolean active, List<ChallengeItem> challengeItemList) {
         mName = name;
@@ -31,6 +32,14 @@ public class Challenge {
 
     public boolean isActive(){
         return this.mActive;
+    }
+
+    public long getActivatedTs(){
+        return this.activatedTs;
+    }
+
+    public void setActivatedTs(long activatedTs){
+        this.activatedTs = activatedTs;
     }
 
     public Challenge(String name, long databaseId) {

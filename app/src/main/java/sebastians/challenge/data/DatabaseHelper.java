@@ -19,7 +19,7 @@ import sebastians.challenge.data.interfaces.TitleDescriptionColumns;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 8;
+    public static final int DATABASE_VERSION = 11;
     public static final String DATABASE_NAME = "challenge_db";
     public static final String LOG_TAG = "DB";
 
@@ -65,7 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Challenge> challenges = new ArrayList<>();
         Cursor cursor = readableDatabase.query(
                 Contract.ChallengeEntry.TABLE_NAME,
-                new String[]{Contract.ChallengeEntry._ID,Contract.ChallengeEntry.TITLE, Contract.ChallengeEntry.DESCRIPTION, Contract.ChallengeEntry.ACTIVE},
+                new String[]{Contract.ChallengeEntry._ID,Contract.ChallengeEntry.TITLE, Contract.ChallengeEntry.DESCRIPTION, Contract.ChallengeEntry.ACTIVE,Contract.ChallengeEntry.ACTIVATEDTS},
                 null,
                 null,
                 null,
@@ -86,7 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Challenge getChallengeById(long id){
         Cursor cursor = readableDatabase.query(
                 Contract.ChallengeEntry.TABLE_NAME,
-                new String[]{Contract.ChallengeEntry._ID, Contract.ChallengeEntry.TITLE, Contract.ChallengeEntry.DESCRIPTION, Contract.ChallengeEntry.ACTIVE},
+                new String[]{Contract.ChallengeEntry._ID, Contract.ChallengeEntry.TITLE, Contract.ChallengeEntry.DESCRIPTION, Contract.ChallengeEntry.ACTIVE, Contract.ChallengeEntry.ACTIVATEDTS},
                 Contract.ChallengeEntry._ID + " = ?",
                 new String[]{String.valueOf(id)},
                 null,
@@ -110,6 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String challengeTitle = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.TITLE));
         String challengeDescription = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.DESCRIPTION));
         boolean isActive = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.ACTIVE)) > 0;
+        long activatedTs = cursor.getLong(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.ACTIVATEDTS));
         Log.i(LOG_TAG, "Challenge id " + challengeDbId);
         challenge = new Challenge(
                 challengeTitle,
@@ -118,6 +119,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 isActive,
                 this.getChallengeItemsForChallengeId(challengeDbId)
         );
+        challenge.setActivatedTs(activatedTs);
 
         return challenge;
     }
@@ -211,7 +213,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(Contract.ChallengeEntry.TITLE, challenge.getName());
         cv.put(Contract.ChallengeEntry.DESCRIPTION, challenge.getDescription());
-        cv.put(Contract.ChallengeEntry.ACTIVE,0);
+        cv.put(Contract.ChallengeEntry.ACTIVE,challenge.isActive());
+        cv.put(Contract.ChallengeEntry.ACTIVATEDTS,challenge.getActivatedTs());
         long challengeId = writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
 
         //create challenge itemss
@@ -279,6 +282,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         imgs.add(new ImagePath("d1img1"));
         imgs.add(new ImagePath("d1img2"));
         challengeItem.setImagePaths(imgs);
+        challengeItem.setOrder(0);
         challengeItems.add(challengeItem);
 
         challengeItem = new ChallengeItem("Day 2", "Stuff to do");
@@ -286,6 +290,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         imgs.add(new ImagePath("d2img1"));
         imgs.add(new ImagePath("d2img2"));
         challengeItem.setImagePaths(imgs);
+        challengeItem.setOrder(1);
         challengeItems.add(challengeItem);
 
         this.create(smoothieChallenge);
@@ -383,6 +388,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         private static final String TYPE_TEXT = " TEXT ";
         private static final String TYPE_INTEGER = " INTEGER ";
+        private static final String TYPE_DATETIME = " DATETIME ";
         private static final String TYPE_FLOAT = " FLOAT ";
         private static final String TYPE_PRIMARY = " INTEGER PRIMARY KEY ";
         private static final String COMMA_SEP = ",";
@@ -397,15 +403,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         protected static abstract class ChallengeEntry implements BaseColumns, TitleDescriptionColumns {
             public static final String TABLE_NAME = "challenges";
             public static final String ACTIVE = "isactive";
-
+            public static final String ACTIVATEDTS = "activatedts";
         }
 
         protected static final String SQL_CREATE_TABLE_CHALLENGES =
                 "CREATE TABLE " + ChallengeEntry.TABLE_NAME + " (" +
                         ChallengeEntry._ID + TYPE_PRIMARY + ", " +
+                        ChallengeEntry.ACTIVATEDTS + TYPE_DATETIME   + COMMA_SEP +
                         ChallengeEntry.TITLE + TYPE_TEXT + NOT_NULL  + COMMA_SEP +
                         ChallengeEntry.ACTIVE + TYPE_INTEGER   + COMMA_SEP +
-                        ChallengeEntry.DESCRIPTION + TYPE_TEXT + NOT_NULL  +
+                        ChallengeEntry.DESCRIPTION + TYPE_TEXT + NOT_NULL   +
+
                         " )";
 
         protected static final String SQL_DROP_TABLE_CHALLENGES =
@@ -422,6 +430,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             public static final String ORDER = "position";
             public static final String SELFIE = "selfie";
             public static final String DONE = "done";
+
         }
 
         protected static final String SQL_CREATE_TABLE_CHALLENGEITEMS =
