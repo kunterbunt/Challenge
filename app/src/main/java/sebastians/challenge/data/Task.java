@@ -17,9 +17,9 @@ public class Task {
     private boolean done;
     private ImagePath selfie;
     private List<ImagePath> imagePaths;
+    private boolean dismissed;
 
-
-    public Task(String title, long databaseId, String description, int durationValidity, int order, boolean done, ImagePath selfie,
+    public Task(String title, long databaseId, String description, int durationValidity, int order, boolean done, boolean dismissed, ImagePath selfie,
                 List<ImagePath> images){
         this.title = title;
         this.databaseId = databaseId;
@@ -29,11 +29,23 @@ public class Task {
         this.selfie = selfie;
         this.imagePaths = images;
         this.description = description;
+        this.dismissed = dismissed;
     }
 
     public Task(String title, String description){
-        this(title, -1, description, 3600, 0, false, new ImagePath(), new ArrayList<ImagePath>());
+        this(title, -1, description, 3600, 0, false, false, new ImagePath(), new ArrayList<ImagePath>());
     }
+
+    public boolean isDismissed(){
+        return this.dismissed;
+    }
+
+
+
+    public void setDismissed(boolean dismissed){
+        this.dismissed = dismissed;
+    }
+
 
     public void setImagePaths(List<ImagePath> imagePaths){
         this.imagePaths = imagePaths;

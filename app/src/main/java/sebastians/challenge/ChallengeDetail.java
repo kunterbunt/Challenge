@@ -6,6 +6,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import sebastians.challenge.data.Challenge;
@@ -44,10 +45,21 @@ public class ChallengeDetail extends ActionBarActivity {
 
         mChallenge = db.getChallengeById(mAssociatedChallengeDatabaseId);
 
+
         if (mAssociatedChallengeDatabaseId == -1)
             throw new IllegalArgumentException("No challenge database ID provided.");
 
 
+
+        final ImageButton addTaskButton = (ImageButton) findViewById(R.id.toggleChallengeActivityButton);
+
+        if(mChallenge.isActive()){
+
+            addTaskButton.setImageResource(android.R.drawable.ic_media_pause);
+        }else{
+
+            addTaskButton.setImageResource(android.R.drawable.ic_media_play);
+        }
 
         setTitle(mChallenge.getName());
         description.setText(Html.fromHtml(mChallenge.getDescription()));

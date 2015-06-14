@@ -82,7 +82,7 @@ public class Challenge {
     }
 
     public void setActive(boolean value){
-        this.mActive = true;
+        this.mActive = value;
     }
 
     public String getDescription(){

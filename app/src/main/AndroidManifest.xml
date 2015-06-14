@@ -52,6 +52,11 @@
             </intent-filter>
         </receiver>
 
+        <service
+            android:name=".services.DismissService">
+        </service>
+
+
     </application>
 
     <!-- Save Image on Device -->
