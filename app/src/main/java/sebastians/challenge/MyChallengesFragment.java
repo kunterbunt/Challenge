@@ -26,6 +26,7 @@ import sebastians.challenge.data.DatabaseHelper;
 public class MyChallengesFragment extends Fragment {
 
     private List<Challenge> mChallengeList;
+    private List<Challenge> mChallengeListViewList;
 
     public MyChallengesFragment() {
     }
@@ -41,7 +42,20 @@ public class MyChallengesFragment extends Fragment {
         DatabaseHelper db = DatabaseHelper.getInstance();
         // Load challenges from database.
         mChallengeList = db.getAllChallenges();
-        challengeList.setAdapter(new ChallengeAdapter(getActivity().getApplicationContext(), mChallengeList));
+
+        mChallengeListViewList = new ArrayList<>();
+        mChallengeListViewList.add(null);
+        //add "VOID" Challenges to Challengelist.
+        boolean notActive = false;
+        for(int i = 0; i < mChallengeList.size(); i++){
+            if(mChallengeList.get(i).isActive() == false && notActive == false){
+                notActive = true;
+                mChallengeListViewList.add(null);
+            }
+            mChallengeListViewList.add(mChallengeList.get(i));
+        }
+
+        challengeList.setAdapter(new ChallengeAdapter(getActivity().getApplicationContext(), mChallengeListViewList));
         challengeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -3,7 +3,7 @@
     android:layout_height="match_parent" tools:context=".MyChallengesFragment"
     android:background="@color/app_color_dark">
 
-    <ListView
+    <com.hb.views.PinnedSectionListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/challenge_list"

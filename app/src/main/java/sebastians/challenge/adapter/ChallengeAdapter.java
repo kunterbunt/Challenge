@@ -18,13 +18,23 @@ import sebastians.challenge.data.Challenge;
 public class ChallengeAdapter extends ListAdapter<Challenge> {
 
     private static final int resource = R.layout.listitem_challenge;
+    private static final int resource2 = R.layout.listitem_challenge_header;
 
     public ChallengeAdapter(Context context, List<Challenge> objects) {
-        super(context, resource, objects);
+        super(context, resource, resource2, objects);
     }
 
     @Override
     public void style(View view, int position) {
         ((TextView) view.findViewById(R.id.name)).setText(getItem(position).getName());
+    }
+
+    @Override
+    public void styleHeader(View view, boolean active) {
+        if(active){
+            ((TextView) view.findViewById(R.id.name)).setText("Active");
+        }else{
+            ((TextView) view.findViewById(R.id.name)).setText("InActive");
+        }
     }
 }

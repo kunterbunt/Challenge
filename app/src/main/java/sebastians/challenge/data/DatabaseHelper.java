@@ -19,7 +19,7 @@ import sebastians.challenge.data.interfaces.TitleDescriptionColumns;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 7;
     public static final String DATABASE_NAME = "challenge_db";
     public static final String LOG_TAG = "DB";
 
@@ -73,7 +73,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null,
                 null,
                 null,
-                null);
+                Contract.ChallengeEntry.ACTIVE +" DESC");
         while (cursor.moveToNext()) {
 
             challenges.add(this.cursor2Challenge(cursor));
@@ -112,7 +112,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long challengeDbId = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry._ID));
         String challengeTitle = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.TITLE));
         String challengeDescription = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.DESCRIPTION));
-        boolean isActive = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.DESCRIPTION)) > 0;
+        boolean isActive = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.ACTIVE)) > 0;
         Log.i(LOG_TAG, "Challenge id " + challengeDbId);
         challenge = new Challenge(
                 challengeTitle,
@@ -235,7 +235,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge");
         cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
         cv.put(Contract.ChallengeEntry.ACTIVE,0);
+        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
+
+        cv = new ContentValues();
+        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 1");
+        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+        cv.put(Contract.ChallengeEntry.ACTIVE,1);
+        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
+
+        cv = new ContentValues();
+        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 2 ");
+        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+        cv.put(Contract.ChallengeEntry.ACTIVE,0);
+        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
+
+        cv = new ContentValues();
+        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 3");
+        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+        cv.put(Contract.ChallengeEntry.ACTIVE,0);
+        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
+
+        cv = new ContentValues();
+        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 4");
+        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+        cv.put(Contract.ChallengeEntry.ACTIVE,0);
+        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
+
+        cv = new ContentValues();
+        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 5");
+        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+        cv.put(Contract.ChallengeEntry.ACTIVE,0);
         writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME,null,cv);
+
+
+        cv = new ContentValues();
+        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 5");
+        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+        cv.put(Contract.ChallengeEntry.ACTIVE,0);
+        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME,null,cv);
+
+
+        cv = new ContentValues();
+        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 5");
+        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+        cv.put(Contract.ChallengeEntry.ACTIVE,0);
+        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME,null,cv);
+
+
+        cv = new ContentValues();
+        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 5");
+        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+        cv.put(Contract.ChallengeEntry.ACTIVE,0);
+        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME,null,cv);
+
 
         //add item to challenge
         cv = new ContentValues();
