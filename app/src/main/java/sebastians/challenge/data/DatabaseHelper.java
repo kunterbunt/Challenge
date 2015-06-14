@@ -18,7 +18,7 @@ import sebastians.challenge.data.interfaces.TitleDescriptionColumns;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 11;
+    public static final int DATABASE_VERSION = 17;
     public static final String DATABASE_NAME = "challenge_db";
     public static final String LOG_TAG = "DB";
 
@@ -54,6 +54,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.i(LOG_TAG, "Database connection closed.");
     }
 
+    public List<Challenge> getActiveChallenges(){
+        List<Challenge> challenges = new ArrayList<>();
+        Cursor cursor = readableDatabase.query(
+                Contract.ChallengeEntry.TABLE_NAME,
+                new String[]{Contract.ChallengeEntry._ID},
+                Contract.ChallengeEntry.ACTIVE + "= ?",
+                new String[]{"1"},
+                null,
+                null,
+                Contract.ChallengeEntry.ACTIVE +" DESC");
+        while (cursor.moveToNext()) {
+            challenges.add(getChallengeById(cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry._ID))));
+        }
+        return challenges;
+    }
 
     /**
      * Fetch alle Challenges from database
@@ -64,15 +79,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Challenge> challenges = new ArrayList<>();
         Cursor cursor = readableDatabase.query(
                 Contract.ChallengeEntry.TABLE_NAME,
-                new String[]{Contract.ChallengeEntry._ID,Contract.ChallengeEntry.TITLE, Contract.ChallengeEntry.DESCRIPTION, Contract.ChallengeEntry.ACTIVE,Contract.ChallengeEntry.ACTIVATEDTS},
+                new String[]{Contract.ChallengeEntry._ID},
                 null,
                 null,
                 null,
                 null,
                 Contract.ChallengeEntry.ACTIVE +" DESC");
         while (cursor.moveToNext()) {
-
-            challenges.add(this.cursor2Challenge(cursor));
+            challenges.add(getChallengeById(cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry._ID))));
         }
         return challenges;
     }
@@ -110,7 +124,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String challengeDescription = cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.DESCRIPTION));
         boolean isActive = cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.ACTIVE)) > 0;
         long activatedTs = cursor.getLong(cursor.getColumnIndexOrThrow(Contract.ChallengeEntry.ACTIVATEDTS));
-        Log.i(LOG_TAG, "Challenge id " + challengeDbId);
+
         challenge = new Challenge(
                 challengeTitle,
                 challengeDbId,
@@ -271,7 +285,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //add first challenge to database
 
         Challenge smoothieChallenge = new Challenge("Smoothie Challenge");
-
+        smoothieChallenge.setActivatedTs(System.currentTimeMillis() / 1000);
+        smoothieChallenge.setActive(true);
         //add some ChallengeItems
         ArrayList<Task> tasks = new ArrayList<>();
 
@@ -290,8 +305,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         imgs.add(new ImagePath("d2img2"));
         task.setImagePaths(imgs);
         task.setOrder(1);
+        task.setTimeAfterPrev(86400);
         tasks.add(task);
 
+        smoothieChallenge.setTaskList(tasks);
         this.create(smoothieChallenge);
 
 

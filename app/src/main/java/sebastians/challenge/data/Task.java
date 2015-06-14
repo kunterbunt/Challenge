@@ -82,11 +82,24 @@ public class Task {
         this.order = order;
     }
 
+    /**
+     * time after prev has to be in SECONDS
+     * @param timeAfterPrev
+     */
     public void setTimeAfterPrev(int timeAfterPrev) {
         this.timeAfterPrev = timeAfterPrev;
     }
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public String toString(){
+        String string = "";
+        string += "title:" + getTitle() + "\n";
+        string += "description:" + getDescription() + "\n";
+        string += "order:" + getOrder() + "\n";
+        string += "time:" + getTimeAfterPrev() + "\n";
+        return string;
     }
 }

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 /**
- * Created by sebastian on 14/06/15.
+ * Add Wakeup Timer at System Boot!
  */
 public class BootReceiver extends BroadcastReceiver {
 

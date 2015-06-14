@@ -39,7 +39,6 @@ public abstract class ListAdapterHeader<T> extends ArrayAdapter<T> implements Pi
     @Override
     public boolean isItemViewTypePinned(int viewType) {
         //return viewType == <type to be pinned>;
-        Log.i("LL", "" + viewType);
         return viewType == TYPE_HEADER;
     }
 
@@ -68,14 +67,13 @@ public abstract class ListAdapterHeader<T> extends ArrayAdapter<T> implements Pi
         if(getItemViewType(position) == TYPE_ITEM){
             LayoutInflater inflater = LayoutInflater.from(getContext());
             View view = inflater.inflate(mResource, parent, false);
-            // Have implementation add listeners and stuff.
+
             style(view, position);
             return view;
         } else {
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
             View view = inflater.inflate(mResourceHeader, parent, false);
-            // Have implementation add listeners and stuff
             if(position > 0)
                 styleHeader(view,false);
             else
