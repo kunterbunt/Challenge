@@ -78,7 +78,7 @@
     <ImageButton
         style="@style/FAB.Final"
         android:id="@+id/toggleChallengeActivityButton"
-        android:src="@mipmap/ic_run"
+        android:src="@android:drawable/ic_media_play"
 
         />
 </RelativeLayout>

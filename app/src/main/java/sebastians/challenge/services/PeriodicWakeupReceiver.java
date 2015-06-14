@@ -2,15 +2,20 @@ package sebastians.challenge.services;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import sebastians.challenge.ChallengeDetail;
+import sebastians.challenge.R;
 import sebastians.challenge.data.Challenge;
 import sebastians.challenge.data.DatabaseHelper;
 import sebastians.challenge.data.Task;
@@ -42,6 +47,37 @@ public class PeriodicWakeupReceiver extends BroadcastReceiver {
 
             if(task != null) {
                 Log.i(LOG_TAG, "Active Task: " + task.getTitle());
+
+                if(!task.isDone()){
+                    //notify user about pending task
+                    //With NOTIFICATION!
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(context)
+                                    .setSmallIcon(R.drawable.button_fab)
+                                    .setContentTitle(task.getTitle())
+                                    .setContentText(task.getDescription());
+
+                    Intent resultIntent = new Intent(context, ChallengeDetail.class);
+                    resultIntent.putExtra(ChallengeDetail.INTENT_CHALLENGE_ID, challenge.getDatabaseId());
+                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                    stackBuilder.addParentStack(ChallengeDetail.class);
+                    stackBuilder.addNextIntent(resultIntent);
+
+                    PendingIntent resultPendingIntent =
+                            stackBuilder.getPendingIntent(
+                                    0,
+                                    PendingIntent.FLAG_UPDATE_CURRENT
+                            );
+                    mBuilder.setContentIntent(resultPendingIntent);
+                    NotificationManager mNotificationManager =
+                            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    // mId allows you to update the notification later on.
+                    mNotificationManager.notify(REQUEST_CODE, mBuilder.build());
+
+                }
+
+
+
             }
 
 

@@ -35,26 +35,39 @@ public class ChallengeDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_challenge_detail, container, false);
         ViewPager imageSwiper = (ViewPager) view.findViewById(R.id.imageSwiper);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity());
-
-        mActivity = (ChallengeDetail) getActivity();
-
         imageSwiper.setAdapter(adapter);
 
-        ImageButton addTaskButton = (ImageButton) view.findViewById(R.id.toggleChallengeActivityButton);
+        //set activity
+        mActivity = (ChallengeDetail) getActivity();
+
+        //set db helper for onclick listener
+        final DatabaseHelper db;
+        DatabaseHelper.init(mActivity.getApplicationContext());
+        db = DatabaseHelper.getInstance();
+
+
+
+
+        final ImageButton addTaskButton = (ImageButton) view.findViewById(R.id.toggleChallengeActivityButton);
+
+
+
+
+
+
         addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //get current challenge from activity
                 Challenge curChallenge = mActivity.getChallenge();
-                DatabaseHelper db;
-                DatabaseHelper.init(mActivity.getApplicationContext());
-                
-                db = DatabaseHelper.getInstance();
+
 
                 if(curChallenge.isActive()){
                     curChallenge.setActive(false);
+                    addTaskButton.setImageResource(android.R.drawable.ic_media_play);
                 }else{
                     curChallenge.startNow();
+                    addTaskButton.setImageResource(android.R.drawable.ic_media_pause);
                 }
                 db.update(curChallenge);
 

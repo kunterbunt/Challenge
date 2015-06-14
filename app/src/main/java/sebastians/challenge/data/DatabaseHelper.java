@@ -374,8 +374,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    /**
+     * update challenge
+     * IMPORTANT: -> TODO deep update with all other stuff
+     * @param challenge
+     */
     public void update(Challenge challenge){
         //TODO ADD LOGIC DUDE!
+        ContentValues cv = new ContentValues();
+        cv.put(Contract.ChallengeEntry.TITLE, challenge.getName());
+        cv.put(Contract.ChallengeEntry.DESCRIPTION, challenge.getDescription());
+        cv.put(Contract.ChallengeEntry.ACTIVE,challenge.isActive());
+        cv.put(Contract.ChallengeEntry.ACTIVATEDTS, challenge.getActivatedTs());
+
+        writableDatabase.update(Contract.ChallengeEntry.TABLE_NAME, cv, Contract.ChallengeEntry._ID + " = ?",
+                new String[] { String.valueOf(challenge.getDatabaseId()) });
     }
 
     /**
