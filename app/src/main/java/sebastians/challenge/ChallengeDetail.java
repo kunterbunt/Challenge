@@ -21,6 +21,11 @@ public class ChallengeDetail extends ActionBarActivity {
     private DatabaseHelper db;
     private Challenge mChallenge;
 
+
+    public Challenge getChallenge(){
+        return this.mChallenge;
+    }
+
     //views:
     private TextView description;
 
@@ -41,8 +46,14 @@ public class ChallengeDetail extends ActionBarActivity {
 
         if (mAssociatedChallengeDatabaseId == -1)
             throw new IllegalArgumentException("No challenge database ID provided.");
+
+
+
         setTitle(mChallenge.getName());
         description.setText(Html.fromHtml(mChallenge.getDescription()));
+
+
+
     }
 
 

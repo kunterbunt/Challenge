@@ -22,8 +22,8 @@ public class PeriodicWakeupReceiver extends BroadcastReceiver {
     public static final int REQUEST_CODE = 134;
     public static final String LOG_TAG ="timer";
 
-    //set update interval to 1 minute
-    public static final long UPDATE_INTERVAL = 5 * 1000;
+    //set update interval to 1/2 minute
+    public static final long UPDATE_INTERVAL = 30 * 1000;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -52,7 +52,7 @@ public class PeriodicWakeupReceiver extends BroadcastReceiver {
 
     }
 
-    
+
 
     public static void setAlarm(Context context){
         PendingIntent pendingIntent;
