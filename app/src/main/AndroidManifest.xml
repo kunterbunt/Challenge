@@ -36,7 +36,8 @@
         <activity
             android:name=".AddChallengeTaskDetail"
             android:label="@string/title_activity_add_challenge_task_detail"
-            android:parentActivityName=".AddChallengeOverview" >
+            android:parentActivityName=".AddChallengeOverview"
+            android:configChanges="keyboardHidden|orientation|screenSize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sebastians.challenge.AddChallengeOverview" />
@@ -56,6 +57,10 @@
     <!-- Save Image on Device -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
+
+    <!-- Use device camera. -->
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
 
     <!-- Call app periodically -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>

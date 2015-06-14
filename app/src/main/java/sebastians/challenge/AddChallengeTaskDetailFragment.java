@@ -1,7 +1,16 @@
 package sebastians.challenge;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -11,7 +20,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
+import sebastians.challenge.adapter.ViewPagerAdapter;
+import sebastians.challenge.dialogs.ButtonDialog;
+import sebastians.challenge.tools.PhotoManager;
 
 
 /**
@@ -19,7 +36,11 @@ import android.widget.Spinner;
  */
 public class AddChallengeTaskDetailFragment extends Fragment {
 
+    public static final String LOG_TAG = "TaskDetailFragment";
+    public static final int SELECT_PHOTO = 123;
     private int previousSpinnerItemSelected;
+    private ViewPagerAdapter viewPagerAdapter;
+    private Uri currentImageUri;
 
     public AddChallengeTaskDetailFragment() {
     }
@@ -147,5 +168,55 @@ public class AddChallengeTaskDetailFragment extends Fragment {
 
             }
         });
+
+        // Populate ViewPager
+        ViewPager viewPager = (ViewPager) getView().findViewById(R.id.viewPager);
+        viewPagerAdapter = new ViewPagerAdapter(getActivity());
+        viewPager.setAdapter(viewPagerAdapter);
+
+        // Set edit image button action.
+        ImageButton addImageButton = (ImageButton) getView().findViewById(R.id.addImageButton);
+        addImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ButtonDialog(getActivity(), null, "Camera", "Remove", "Gallery", null) {
+                    @Override
+                    public void onPositiveButtonClick() {
+                        currentImageUri = PhotoManager.requestToTakeImage(getActivity());
+                    }
+
+                    @Override
+                    public void onNeutralButtonClick() {
+                        super.onNeutralButtonClick();
+                    }
+
+                    @Override
+                    public void onNegativeButtonClick() {
+                        Intent choosePictureIntent = new Intent(Intent.ACTION_PICK);
+                        choosePictureIntent.setType("image/*");
+                        choosePictureIntent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(choosePictureIntent, SELECT_PHOTO);
+                    }
+                };
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case PhotoManager.REQUEST_TAKE_PHOTO:
+                    viewPagerAdapter.add(currentImageUri);
+                    viewPagerAdapter.notifyDataSetChanged();
+                    break;
+                case SELECT_PHOTO:
+                    viewPagerAdapter.add(Uri.parse(data.getDataString()));
+                    viewPagerAdapter.notifyDataSetChanged();
+                    break;
+            }
+        } else
+            Log.e(LOG_TAG, "Recieved intent with resultCode != RESULT_OK.");
     }
 }
