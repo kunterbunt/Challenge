@@ -1,19 +1,31 @@
 package sebastians.challenge;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import sebastians.challenge.services.PeriodicWakeupReceiver;
 
 
 public class MyChallenges extends ActionBarActivity {
+    public static final String LOG_TAG = "MyChallenges";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_challenges);
         setTitle(getResources().getString(R.string.overview_title));
+        PeriodicWakeupReceiver.setAlarm(this);
     }
+
 
 
     @Override

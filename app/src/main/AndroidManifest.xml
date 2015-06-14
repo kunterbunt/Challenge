@@ -33,11 +33,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sebastians.challenge.MyChallenges" />
         </activity>
+
+
+        <receiver android:name=".services.PeriodicWakeupReceiver" />
+
     </application>
 
     <!-- Save Image on Device -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
+
+    <!-- Call app periodically -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
 
 
 </manifest>
