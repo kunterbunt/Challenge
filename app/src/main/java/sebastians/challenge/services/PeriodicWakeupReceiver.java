@@ -15,6 +15,10 @@ import android.widget.Toast;
 public class PeriodicWakeupReceiver extends BroadcastReceiver {
     public static final int REQUEST_CODE = 134;
     public static final String LOG_TAG ="timer";
+
+    //set update interval to 1 minute
+    public static final long UPDATE_INTERVAL = 60 * 1000;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Toast.makeText(context, "WAKEUP", Toast.LENGTH_SHORT).show();
@@ -27,11 +31,11 @@ public class PeriodicWakeupReceiver extends BroadcastReceiver {
         AlarmManager manager;
 Log.i(LOG_TAG, "scheduled Alarm");
         manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        int interval = 10000;
+
         Intent alarmIntent = new Intent(context, PeriodicWakeupReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
 
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), UPDATE_INTERVAL, pendingIntent);
         Toast.makeText(context, "Alarm Set", Toast.LENGTH_SHORT).show();
     }
 }
