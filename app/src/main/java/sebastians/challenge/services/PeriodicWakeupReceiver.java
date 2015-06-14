@@ -27,7 +27,7 @@ public class PeriodicWakeupReceiver extends BroadcastReceiver {
         AlarmManager manager;
 Log.i(LOG_TAG, "scheduled Alarm");
         manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        int interval = 1000;
+        int interval = 10000;
         Intent alarmIntent = new Intent(context, PeriodicWakeupReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
 

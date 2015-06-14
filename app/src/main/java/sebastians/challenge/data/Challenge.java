@@ -1,7 +1,5 @@
 package sebastians.challenge.data;
 
-import android.database.Cursor;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,20 +11,20 @@ public class Challenge {
     private String mName;
     private long mDatabaseId;
     private String mDescription;
-    private List<ChallengeItem> mChallengeItemList;
+    private List<Task> mTaskList;
     private boolean mActive = false;
     private long activatedTs = 0;
 
-    public Challenge(String name, long databaseId, String description, boolean active, List<ChallengeItem> challengeItemList) {
+    public Challenge(String name, long databaseId, String description, boolean active, List<Task> taskList) {
         mName = name;
         mDatabaseId = databaseId;
-        mChallengeItemList = challengeItemList;
+        mTaskList = taskList;
         mDescription = description;
         mActive = active;
     }
 
     public Challenge(String name){
-        this(name,-1,"",false,new ArrayList<ChallengeItem>());
+        this(name,-1,"",false,new ArrayList<Task>());
     }
 
 
@@ -45,7 +43,7 @@ public class Challenge {
     public Challenge(String name, long databaseId) {
         mName = name;
         mDatabaseId = databaseId;
-        mChallengeItemList = new ArrayList<ChallengeItem>();
+        mTaskList = new ArrayList<Task>();
     }
 
 
@@ -53,8 +51,8 @@ public class Challenge {
         return this.mDescription;
     }
 
-    public List<ChallengeItem> getChallengeItemList(){
-        return mChallengeItemList;
+    public List<Task> getChallengeItemList(){
+        return mTaskList;
     }
 
 

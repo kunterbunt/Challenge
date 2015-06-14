@@ -73,7 +73,7 @@ public class MyChallengesFragment extends Fragment {
         ((ImageButton) view.findViewById(R.id.addChallengeButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity().getApplicationContext(), AddChallenge.class));
+                startActivity(new Intent(getActivity().getApplicationContext(), AddChallengeOverview.class));
             }
         });
         return view;

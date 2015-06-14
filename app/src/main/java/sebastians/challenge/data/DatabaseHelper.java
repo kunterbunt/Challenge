@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.media.Image;
 import android.provider.BaseColumns;
 import android.util.Log;
 
@@ -129,8 +128,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param id
      * @return
      */
-    public List<ChallengeItem> getChallengeItemsForChallengeId(long id){
-        List<ChallengeItem> challengeItems = new ArrayList<>();
+    public List<Task> getChallengeItemsForChallengeId(long id){
+        List<Task> tasks = new ArrayList<>();
         Cursor cursor = readableDatabase.query(
                 Contract.ChallengeItemEntry.TABLE_NAME,
                 new String[]{Contract.ChallengeItemEntry._ID,
@@ -185,7 +184,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-            ChallengeItem challengeItem = new ChallengeItem(
+            Task task = new Task(
                     cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry.TITLE)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry._ID)),
                     cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry.DESCRIPTION)),
@@ -195,11 +194,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     new ImagePath(cursor.getString(cursor.getColumnIndexOrThrow(Contract.ChallengeItemEntry.SELFIE))),
                     imagePaths);
 
-            challengeItems.add(challengeItem);
+            tasks.add(task);
 
         }
 
-        return challengeItems;
+        return tasks;
     }
 
     /**
@@ -219,19 +218,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //create challenge itemss
         for(int i = 0; i < challenge.getChallengeItemList().size(); i++){
-            ChallengeItem challengeItem = challenge.getChallengeItemList().get(i);
+            Task task = challenge.getChallengeItemList().get(i);
             cv = new ContentValues();
             cv.put(Contract.ChallengeItemEntry.CHALLENGE,challengeId);
-            cv.put(Contract.ChallengeItemEntry.TITLE,challengeItem.getTitle());
-            cv.put(Contract.ChallengeItemEntry.DESCRIPTION,challengeItem.getDescription());
-            cv.put(Contract.ChallengeItemEntry.ORDER, challengeItem.getOrder());
-            cv.put(Contract.ChallengeItemEntry.TIME_AFTER_PREV,challengeItem.getTimeAfterPrev());
-            cv.put(Contract.ChallengeItemEntry.SELFIE,challengeItem.getSelfie().getPath());
+            cv.put(Contract.ChallengeItemEntry.TITLE, task.getTitle());
+            cv.put(Contract.ChallengeItemEntry.DESCRIPTION, task.getDescription());
+            cv.put(Contract.ChallengeItemEntry.ORDER, task.getOrder());
+            cv.put(Contract.ChallengeItemEntry.TIME_AFTER_PREV, task.getTimeAfterPrev());
+            cv.put(Contract.ChallengeItemEntry.SELFIE, task.getSelfie().getPath());
             long itemId = writableDatabase.insert(Contract.ChallengeItemEntry.TABLE_NAME,null,cv);
 
-            for(int j = 0; j < challengeItem.getImagePaths().size(); j++){
+            for(int j = 0; j < task.getImagePaths().size(); j++){
                 //insert all image paths to database
-                ImagePath imagePath = challengeItem.getImagePaths().get(j);
+                ImagePath imagePath = task.getImagePaths().get(j);
                 cv = new ContentValues();
                 cv.put(Contract.ImageEntry.PATH,imagePath.getPath());
                 long imageId = writableDatabase.insert(Contract.ImageEntry.TABLE_NAME,null,cv);
@@ -274,24 +273,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Challenge smoothieChallenge = new Challenge("Smoothie Challenge");
 
         //add some ChallengeItems
-        ArrayList<ChallengeItem> challengeItems = new ArrayList<>();
+        ArrayList<Task> tasks = new ArrayList<>();
 
-        ChallengeItem challengeItem;
-        challengeItem = new ChallengeItem("Day 1", "Stuff to do");
+        Task task;
+        task = new Task("Day 1", "Stuff to do");
         ArrayList<ImagePath> imgs = new ArrayList<>();
         imgs.add(new ImagePath("d1img1"));
         imgs.add(new ImagePath("d1img2"));
-        challengeItem.setImagePaths(imgs);
-        challengeItem.setOrder(0);
-        challengeItems.add(challengeItem);
+        task.setImagePaths(imgs);
+        task.setOrder(0);
+        tasks.add(task);
 
-        challengeItem = new ChallengeItem("Day 2", "Stuff to do");
+        task = new Task("Day 2", "Stuff to do");
         imgs = new ArrayList<>();
         imgs.add(new ImagePath("d2img1"));
         imgs.add(new ImagePath("d2img2"));
-        challengeItem.setImagePaths(imgs);
-        challengeItem.setOrder(1);
-        challengeItems.add(challengeItem);
+        task.setImagePaths(imgs);
+        task.setOrder(1);
+        tasks.add(task);
 
         this.create(smoothieChallenge);
 
@@ -421,7 +420,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-        //ChallengeItem
+        //Task
 
         protected static abstract class ChallengeItemEntry implements BaseColumns, TitleDescriptionColumns {
             public static final String TABLE_NAME = "challengeitems";

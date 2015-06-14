@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sebastians.challenge" >
 
+    <!-- Save Image on Device -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -33,23 +37,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sebastians.challenge.MyChallenges" />
         </activity>
-        <activity
-            android:name=".AddChallengeTaskDetail"
-            android:label="@string/title_activity_add_challenge_task_detail"
-            android:parentActivityName=".AddChallengeOverview" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="sebastians.challenge.AddChallengeOverview" />
-        </activity>
+<<<<<<< HEAD
+
 
         <receiver android:name=".services.PeriodicWakeupReceiver" />
-
-        <receiver android:name=".services.BootReceiver"
-            android:enabled="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
-            </intent-filter>
-        </receiver>
 
     </application>
 
@@ -64,4 +55,16 @@
 
 
 
+=======
+        <activity
+            android:name=".AddChallengeTaskDetail"
+            android:label="@string/title_activity_add_challenge_task_detail"
+            android:parentActivityName=".AddChallengeOverview" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sebastians.challenge.AddChallengeOverview" />
+        </activity>
+    </application>
+
+>>>>>>> d48cf5c26fd9a1238ec1ca20f9ee6361a919b5a9
 </manifest>

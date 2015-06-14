@@ -7,15 +7,15 @@ import android.widget.TextView;
 import java.util.List;
 
 import sebastians.challenge.R;
-import sebastians.challenge.data.ChallengeItem;
+import sebastians.challenge.data.Task;
 
 /**
  * Created by kunterbunt on 14.06.15.
  */
-public class ChallengeItemAdapter extends ListAdapter<ChallengeItem> {
+public class ChallengeItemAdapter extends ListAdapter<Task> {
 
-    public ChallengeItemAdapter(Context context, List<ChallengeItem> objects) {
-        super(context, R.layout.listitem_subchallenge, objects);
+    public ChallengeItemAdapter(Context context, List<Task> objects) {
+        super(context, R.layout.listitem_task, objects);
     }
 
     @Override

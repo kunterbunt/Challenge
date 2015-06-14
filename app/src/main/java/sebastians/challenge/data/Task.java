@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by sebastian on 13/06/15.
  */
-public class ChallengeItem {
+public class Task {
     private String title;
     private String description;
     private long databaseId;
@@ -17,7 +17,7 @@ public class ChallengeItem {
     private List<ImagePath> imagePaths;
 
 
-    public ChallengeItem(String title, long databaseId, String description, int timeAfterPrev, int order, boolean done, ImagePath selfie, List<ImagePath> images){
+    public Task(String title, long databaseId, String description, int timeAfterPrev, int order, boolean done, ImagePath selfie, List<ImagePath> images){
         this.title = title;
         this.databaseId = databaseId;
         this.timeAfterPrev = timeAfterPrev;
@@ -28,16 +28,12 @@ public class ChallengeItem {
         this.description = description;
     }
 
-    public ChallengeItem(String title, String description){
+    public Task(String title, String description){
         this(title,-1,description,0,0,false,new ImagePath(), new ArrayList<ImagePath>());
     }
 
     public void setImagePaths(List<ImagePath> imagePaths){
         this.imagePaths = imagePaths;
-    }
-
-    public void setOrder(int order){
-        this.order = order;
     }
 
     public String getTitle(){
@@ -72,5 +68,25 @@ public class ChallengeItem {
 
     public ImagePath getSelfie(){
         return this.selfie;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public void setTimeAfterPrev(int timeAfterPrev) {
+        this.timeAfterPrev = timeAfterPrev;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
     }
 }
