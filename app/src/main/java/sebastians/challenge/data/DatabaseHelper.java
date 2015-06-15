@@ -249,8 +249,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long challengeId = writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
 
         //create challenge itemss
-        for(int i = 0; i < challenge.getChallengeItemList().size(); i++){
-            Task task = challenge.getChallengeItemList().get(i);
+        for(int i = 0; i < challenge.getTaskList().size(); i++){
+            Task task = challenge.getTaskList().get(i);
             cv = new ContentValues();
             cv.put(Contract.ChallengeItemEntry.CHALLENGE,challengeId);
             cv.put(Contract.ChallengeItemEntry.TITLE, task.getTitle());
@@ -426,8 +426,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         writableDatabase.update(Contract.ChallengeEntry.TABLE_NAME, cv, Contract.ChallengeEntry._ID + " = ?",
                 new String[] { String.valueOf(challenge.getDatabaseId()) });
 
-        for(int i = 0; i < challenge.getChallengeItemList().size(); i++){
-            this.update(challenge.getChallengeItemList().get(i));
+        for(int i = 0; i < challenge.getTaskList().size(); i++){
+            this.update(challenge.getTaskList().get(i));
         }
 
     }

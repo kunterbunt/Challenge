@@ -59,16 +59,17 @@ public class ProgressView extends View {
         dueTaskId = challenge.getDueTaskId();
 
 
-        int totWidth = circRadius * 3 * challenge.getChallengeItemList().size();
+        int totWidth = circRadius * 3 * challenge.getTaskList().size();
 
         int itemX = (width - totWidth) / 2;
         int itemY = height / 2;
 
-        for(int i = 0; i < challenge.getChallengeItemList().size(); i++){
-            Task task = challenge.getChallengeItemList().get(i);
+        for(int i = 0; i < challenge.getTaskList().size(); i++){
+            Task task = challenge.getTaskList().get(i);
             PointF curPoint = new PointF();
             if(i > 0)
                 itemX += circRadius * 3;
+
             curPoint.x = itemX;
             curPoint.y = itemY;
             itemsPositions.add(curPoint);
@@ -112,10 +113,15 @@ public class ProgressView extends View {
 
 
         int selectedPointId = getClosestPointIdToTouch();
-        for(int i = 0; i < challenge.getChallengeItemList().size(); i++){
+        for(int i = 0; i < challenge.getTaskList().size(); i++){
             PointF curPoint = itemsPositions.get(i);
             double influence = distanceToScale(curPoint, touchPoint);
             int mRadius = circRadius + (int)((((double)circRadius) / 2 )* influence);
+            int mRadiusWOInf = circRadius + (int)((((double)circRadius) / 2 ));
+
+            if(selectedPointId == i){
+                mRadius = mRadiusWOInf;
+            }
 
             if(i == dueTaskId){
                 canvas.drawCircle(curPoint.x, curPoint.y, mRadius , currentPaint);
@@ -127,7 +133,7 @@ public class ProgressView extends View {
 
             //is this point closest to all others?
             if(selectedPointId == i){
-                canvas.drawCircle(curPoint.x, curPoint.y, 2 + circRadius + (int)((((double)circRadius) / 2 )* influence), selectedPaint);
+                canvas.drawCircle(curPoint.x, curPoint.y, 2 + mRadiusWOInf, selectedPaint);
             }
         }
 
@@ -154,7 +160,7 @@ public class ProgressView extends View {
         do {
             radius--;
             int distance = radius * 2;
-            int items = challenge.getChallengeItemList().size();
+            int items = challenge.getTaskList().size();
 
             mWidth = radius * items * (items);
 
@@ -172,6 +178,7 @@ public class ProgressView extends View {
         //redraw active
         this.invalidate();
         super.onTouchEvent(event);
+
         return true;
 
     }

@@ -8,21 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ViewAnimator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import sebastians.challenge.adapter.ViewPagerAdapter;
 import sebastians.challenge.data.Challenge;
 import sebastians.challenge.data.DatabaseHelper;
-import sebastians.challenge.data.OnSwipeListener;
 import sebastians.challenge.data.Task;
 import sebastians.challenge.views.ProgressView;
 
@@ -62,7 +53,7 @@ public class ChallengeDetailFragment extends Fragment {
                 int taskId = progressView.getClosestPointIdToTouch();
                 Log.i("POINT", taskId + "");
                 Challenge curChallenge = mActivity.getChallenge();
-                Task selectedTask = curChallenge.getChallengeItemList().get(taskId);
+                Task selectedTask = curChallenge.getTaskList().get(taskId);
                 description.setText(Html.fromHtml(selectedTask.getDescription()));
                 //TODO ADD IMAGE STUFF
 
@@ -85,7 +76,7 @@ public class ChallengeDetailFragment extends Fragment {
                     addTaskButton.setImageResource(android.R.drawable.ic_media_play);
                 }else{
                     curChallenge.startNow();
-                    addTaskButton.setImageResource(android.R.drawable.ic_media_pause);
+                    addTaskButton.setImageResource(android.R.drawable.ic_media_rew);
                 }
                 db.update(curChallenge);
 

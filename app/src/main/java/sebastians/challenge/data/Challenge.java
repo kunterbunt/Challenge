@@ -104,7 +104,7 @@ public class Challenge {
         return this.mDescription;
     }
 
-    public List<Task> getChallengeItemList(){
+    public List<Task> getTaskList(){
         return mTaskList;
     }
 
