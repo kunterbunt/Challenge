@@ -1,7 +1,6 @@
 package sebastians.challenge.data;
 
-import android.media.Image;
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,7 @@ public class ImagePath {
     private String path;
     private long databaseId;
 
-    public ImagePath(String path, long databaseId){
+    public ImagePath(String path, long databaseId) {
         this.path = path;
         this.databaseId = databaseId;
     }
@@ -46,6 +45,13 @@ public class ImagePath {
 
     public long getDatabaseId(){
         return this.databaseId;
+    }
+
+    /**
+     * @return Whether this image exists in storage.
+     */
+    public boolean valdiate() {
+        return new File(path).exists();
     }
 
 }

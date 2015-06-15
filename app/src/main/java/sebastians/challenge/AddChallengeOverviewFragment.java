@@ -87,4 +87,8 @@ public class AddChallengeOverviewFragment extends Fragment {
                 }
         }
     }
+
+    public boolean hasTasks() {
+        return mTaskList.size() > 0;
+    }
 }

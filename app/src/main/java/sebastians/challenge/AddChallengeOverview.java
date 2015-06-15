@@ -1,18 +1,28 @@
 package sebastians.challenge;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import sebastians.challenge.data.Challenge;
+import sebastians.challenge.data.DatabaseHelper;
+import sebastians.challenge.data.ImagePath;
+import sebastians.challenge.dialogs.EditTextDialog;
 
 
 public class AddChallengeOverview extends ActionBarActivity {
 
     public static final String LOG_TAG = "AddChallengeOverview";
+    public static final int REQUEST_NEW_CHALLENGE = 12;
 
     private Challenge challenge;
 
@@ -25,20 +35,44 @@ public class AddChallengeOverview extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_add_challenge_overview, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_save) {
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment);
+            if (!((AddChallengeOverviewFragment) currentFragment).hasTasks()) {
+                Toast.makeText(this, "A challenge without tasks is boring, man.", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            final Activity activity = this;
+            new EditTextDialog(this, getString(R.string.saveChallenge), getString(R.string.save), null, getString(R.string.cancel), null) {
+                @Override
+                public void onPositiveButtonClick(EditText input) {
+                    String name = input.getText().toString();
+                    if (name.equals("")) {
+                        Toast.makeText(activity, "Hey! That's not a name!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    getChallenge().setName(name);
+
+                    Challenge dbChallenge = DatabaseHelper.getInstance().create(getChallenge());
+                    Log.i(LOG_TAG, "Saved Challenge: " + dbChallenge.getName() + "\n" + dbChallenge.getDescription() + "\n"
+                        + dbChallenge.getTaskList().size());
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                }
+
+                @Override
+                public void onNegativeButtonClick(EditText input) {
+                    // Do nothing.
+                }
+            };
             return true;
         }
 

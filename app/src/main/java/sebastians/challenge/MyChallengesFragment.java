@@ -1,5 +1,6 @@
 package sebastians.challenge;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ public class MyChallengesFragment extends Fragment {
 
     private List<Challenge> mChallengeList;
     private List<Challenge> mChallengeListViewList;
+    private ChallengeAdapter mChallengeAdapter;
 
     public MyChallengesFragment() {
     }
@@ -54,8 +56,8 @@ public class MyChallengesFragment extends Fragment {
             }
             mChallengeListViewList.add(mChallengeList.get(i));
         }
-
-        challengeList.setAdapter(new ChallengeAdapter(getActivity().getApplicationContext(), mChallengeListViewList));
+        mChallengeAdapter = new ChallengeAdapter(getActivity().getApplicationContext(), mChallengeListViewList);
+        challengeList.setAdapter(mChallengeAdapter);
         challengeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -73,9 +75,30 @@ public class MyChallengesFragment extends Fragment {
         ((ImageButton) view.findViewById(R.id.addChallengeButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity().getApplicationContext(), AddChallengeOverview.class));
+                startActivityForResult(new Intent(getActivity().getApplicationContext(), AddChallengeOverview.class), AddChallengeOverview.REQUEST_NEW_CHALLENGE);
             }
         });
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AddChallengeOverview.REQUEST_NEW_CHALLENGE && resultCode == Activity.RESULT_OK) {
+            Log.i("test", "intent recived");
+            mChallengeList = DatabaseHelper.getInstance().getAllChallenges();
+            mChallengeListViewList.clear();
+            mChallengeListViewList.add(null);
+            //add "VOID" Challenges to Challengelist.
+            boolean notActive = false;
+            for(int i = 0; i < mChallengeList.size(); i++){
+                if(mChallengeList.get(i).isActive() == false && notActive == false){
+                    notActive = true;
+                    mChallengeListViewList.add(null);
+                }
+                mChallengeListViewList.add(mChallengeList.get(i));
+            }
+            mChallengeAdapter.notifyDataSetChanged();
+        }
     }
 }
