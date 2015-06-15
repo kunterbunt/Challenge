@@ -15,7 +15,8 @@
             android:layout_height="fill_parent"
             android:id="@+id/viewPager"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.4" />
+            android:layout_weight="0.4"
+            android:background="@color/app_color_dark" />
 
         <ImageButton
             style="@style/FAB.Final"
@@ -37,8 +38,7 @@
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:focusable="false" />
+        android:layout_marginBottom="16dp" />
 
     <LinearLayout
         android:orientation="horizontal"

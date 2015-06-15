@@ -59,9 +59,8 @@
 
     </application>
 
-    <!-- Save Image on Device -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
+    <!-- ContentProvider that passes an image picked from gallery needs this permission to work. Don't ask me why. -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- Use device camera. -->
     <uses-feature android:name="android.hardware.camera"

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="AppTheme" parent="AppTheme.Base">
+        <item name="android:colorPrimary">@color/app_color</item>
+        <item name="android:colorPrimaryDark">@color/app_color_dark</item>
+        <item name="android:colorAccent">@color/app_color_accent</item>
+        <item name="android:statusBarColor">@color/app_color_accent</item>
+
+    </style>
+
     <style name="FAB.Final">
         <item name="android:layout_alignParentEnd">true</item>
         <item name="android:layout_marginEnd">@dimen/fab_button_margin_right</item>

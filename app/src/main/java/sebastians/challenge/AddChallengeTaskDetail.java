@@ -72,8 +72,8 @@ public class AddChallengeTaskDetail extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // Pass on photo taking intent to fragment.
-        if (requestCode == PhotoManager.REQUEST_TAKE_PHOTO) {
+        // Pass on intents to fragment.
+        if (requestCode == PhotoManager.REQUEST_TAKE_PHOTO || requestCode == PhotoManager.REQUEST_PICK_PHOTO) {
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment);
             currentFragment.onActivityResult(requestCode, resultCode, data);
         }

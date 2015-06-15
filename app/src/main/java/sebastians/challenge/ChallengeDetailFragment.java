@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import sebastians.challenge.adapter.ViewPagerAdapter;
+import sebastians.challenge.adapter.ViewPagerImageAdapter;
 import sebastians.challenge.data.Challenge;
 import sebastians.challenge.data.DatabaseHelper;
 import sebastians.challenge.data.Task;
@@ -28,7 +28,7 @@ public class ChallengeDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_challenge_detail, container, false);
         ViewPager imageSwiper = (ViewPager) view.findViewById(R.id.imageSwiper);
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity());
+        ViewPagerImageAdapter adapter = new ViewPagerImageAdapter(getActivity());
         imageSwiper.setAdapter(adapter);
 
         //set activity
