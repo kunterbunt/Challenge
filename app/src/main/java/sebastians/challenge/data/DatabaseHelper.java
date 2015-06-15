@@ -40,8 +40,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(instance.getAllChallenges().size() == 0)
                 instance.createDefaultData();
             Log.i(LOG_TAG, "Database instantiated.");
-        } else
-            Log.e(LOG_TAG, "Attempted to re-instantiate database.");
+        }
+//        else
+//            Log.e(LOG_TAG, "Attempted to re-instantiate database.");
     }
 
     public static DatabaseHelper getInstance() {

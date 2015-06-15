@@ -21,8 +21,15 @@ public class PhotoManager {
     public static final String LOG_TAG = "PhotoManager";
 
     public static final int REQUEST_TAKE_PHOTO = 451;
-    private static String mCurrentImagePath;
 
+    /**
+     * Launches the camera app and stores the image that the user might take in the Uri it returns.
+     * Implement an onActivityResult and listen for requestCode == PhotoManager.REQUEST_TAKE_PHOTO
+     * in the activity you pass to this method to get the returning intent
+     * and to do stuff with it or just know when the operation is finished.
+     * @param activity Activity that will be used to launch the camera intent. This will recieve an resulting intent, too.
+     * @return Uri to the file the image is saved to.
+     */
     public static Uri requestToTakeImage(Activity activity) {
         // Create image file.
         String timestamp = new SimpleDateFormat("dd_MM_yyyy_HHmmss").format(new Date());
@@ -34,10 +41,9 @@ public class PhotoManager {
             if (!storageDir.exists())
                 storageDir.mkdirs();
             image = File.createTempFile(filename, ".jpg", storageDir);
-            mCurrentImagePath = image.getAbsolutePath();
         } catch (IOException ex) {
             Log.e(LOG_TAG, ex.toString());
-            Toast.makeText(activity, "Taking picture failed, sorry.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "Taking picture failed, sorry mate.", Toast.LENGTH_SHORT).show();
             return null;
         }
         // Start camera.

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sebastians.challenge.adapter.TaskListAdapter;
+import sebastians.challenge.data.ImagePath;
 import sebastians.challenge.data.Task;
 
 
@@ -62,6 +64,7 @@ public class AddChallengeOverviewFragment extends Fragment {
                 intent.putExtra(AddChallengeTaskDetail.INTENT_TITLE, task.getTitle());
                 intent.putExtra(AddChallengeTaskDetail.INTENT_DESCRIPTION, task.getDescription());
                 intent.putExtra(AddChallengeTaskDetail.INTENT_TIMEAFTERPREV, task.getDurationValidity());
+                intent.putStringArrayListExtra(AddChallengeTaskDetail.INTENT_IMAGEPATHLIST, (ArrayList) ImagePath.convertToStringList(task.getImagePaths()));
                 startActivityForResult(intent, AddChallengeTaskDetail.REQUEST_SET_DETAIL);
             }
         });
@@ -79,7 +82,7 @@ public class AddChallengeOverviewFragment extends Fragment {
                     task.setTitle(data.getStringExtra(AddChallengeTaskDetail.INTENT_TITLE));
                     task.setDescription(data.getStringExtra(AddChallengeTaskDetail.INTENT_DESCRIPTION));
                     task.setDurationValidity(data.getIntExtra(AddChallengeTaskDetail.INTENT_TIMEAFTERPREV, 1));
-
+                    task.setImagePaths(ImagePath.convertToImagePathList(data.getStringArrayListExtra(AddChallengeTaskDetail.INTENT_IMAGEPATHLIST)));
                     mTaskListAdapter.notifyDataSetChanged();
                 }
         }

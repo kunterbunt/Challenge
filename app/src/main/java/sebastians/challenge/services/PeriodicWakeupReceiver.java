@@ -37,7 +37,7 @@ public class PeriodicWakeupReceiver extends BroadcastReceiver {
         DatabaseHelper.init(context);
         DatabaseHelper db = DatabaseHelper.getInstance();
         ArrayList<Challenge> activeChallenges = (ArrayList<Challenge>) db.getActiveChallenges();
-        Log.i(LOG_TAG, "Active Challenges: " + activeChallenges.size());
+//        Log.i(LOG_TAG, "Active Challenges: " + activeChallenges.size());
 
         for(int i = 0; i < activeChallenges.size(); i++){
             Challenge challenge = activeChallenges.get(i);

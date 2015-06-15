@@ -2,14 +2,9 @@ package sebastians.challenge;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,10 +18,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import sebastians.challenge.adapter.ViewPagerAdapter;
+import sebastians.challenge.data.ImagePath;
 import sebastians.challenge.dialogs.ButtonDialog;
 import sebastians.challenge.tools.PhotoManager;
 
@@ -172,6 +168,10 @@ public class AddChallengeTaskDetailFragment extends Fragment {
         // Populate ViewPager
         ViewPager viewPager = (ViewPager) getView().findViewById(R.id.viewPager);
         viewPagerAdapter = new ViewPagerAdapter(getActivity());
+        Log.i("TEST", "No:" + getCastedActivity().getTaskImagePaths().size());
+        for (ImagePath path : getCastedActivity().getTaskImagePaths())
+            viewPagerAdapter.add(Uri.parse(path.getPath()));
+        viewPagerAdapter.notifyDataSetChanged();
         viewPager.setAdapter(viewPagerAdapter);
 
         // Set edit image button action.
@@ -192,8 +192,9 @@ public class AddChallengeTaskDetailFragment extends Fragment {
 
                     @Override
                     public void onNegativeButtonClick() {
-                        Intent choosePictureIntent = new Intent(Intent.ACTION_PICK);
+                        Intent choosePictureIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         choosePictureIntent.setType("image/*");
+                        choosePictureIntent.addCategory(Intent.CATEGORY_OPENABLE);
                         choosePictureIntent.setAction(Intent.ACTION_GET_CONTENT);
                         startActivityForResult(choosePictureIntent, SELECT_PHOTO);
                     }
@@ -212,11 +213,26 @@ public class AddChallengeTaskDetailFragment extends Fragment {
                     viewPagerAdapter.notifyDataSetChanged();
                     break;
                 case SELECT_PHOTO:
-                    viewPagerAdapter.add(Uri.parse(data.getDataString()));
+                    Uri uri = data.getData();
+                    getActivity().grantUriPermission(getActivity().getPackageName(), uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    final int takeFlags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                    getActivity().getContentResolver().takePersistableUriPermission(uri, takeFlags);
+                    viewPagerAdapter.add(uri);
                     viewPagerAdapter.notifyDataSetChanged();
                     break;
             }
         } else
             Log.e(LOG_TAG, "Recieved intent with resultCode != RESULT_OK.");
+        // Convert Uris to ImagePaths.
+        List<Uri> imageUriList = viewPagerAdapter.getImageUris();
+        List<ImagePath> imagePathList = new ArrayList<>(imageUriList.size());
+        for (Uri uri : imageUriList) {
+            String path = uri.toString();
+            if (path == null)
+                Log.e(LOG_TAG, "Image path from Uri conversion failed: " + uri.toString());
+            else
+                imagePathList.add(new ImagePath(path));
+        }
+        getCastedActivity().setTaskImagePaths(imagePathList);
     }
 }

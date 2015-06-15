@@ -2,6 +2,9 @@ package sebastians.challenge.data;
 
 import android.media.Image;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by sebastian on 13/06/15.
  */
@@ -13,6 +16,20 @@ public class ImagePath {
     public ImagePath(String path, long databaseId){
         this.path = path;
         this.databaseId = databaseId;
+    }
+
+    public static List<ImagePath> convertToImagePathList(List<String> list) {
+        List<ImagePath> imagePathList = new ArrayList<>(list.size());
+        for (String path : list)
+            imagePathList.add(new ImagePath(path));
+        return imagePathList;
+    }
+
+    public static List<String> convertToStringList(List<ImagePath> list) {
+        List<String> stringList = new ArrayList<>(list.size());
+        for (ImagePath path : list)
+            stringList.add(path.getPath());
+        return stringList;
     }
 
     public ImagePath(String path){
