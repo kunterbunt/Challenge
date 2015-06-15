@@ -18,7 +18,7 @@ import sebastians.challenge.data.interfaces.TitleDescriptionColumns;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 20;
+    public static final int DATABASE_VERSION = 21;
     public static final String DATABASE_NAME = "challenge_db";
     public static final String LOG_TAG = "DB";
 
@@ -324,6 +324,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         imgs.add(new ImagePath("d2img2"));
         task.setImagePaths(imgs);
         task.setOrder(1);
+        task.setDurationValidity(120);
+        tasks.add(task);
+
+        task = new Task("Day 3", " even more Stuff to do");
+        imgs = new ArrayList<>();
+        imgs.add(new ImagePath("d2img1"));
+        imgs.add(new ImagePath("d2img2"));
+        task.setImagePaths(imgs);
+        task.setOrder(2);
+        task.setDurationValidity(120);
+        tasks.add(task);
+
+        task = new Task("Day 4", " dude this is lots of Stuff to do");
+        imgs = new ArrayList<>();
+        imgs.add(new ImagePath("d2img1"));
+        imgs.add(new ImagePath("d2img2"));
+        task.setImagePaths(imgs);
+        task.setOrder(3);
         task.setDurationValidity(120);
         tasks.add(task);
 

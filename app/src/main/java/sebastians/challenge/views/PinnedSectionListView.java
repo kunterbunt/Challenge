@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package sebastians.challenge.data.views;
+package sebastians.challenge.views;
 
 import android.content.Context;
 import android.database.DataSetObserver;

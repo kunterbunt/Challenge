@@ -48,10 +48,8 @@ public class ChallengeDetailFragment extends Fragment {
         DatabaseHelper.init(mActivity.getApplicationContext());
         db = DatabaseHelper.getInstance();
 
-
-
-
         final ImageButton addTaskButton = (ImageButton) view.findViewById(R.id.toggleChallengeActivityButton);
+<<<<<<< HEAD
 
         final ProgressView progressView = (ProgressView) view.findViewById(R.id.progressBar);
 
@@ -73,12 +71,21 @@ public class ChallengeDetailFragment extends Fragment {
 
 
 
+=======
+>>>>>>> 54c9652831997b0ae70e3c923a413879404709bc
         addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //get current challenge from activity
                 Challenge curChallenge = mActivity.getChallenge();
+<<<<<<< HEAD
                 curChallenge.resetDismissedForTasks();
+=======
+                DatabaseHelper db;
+                DatabaseHelper.init(mActivity.getApplicationContext());
+                
+                db = DatabaseHelper.getInstance();
+>>>>>>> 54c9652831997b0ae70e3c923a413879404709bc
 
                 if(curChallenge.isActive()){
                     curChallenge.setActive(false);
