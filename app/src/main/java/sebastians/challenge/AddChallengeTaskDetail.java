@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -21,7 +20,7 @@ public class AddChallengeTaskDetail extends ActionBarActivity {
     public static final String LOG_TAG = "AddChallengeTaskDetail";
     public static final String INTENT_TITLE = "TITLE",
                                 INTENT_DESCRIPTION = "DESCRIPTION",
-                                INTENT_TIMEAFTERPREV = "TIMEAFTERPREV",
+                                INTENT_DURATION = "TIMEAFTERPREV",
                                 INTENT_IMAGEPATHLIST = "IMAGEPATHLIST";
     public static final int REQUEST_SET_DETAIL = 42;
 
@@ -35,7 +34,7 @@ public class AddChallengeTaskDetail extends ActionBarActivity {
         setContentView(R.layout.activity_add_challenge_task_detail);
         task_title = getIntent().getStringExtra(INTENT_TITLE);
         task_description = getIntent().getStringExtra(INTENT_DESCRIPTION);
-        task_timeAfterPrevious = getIntent().getIntExtra(INTENT_TIMEAFTERPREV, 1);
+        task_timeAfterPrevious = getIntent().getIntExtra(INTENT_DURATION, 1);
         task_imagePaths = ImagePath.convertToImagePathList(getIntent().getStringArrayListExtra(INTENT_IMAGEPATHLIST));
     }
 
@@ -65,7 +64,7 @@ public class AddChallengeTaskDetail extends ActionBarActivity {
         Intent sendBackIntent = new Intent();
         sendBackIntent.putExtra(INTENT_TITLE, getTaskTitle());
         sendBackIntent.putExtra(INTENT_DESCRIPTION, getTaskDescription());
-        sendBackIntent.putExtra(INTENT_TIMEAFTERPREV, getTaskDuration());
+        sendBackIntent.putExtra(INTENT_DURATION, getTaskDuration());
         sendBackIntent.putStringArrayListExtra(INTENT_IMAGEPATHLIST, (ArrayList) ImagePath.convertToStringList(task_imagePaths));
         setResult(Activity.RESULT_OK, sendBackIntent);
         finish();

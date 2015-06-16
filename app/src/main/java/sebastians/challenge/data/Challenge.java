@@ -27,6 +27,10 @@ public class Challenge {
         this(name,-1,"",false,new ArrayList<Task>());
     }
 
+    public Challenge() {
+        this("unnamed");
+    }
+
 
     public boolean isActive(){
         return this.mActive;
@@ -72,7 +76,7 @@ public class Challenge {
         for(int i = 0; i < mTaskList.size(); i++){
             Task task = mTaskList.get(i);
 
-            accumulatedTs += task.getDurationValidity();
+            accumulatedTs += task.getDuration();
 
             if(accumulatedTs > currentTs){
                 return i;

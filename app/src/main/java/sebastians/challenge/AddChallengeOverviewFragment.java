@@ -2,6 +2,7 @@ package sebastians.challenge;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,12 +47,31 @@ public class AddChallengeOverviewFragment extends Fragment {
         mTaskListAdapter = new TaskListAdapter(getActivity(), mTaskList);
         mTaskListView.setAdapter(mTaskListAdapter);
 
+        // Pass all changes of the task dataset on to the parent activity.
+        mTaskListAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                AddChallengeOverview activity = (AddChallengeOverview) getActivity();
+                Challenge challenge = activity.getChallenge();
+                challenge.setTaskList(mTaskListAdapter.getTaskListWithoutHeaders());
+                activity.setChallenge(challenge);
+            }
+        });
         // Add button action.
         ImageButton addTaskButton = (ImageButton) view.findViewById(R.id.addTaskButton);
         addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTaskList.add(new Task("Task " + (mTaskList.size() + 1), ""));
+                // null indicates arrow.
+                if (mTaskList.size() > 0)
+                    mTaskList.add(null);
+                String name;
+                if (mTaskList.size() == 0)
+                    name = "Task 1";
+                else
+                    name = "Task " + (mTaskList.size() / 2 + 1);
+                mTaskList.add(new Task(name, ""));
                 mTaskListAdapter.notifyDataSetChanged();
             }
         });
@@ -60,12 +80,15 @@ public class AddChallengeOverviewFragment extends Fragment {
         mTaskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Every second item is an arrow.
+                if (position % 2 == 1)
+                    return;
                 Task task = mTaskList.get(position);
                 mPositionOfLastEditedTask = position;
                 Intent intent = new Intent(getActivity(), AddChallengeTaskDetail.class);
                 intent.putExtra(AddChallengeTaskDetail.INTENT_TITLE, task.getTitle());
                 intent.putExtra(AddChallengeTaskDetail.INTENT_DESCRIPTION, task.getDescription());
-                intent.putExtra(AddChallengeTaskDetail.INTENT_TIMEAFTERPREV, task.getDurationValidity());
+                intent.putExtra(AddChallengeTaskDetail.INTENT_DURATION, task.getDuration());
                 intent.putStringArrayListExtra(AddChallengeTaskDetail.INTENT_IMAGEPATHLIST, (ArrayList) ImagePath.convertToStringList(task.getImagePaths()));
                 startActivityForResult(intent, AddChallengeTaskDetail.REQUEST_SET_DETAIL);
             }
@@ -84,15 +107,9 @@ public class AddChallengeOverviewFragment extends Fragment {
                     Task task = mTaskList.get(mPositionOfLastEditedTask);
                     task.setTitle(data.getStringExtra(AddChallengeTaskDetail.INTENT_TITLE));
                     task.setDescription(data.getStringExtra(AddChallengeTaskDetail.INTENT_DESCRIPTION));
-                    task.setDurationValidity(data.getIntExtra(AddChallengeTaskDetail.INTENT_TIMEAFTERPREV, 1));
+                    task.setDuration(data.getIntExtra(AddChallengeTaskDetail.INTENT_DURATION, 1));
                     task.setImagePaths(ImagePath.convertToImagePathList(data.getStringArrayListExtra(AddChallengeTaskDetail.INTENT_IMAGEPATHLIST)));
                     mTaskListAdapter.notifyDataSetChanged();
-
-                    // Pass that on to the activity.
-                    AddChallengeOverview activity = (AddChallengeOverview) getActivity();
-                    Challenge challenge = activity.getChallenge();
-                    challenge.setTaskList(mTaskList);
-                    activity.setChallenge(challenge);
                 }
         }
     }

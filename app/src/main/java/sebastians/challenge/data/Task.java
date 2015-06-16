@@ -59,7 +59,7 @@ public class Task {
         return this.databaseId;
     }
 
-    public int getDurationValidity(){
+    public int getDuration(){
         return this.durationValidity;
     }
 
@@ -101,7 +101,7 @@ public class Task {
      * time after prev has to be in SECONDS
      * @param durationValidity
      */
-    public void setDurationValidity(int durationValidity) {
+    public void setDuration(int durationValidity) {
         this.durationValidity = durationValidity;
     }
 
@@ -114,7 +114,7 @@ public class Task {
         string += "title:" + getTitle() + "\n";
         string += "description:" + getDescription() + "\n";
         string += "order:" + getOrder() + "\n";
-        string += "time:" + getDurationValidity() + "\n";
+        string += "time:" + getDuration() + "\n";
         return string;
     }
 }

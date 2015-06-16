@@ -31,7 +31,7 @@ public class AddChallengeOverview extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_challenge_overview);
-        challenge = new Challenge("no name");
+        challenge = new Challenge();
     }
 
     @Override

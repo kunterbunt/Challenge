@@ -253,7 +253,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cv.put(Contract.ChallengeItemEntry.TITLE, task.getTitle());
             cv.put(Contract.ChallengeItemEntry.DESCRIPTION, task.getDescription());
             cv.put(Contract.ChallengeItemEntry.ORDER, task.getOrder());
-            cv.put(Contract.ChallengeItemEntry.TIME_AFTER_PREV, task.getDurationValidity());
+            cv.put(Contract.ChallengeItemEntry.TIME_AFTER_PREV, task.getDuration());
             cv.put(Contract.ChallengeItemEntry.SELFIE, task.getSelfie().getPath());
             long itemId = writableDatabase.insert(Contract.ChallengeItemEntry.TABLE_NAME,null,cv);
 
@@ -311,7 +311,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         imgs.add(new ImagePath("d1img1"));
         imgs.add(new ImagePath("d1img2"));
         task.setImagePaths(imgs);
-        task.setDurationValidity(120);
+        task.setDuration(120);
         task.setOrder(0);
         tasks.add(task);
 
@@ -321,7 +321,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         imgs.add(new ImagePath("d2img2"));
         task.setImagePaths(imgs);
         task.setOrder(1);
-        task.setDurationValidity(120);
+        task.setDuration(120);
         tasks.add(task);
 
         task = new Task("Day 3", " even more Stuff to do");
@@ -330,7 +330,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         imgs.add(new ImagePath("d2img2"));
         task.setImagePaths(imgs);
         task.setOrder(2);
-        task.setDurationValidity(120);
+        task.setDuration(120);
         tasks.add(task);
 
         task = new Task("Day 4", " dude this is lots of Stuff to do");
@@ -339,7 +339,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         imgs.add(new ImagePath("d2img2"));
         task.setImagePaths(imgs);
         task.setOrder(3);
-        task.setDurationValidity(120);
+        task.setDuration(120);
         tasks.add(task);
 
         smoothieChallenge.setTaskList(tasks);
@@ -437,7 +437,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(Contract.ChallengeItemEntry.DONE, task.isDone());
         cv.put(Contract.ChallengeItemEntry.SELFIE, task.getSelfie().getPath());
         cv.put(Contract.ChallengeItemEntry.ORDER, task.getOrder());
-        cv.put(Contract.ChallengeItemEntry.TIME_AFTER_PREV, task.getDurationValidity());
+        cv.put(Contract.ChallengeItemEntry.TIME_AFTER_PREV, task.getDuration());
 
         writableDatabase.update(Contract.ChallengeItemEntry.TABLE_NAME, cv, Contract.ChallengeItemEntry._ID + " = ?",
                 new String[] { String.valueOf(task.getDatabaseId()) });
