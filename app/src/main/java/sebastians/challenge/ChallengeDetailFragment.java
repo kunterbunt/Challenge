@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import sebastians.challenge.adapter.ViewPagerImageAdapter;
@@ -47,6 +48,9 @@ public class ChallengeDetailFragment extends Fragment {
         for (ImagePath imagePath : mChallenge.getTaskList().get(0).getImagePaths())
             viewPagerAdapter.add(imagePath);
         viewPager.setAdapter(viewPagerAdapter);
+
+        // Set up for zoom-in animation.
+        viewPagerAdapter.setUpForZoomAnimation(getView());
 
         // Set toggle active button action.
         final ImageButton toggleActiveButton = (ImageButton) view.findViewById(R.id.toggleChallengeActivityButton);

@@ -1,5 +1,6 @@
 package sebastians.challenge;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
 import android.media.Image;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -173,6 +175,9 @@ public class AddChallengeTaskDetailFragment extends Fragment {
         viewPagerImageAdapter.notifyDataSetChanged();
         viewPager.setAdapter(viewPagerImageAdapter);
 
+        // Set up for zoom-in animation.
+        viewPagerImageAdapter.setUpForZoomAnimation(getView());
+
         // Set edit image button action.
         ImageButton addImageButton = (ImageButton) getView().findViewById(R.id.addImageButton);
         addImageButton.setOnClickListener(new View.OnClickListener() {
@@ -197,6 +202,7 @@ public class AddChallengeTaskDetailFragment extends Fragment {
                 };
             }
         });
+
     }
 
     @Override
