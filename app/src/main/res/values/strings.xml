@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Challenge</string>
+    <string name="overview_title">My Challenges</string>
+    <string name="hello_world">Hello world!2</string>
+    <string name="action_settings">Settings</string>
+    <string name="name">Name</string>
+    <string name="title_activity_challenge_detail">Challenge</string>
+    <string name="description">Description</string>
+    <string name="title_activity_add_challenge">Add Challenge</string>
+    <string name="done">Done</string>
+    <string name="save">Save</string>
+    <string name="saveChallenge">Give your challenge a name</string>
+    <string name="cancel">Cancel</string>
+    <string name="discard">Discard</string>
+    <string name="TIMELINE">TIMELINE</string>
+    <string name="TASK">TASK</string>
+
+    <string name="add_challenge_tab_title_overview">Overview</string>
+    <string name="add_challenge_tab_title_detail">Detail</string>
+    <string name="add_challenge_description_hint">Enter description...</string>
+    <array name="timeAfterPreviousChoices">
+        <item>hour(s)</item>
+        <item>day(s)</item>
+    </array>
+    <string name="timeAfterPrevious">task duration</string>
+
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_add_challenge_overview">New Challenge</string>
+    <string name="title_activity_add_challenge_task_detail">Edit Task</string>
+</resources>
