@@ -43,14 +43,14 @@ public class ChallengeDetailFragment extends Fragment {
         View view = getView();
 
         // Populate ViewPager.
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.imageSwiper);
+        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.imageSwiper);
         viewPagerAdapter = new ViewPagerImageAdapter(getActivity());
         for (ImagePath imagePath : mChallenge.getTaskList().get(0).getImagePaths())
             viewPagerAdapter.add(imagePath);
         viewPager.setAdapter(viewPagerAdapter);
 
         // Set up for zoom-in animation.
-        viewPagerAdapter.setUpForZoomAnimation(getView());
+        viewPagerAdapter.setUpForZoomAnimation(getView(), null);
 
         // Set toggle active button action.
         final ImageButton toggleActiveButton = (ImageButton) view.findViewById(R.id.toggleChallengeActivityButton);
@@ -93,7 +93,7 @@ public class ChallengeDetailFragment extends Fragment {
                 descriptionField.setText(Html.fromHtml(selectedTask.getDescription()));
 
                 // Update images.
-                viewPagerAdapter.clear();
+                viewPagerAdapter.clear(viewPager);
                 viewPagerAdapter.add(selectedTask.getImagePaths());
                 viewPagerAdapter.notifyDataSetChanged();
             }

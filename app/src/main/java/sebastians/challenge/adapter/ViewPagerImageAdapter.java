@@ -8,9 +8,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
-//import android.util.Log;
-import android.util.Log;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
@@ -23,6 +24,8 @@ import sebastians.challenge.R;
 import sebastians.challenge.data.ImagePath;
 import sebastians.challenge.tools.PhotoManager;
 
+//import android.util.Log;
+
 /**
  * Created by kunterbunt on 14.06.15.
  */
@@ -34,23 +37,22 @@ public class ViewPagerImageAdapter extends PagerAdapter {
     private int mAnimationDuration;
     private ImageView mExpandedImageView = null;
     private View mContainerLayout, mExpandedImageViewOverlay;
+    private ActionBar mActionBar = null;
 
     private List<ImagePath> mImagePaths;
+    private List<View> mViews;
     private Context mContext;
     private ImageView.ScaleType mScaleType;
-    private int mCurrentPosition;
-    private boolean needsToRefresh;
 
     public ViewPagerImageAdapter(Context context) {
         this(context, new ArrayList<ImagePath>());
-        mScaleType = ImageView.ScaleType.CENTER_CROP;
-        mCurrentPosition = 0;
-        needsToRefresh = false;
     }
 
     public ViewPagerImageAdapter(Context context, List<ImagePath> imagePaths) {
         mContext = context;
         mImagePaths = imagePaths;
+        mViews = new ArrayList<>();
+        mScaleType = ImageView.ScaleType.CENTER_CROP;
     }
 
     @Override
@@ -60,16 +62,44 @@ public class ViewPagerImageAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return mImagePaths.size();
+        return mViews.size();
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
+        View view = mViews.get(position);
+        container.addView(view);
+        return view;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        container.removeView(mViews.get(position));
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        int index = mViews.indexOf(object);
+        if (index == -1)
+            return POSITION_NONE;
+        else
+            return index;
+    }
+
+    /**
+     * Change the scale type used to show the images.
+     * @param scaleType
+     */
+    public void setScaleType(ImageView.ScaleType scaleType) {
+        this.mScaleType = scaleType;
+    }
+
+    public int add(ImagePath path) {
+        mImagePaths.add(path);
+
         final ImageView imageView = new ImageView(mContext);
         imageView.setScaleType(mScaleType);
-
-        ImagePath imagePath = mImagePaths.get(position);
-        final Bitmap bitmap = PhotoManager.getBitmap(imagePath);
+        final Bitmap bitmap = PhotoManager.getBitmap(path);
 
         // Set up animation click event.
         if (mExpandedImageView != null) {
@@ -82,56 +112,31 @@ public class ViewPagerImageAdapter extends PagerAdapter {
         }
 
         imageView.setImageBitmap(bitmap);
-        container.addView(imageView, 0);
-        mCurrentPosition = position;
-        return imageView;
+        mViews.add(imageView);
+        return mViews.size() - 1;
     }
 
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((ImageView) object);
-    }
-
-    @Override
-    public int getItemPosition(Object object) {
-        if (!needsToRefresh)
-            return super.getItemPosition(object);
-        else {
-            needsToRefresh = false;
-            return POSITION_NONE;
-        }
-
-    }
-
-    /**
-     * Change the scale type used to show the images.
-     * @param scaleType
-     */
-    public void setScaleType(ImageView.ScaleType scaleType) {
-        this.mScaleType = scaleType;
-    }
-
-    public void add(ImagePath path) {
-        mImagePaths.add(path);
-    }
-
-    public void add(List<ImagePath> paths) {
+    public int add(List<ImagePath> paths) {
+        int position = 0;
         for (ImagePath path : paths)
-            add(path);
+            position = add(path);
+        return position;
     }
 
-    public void remove(ImagePath path) {
-        mImagePaths.remove(path);
+    public int remove(ViewPager pager, ImagePath path) {
+        return remove(pager, mImagePaths.indexOf(path));
     }
-
-    public void remove(int position) {
+    public int remove(ViewPager pager, int position) {
         mImagePaths.remove(position);
+        pager.setAdapter(null);
+        mViews.remove(position);
+        pager.setAdapter(this);
+        return position;
     }
 
-    public void clear() { mImagePaths.clear(); needsToRefresh = true;}
-
-    public void removeCurrentImage() {
-        mImagePaths.remove(mCurrentPosition);
+    public void clear(ViewPager pager) {
+        for (int i = 0; i < mImagePaths.size(); i++)
+            remove(pager, i);
     }
 
     public List<ImagePath> getImagePaths() {
@@ -144,14 +149,16 @@ public class ViewPagerImageAdapter extends PagerAdapter {
      * 2) A View that is also INVISIBLE that has a semi-transparent background.
      * The ImageView needs to be on top of the background View.
      * @param rootView The same view that is inflated during creation. After creation use getView() to get it.
+     * @param actionBar If you also want to hide the action bar, pass it on. Otherwise leave this null.
      */
-    public void setUpForZoomAnimation(View rootView) {
+    public void setUpForZoomAnimation(View rootView, @Nullable ActionBar actionBar) {
         mAnimationDuration = mContext.getResources().getInteger(android.R.integer.config_shortAnimTime);
         mExpandedImageView = (ImageView) rootView.findViewById(R.id.expanded_image);
         mContainerLayout = rootView;
         mExpandedImageViewOverlay = rootView.findViewById(R.id.expanded_image_overlay);
         if (mExpandedImageView == null || mExpandedImageViewOverlay == null || mContainerLayout == null)
             throw new IllegalArgumentException("You need to follow the instructions of setupForZoomAnimation!");
+        mActionBar = actionBar;
     }
 
     private void zoomImage(final View originalView, Bitmap bitmap) {
@@ -211,6 +218,8 @@ public class ViewPagerImageAdapter extends PagerAdapter {
             @Override
             public void onAnimationEnd(Animator animation) {
                 mAnimator = null;
+                if (mActionBar != null)
+                    mActionBar.hide();
             }
 
             @Override
@@ -251,6 +260,8 @@ public class ViewPagerImageAdapter extends PagerAdapter {
                         originalView.setAlpha(1f);
                         mExpandedImageView.setVisibility(View.GONE);
                         mExpandedImageViewOverlay.setVisibility(View.GONE);
+                        if (mActionBar != null)
+                            mActionBar.show();
                         mAnimator = null;
                     }
 
@@ -259,6 +270,8 @@ public class ViewPagerImageAdapter extends PagerAdapter {
                         originalView.setAlpha(1f);
                         mExpandedImageView.setVisibility(View.GONE);
                         mExpandedImageViewOverlay.setVisibility(View.GONE);
+                        if (mActionBar != null)
+                            mActionBar.show();
                         mAnimator = null;
                     }
                 });

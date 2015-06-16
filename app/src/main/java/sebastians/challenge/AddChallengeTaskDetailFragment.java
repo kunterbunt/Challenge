@@ -1,9 +1,7 @@
 package sebastians.challenge;
 
-import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,11 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Spinner;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import sebastians.challenge.adapter.ViewPagerImageAdapter;
 import sebastians.challenge.data.ImagePath;
@@ -36,9 +30,10 @@ import sebastians.challenge.tools.PhotoManager;
 public class AddChallengeTaskDetailFragment extends Fragment {
 
     public static final String LOG_TAG = "TaskDetailFragment";
-    private int previousSpinnerItemSelected;
-    private ViewPagerImageAdapter viewPagerImageAdapter;
-    private ImagePath currentImagePath;
+    private int mPreviousSelectedSpinnerItem;
+    private ViewPagerImageAdapter mViewPagerImageAdapter;
+    private ViewPager mViewPager;
+    private ImagePath mCurrentImagePath;
 
     public AddChallengeTaskDetailFragment() {
     }
@@ -115,7 +110,7 @@ public class AddChallengeTaskDetailFragment extends Fragment {
             timeChoiceField.setText("" + hours);
         } else
             timeChoiceField.setText("" + 1);
-        previousSpinnerItemSelected = timeChoiceSpinner.getSelectedItemPosition();
+        mPreviousSelectedSpinnerItem = timeChoiceSpinner.getSelectedItemPosition();
 
         // Change timeAfterPrev when user changed the value.
         timeChoiceField.addTextChangedListener(new TextWatcher() {
@@ -149,16 +144,16 @@ public class AddChallengeTaskDetailFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Day(s) selected.
-                if (id == 1 && previousSpinnerItemSelected != 1) {
+                if (id == 1 && mPreviousSelectedSpinnerItem != 1) {
                     int hours = Integer.parseInt(timeChoiceField.getText().toString());
                     int days = hours / 24;
                     timeChoiceField.setText("" + (days > 0 ? days : 1));
                 // Hour(s) selected.
-                } else if (id == 0 && previousSpinnerItemSelected != 0) {
+                } else if (id == 0 && mPreviousSelectedSpinnerItem != 0) {
                     int days = Integer.parseInt(timeChoiceField.getText().toString());
                     timeChoiceField.setText("" + (days * 24));
                 }
-                previousSpinnerItemSelected = timeChoiceSpinner.getSelectedItemPosition();
+                mPreviousSelectedSpinnerItem = timeChoiceSpinner.getSelectedItemPosition();
             }
 
             @Override
@@ -168,15 +163,15 @@ public class AddChallengeTaskDetailFragment extends Fragment {
         });
 
         // Populate ViewPager
-        ViewPager viewPager = (ViewPager) getView().findViewById(R.id.viewPager);
-        viewPagerImageAdapter = new ViewPagerImageAdapter(getActivity());
+        mViewPager = (ViewPager) getView().findViewById(R.id.viewPager);
+        mViewPagerImageAdapter = new ViewPagerImageAdapter(getActivity());
         for (ImagePath path : getCastedActivity().getTaskImagePaths())
-            viewPagerImageAdapter.add(path);
-        viewPagerImageAdapter.notifyDataSetChanged();
-        viewPager.setAdapter(viewPagerImageAdapter);
+            mViewPagerImageAdapter.add(path);
+        mViewPagerImageAdapter.notifyDataSetChanged();
+        mViewPager.setAdapter(mViewPagerImageAdapter);
 
         // Set up for zoom-in animation.
-        viewPagerImageAdapter.setUpForZoomAnimation(getView());
+        mViewPagerImageAdapter.setUpForZoomAnimation(getView(), null);
 
         // Set edit image button action.
         ImageButton addImageButton = (ImageButton) getView().findViewById(R.id.addImageButton);
@@ -186,13 +181,16 @@ public class AddChallengeTaskDetailFragment extends Fragment {
                 new ButtonDialog(getActivity(), null, "Camera", "Remove", "Gallery", null) {
                     @Override
                     public void onPositiveButtonClick() {
-                        currentImagePath = new ImagePath(PhotoManager.requestToTakePhoto(getActivity()));
+                        mCurrentImagePath = new ImagePath(PhotoManager.requestToTakePhoto(getActivity()));
                     }
 
                     @Override
                     public void onNeutralButtonClick() {
-                        viewPagerImageAdapter.removeCurrentImage();
-                        viewPagerImageAdapter.notifyDataSetChanged();
+                        int pos = mViewPagerImageAdapter.remove(mViewPager, mViewPager.getCurrentItem());
+                        mViewPagerImageAdapter.notifyDataSetChanged();
+                        if (pos > -1)
+                            mViewPager.setCurrentItem(pos, true);
+                        getCastedActivity().setTaskImagePaths(mViewPagerImageAdapter.getImagePaths());
                     }
 
                     @Override
@@ -209,21 +207,23 @@ public class AddChallengeTaskDetailFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
+            int pos;
             switch (requestCode) {
                 case PhotoManager.REQUEST_TAKE_PHOTO:
-                    viewPagerImageAdapter.add(currentImagePath);
-                    viewPagerImageAdapter.notifyDataSetChanged();
+                    pos = mViewPagerImageAdapter.add(mCurrentImagePath);
+                    mViewPagerImageAdapter.notifyDataSetChanged();
+                    mViewPager.setCurrentItem(pos, true);
                     break;
                 case PhotoManager.REQUEST_PICK_PHOTO:
                     Uri uri = data.getData();
                     ImagePath imagePath = PhotoManager.convertContentUriToImagePath(getActivity(), uri);
-                    viewPagerImageAdapter.add(imagePath);
-                    viewPagerImageAdapter.notifyDataSetChanged();
+                    pos = mViewPagerImageAdapter.add(imagePath);
+                    mViewPagerImageAdapter.notifyDataSetChanged();
+                    mViewPager.setCurrentItem(pos, true);
                     break;
             }
-        } else
-            Log.e(LOG_TAG, "Recieved intent with resultCode != RESULT_OK.");
-        // Set changed image paths in activity.
-        getCastedActivity().setTaskImagePaths(viewPagerImageAdapter.getImagePaths());
+            // Set changed image paths in activity.
+            getCastedActivity().setTaskImagePaths(mViewPagerImageAdapter.getImagePaths());
+        }
     }
 }

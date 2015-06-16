@@ -109,9 +109,9 @@
         android:id="@+id/expanded_image_overlay"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@color/dark_gray"
+        android:background="@android:color/black"
         android:visibility="invisible"
-        android:alpha="0.75"
+        android:alpha="1"
     />
 
     <ImageView
