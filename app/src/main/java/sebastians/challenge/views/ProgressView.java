@@ -33,6 +33,7 @@ public class ProgressView extends View {
     Paint selectedPaint;
     Paint currentPaint;
     Paint donePaint;
+    int totWidth;
     private ArrayList<PointF> itemsPositions = new ArrayList<>();
 
 
@@ -59,7 +60,7 @@ public class ProgressView extends View {
         dueTaskId = challenge.getDueTaskId();
 
 
-        int totWidth = circRadius * 3 * challenge.getTaskList().size();
+        totWidth = circRadius * 3 * challenge.getTaskList().size();
 
         int itemX = (width - totWidth) / 2;
         int itemY = height / 2;
@@ -159,10 +160,8 @@ public class ProgressView extends View {
         int mWidth;
         do {
             radius--;
-            int distance = radius * 2;
-            int items = challenge.getTaskList().size();
 
-            mWidth = radius * items * (items);
+            mWidth = radius * 3 * challenge.getTaskList().size();
 
         }while(mWidth > width);
 
