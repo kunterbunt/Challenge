@@ -3,6 +3,7 @@ package sebastians.challenge;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -22,6 +24,7 @@ import sebastians.challenge.adapter.ViewPagerImageAdapter;
 import sebastians.challenge.data.ImagePath;
 import sebastians.challenge.dialogs.ButtonDialog;
 import sebastians.challenge.tools.PhotoManager;
+import sebastians.challenge.tools.ViewDimensionGetter;
 
 
 /**
@@ -164,7 +167,17 @@ public class AddChallengeTaskDetailFragment extends Fragment {
 
         // Populate ViewPager
         mViewPager = (ViewPager) getView().findViewById(R.id.viewPager);
+        Log.i(LOG_TAG, "onActivity..: " + mViewPager.getWidth());
         mViewPagerImageAdapter = new ViewPagerImageAdapter(getActivity());
+
+        // Tell the adapter the ViewPager size once that is set.
+        new ViewDimensionGetter(mViewPager) {
+            @Override
+            public void sizeWasSet(int width, int height) {
+                mViewPagerImageAdapter.setTargetSize(width, height);
+            }
+        };
+
         for (ImagePath path : getCastedActivity().getTaskImagePaths())
             mViewPagerImageAdapter.add(path);
         mViewPagerImageAdapter.notifyDataSetChanged();

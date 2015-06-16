@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
@@ -43,6 +44,7 @@ public class ViewPagerImageAdapter extends PagerAdapter {
     private List<View> mViews;
     private Context mContext;
     private ImageView.ScaleType mScaleType;
+    private int mTargetWidth = 0, mTargetHeight = 0;
 
     public ViewPagerImageAdapter(Context context) {
         this(context, new ArrayList<ImagePath>());
@@ -99,7 +101,12 @@ public class ViewPagerImageAdapter extends PagerAdapter {
 
         final ImageView imageView = new ImageView(mContext);
         imageView.setScaleType(mScaleType);
-        final Bitmap bitmap = PhotoManager.getBitmap(path);
+        final Bitmap bitmap;
+        Log.i(LOG_TAG, "Width=" + mTargetWidth + " Height=" + mTargetHeight);
+        if (mTargetHeight <= 0 || mTargetWidth <= 0)
+            bitmap = PhotoManager.getBitmap(path);
+        else
+            bitmap = PhotoManager.getScaledBitmap(path, mTargetWidth, mTargetHeight);
 
         // Set up animation click event.
         if (mExpandedImageView != null) {
@@ -141,6 +148,25 @@ public class ViewPagerImageAdapter extends PagerAdapter {
 
     public List<ImagePath> getImagePaths() {
         return mImagePaths;
+    }
+
+    /**
+     * Set target width and height to tell the adapter to downsample images to fit the required dimensions.
+     * Good for memory, y'know.
+     * @param width
+     * @param height
+     */
+    public void setTargetSize(int width, int height) {
+        mTargetWidth = width;
+        mTargetHeight = height;
+    }
+
+    public int getTargetWidth() {
+        return mTargetWidth;
+    }
+
+    public int getTargetHeight() {
+        return mTargetHeight;
     }
 
     /**

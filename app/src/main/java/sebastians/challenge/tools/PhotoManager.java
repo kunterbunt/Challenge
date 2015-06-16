@@ -151,11 +151,41 @@ public class PhotoManager {
      */
     public static Bitmap getScaledBitmap(ImagePath imagePath, int width, int height) {
         BitmapFactory.Options options = new BitmapFactory.Options();
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath.getPath(), options);
-        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
-        return bitmap;
+        // First decoding checks dimensions.
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(imagePath.getPath(), options); // returns null but sets size in options.
+        // Set inSampleSize.
+        options.inSampleSize = calculateInSampleSize(options, width, height);
+
+        // Decode bitmap with correct size.
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(imagePath.getPath(), options);
     }
 
+    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
+    }
+
+    /**
+     * @param imagePath
+     * @return Bitmap as it is, in full resolution. Avoid this method if you can because of memory issues.
+     */
     public static Bitmap getBitmap(ImagePath imagePath) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath.getPath(), options);
