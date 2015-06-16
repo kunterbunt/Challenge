@@ -23,12 +23,15 @@ public class ViewPagerImageAdapter extends PagerAdapter {
 
     private List<ImagePath> mImagePaths;
     private Context mContext;
-    private ImageView.ScaleType mScaleType = ImageView.ScaleType.CENTER_CROP;
-    private int mCurrentPosition = 0;
-
+    private ImageView.ScaleType mScaleType;
+    private int mCurrentPosition;
+    private boolean needsToRefresh;
 
     public ViewPagerImageAdapter(Context context) {
         this(context, new ArrayList<ImagePath>());
+        mScaleType = ImageView.ScaleType.CENTER_CROP;
+        mCurrentPosition = 0;
+        needsToRefresh = false;
     }
 
     public ViewPagerImageAdapter(Context context, List<ImagePath> imagePaths) {
@@ -65,6 +68,17 @@ public class ViewPagerImageAdapter extends PagerAdapter {
         container.removeView((ImageView) object);
     }
 
+    @Override
+    public int getItemPosition(Object object) {
+        if (!needsToRefresh)
+            return super.getItemPosition(object);
+        else {
+            needsToRefresh = false;
+            return POSITION_NONE;
+        }
+
+    }
+
     /**
      * Change the scale type used to show the images.
      * @param scaleType
@@ -77,6 +91,11 @@ public class ViewPagerImageAdapter extends PagerAdapter {
         mImagePaths.add(path);
     }
 
+    public void add(List<ImagePath> paths) {
+        for (ImagePath path : paths)
+            add(path);
+    }
+
     public void remove(ImagePath path) {
         mImagePaths.remove(path);
     }
@@ -84,6 +103,8 @@ public class ViewPagerImageAdapter extends PagerAdapter {
     public void remove(int position) {
         mImagePaths.remove(position);
     }
+
+    public void clear() { mImagePaths.clear(); needsToRefresh = true;}
 
     public void removeCurrentImage() {
         mImagePaths.remove(mCurrentPosition);

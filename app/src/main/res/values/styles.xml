@@ -9,6 +9,16 @@
 
     </style>
 
+    <style name="separator">
+        <item name="android:layout_width">fill_parent</item>>
+        <item name="android:layout_height">1dp</item>>
+        <item name="android:background">@color/app_color_dark</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:layout_marginLeft">24dp</item>
+        <item name="android:layout_marginRight">24dp</item>
+    </style>
+
     <!-- FAB Button style base. -->
     <style name="FAB">
         <item name="android:layout_width">@dimen/fab_button_diameter</item>

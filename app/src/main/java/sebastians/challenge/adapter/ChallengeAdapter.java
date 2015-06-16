@@ -1,10 +1,7 @@
 package sebastians.challenge.adapter;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
@@ -17,11 +14,11 @@ import sebastians.challenge.data.Challenge;
  */
 public class ChallengeAdapter extends ListAdapterHeader<Challenge> {
 
-    private static final int resource = R.layout.listitem_challenge;
-    private static final int resource2 = R.layout.listitem_challenge_header;
+    private static final int RESOURCE_ITEM = R.layout.listitem_challenge;
+    private static final int RESOURCE_HEADER = R.layout.listitem_challenge_header;
 
     public ChallengeAdapter(Context context, List<Challenge> objects) {
-        super(context, resource, resource2, objects);
+        super(context, RESOURCE_ITEM, RESOURCE_HEADER, objects);
     }
 
     @Override
@@ -31,10 +28,10 @@ public class ChallengeAdapter extends ListAdapterHeader<Challenge> {
 
     @Override
     public void styleHeader(View view, boolean active) {
-        if(active){
+        if (active) {
             ((TextView) view.findViewById(R.id.name)).setText("Active");
             ((TextView) view.findViewById(R.id.name)).setTextColor(getContext().getResources().getColor(android.R.color.black));
-        }else{
+        } else {
             ((TextView) view.findViewById(R.id.name)).setText("Inactive");
         }
     }

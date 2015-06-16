@@ -22,9 +22,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "challenge_db";
     public static final String LOG_TAG = "DB";
 
+    private static DatabaseHelper instance = null;
+
     private SQLiteDatabase writableDatabase;
     private SQLiteDatabase readableDatabase;
-    public static DatabaseHelper instance = null;
 
 
     private DatabaseHelper(Context context) {
@@ -37,15 +38,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (instance == null) {
             instance = new DatabaseHelper(context);
 
-            if(instance.getAllChallenges().size() == 0)
+            if (instance.getAllChallenges().size() == 0)
                 instance.createDefaultData();
-            Log.i(LOG_TAG, "Database instantiated.");
+            Log.d(LOG_TAG, "Database instantiated.");
         }
-//        else
-//            Log.e(LOG_TAG, "Attempted to re-instantiate database.");
     }
 
     public static DatabaseHelper getInstance() {
+        if (instance == null)
+            throw new IllegalStateException("Database has not been instantiated!");
         return instance;
     }
 
@@ -72,8 +73,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Fetch alle Challenges from database
-     * @return List of Challenges
+     * @return all challenges from database, starting by all active ones.
      */
     public List<Challenge> getAllChallenges(){
 
@@ -107,9 +107,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null,
                 null);
         cursor.moveToFirst();
-
-
-
         return cursor2Challenge(cursor);
     }
 
@@ -304,7 +301,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Challenge smoothieChallenge = new Challenge("Smoothie Challenge");
         smoothieChallenge.setActivatedTs(System.currentTimeMillis() / 1000);
-        smoothieChallenge.setActive(true);
+        smoothieChallenge.setActive(false);
         //add some ChallengeItems
         ArrayList<Task> tasks = new ArrayList<>();
 
@@ -349,64 +346,64 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         this.create(smoothieChallenge);
 
 
-        ContentValues cv = new ContentValues();
-
-        cv = new ContentValues();
-        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge");
-        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
-        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
-        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
-
-        cv = new ContentValues();
-        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 1");
-        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
-        cv.put(Contract.ChallengeEntry.ACTIVE, 1);
-        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
-
-        cv = new ContentValues();
-        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 2 ");
-        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
-        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
-        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
-
-        cv = new ContentValues();
-        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 3");
-        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
-        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
-        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
-
-        cv = new ContentValues();
-        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 4");
-        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
-        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
-        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
-
-        cv = new ContentValues();
-        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 5");
-        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
-        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
-        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
-
-
-        cv = new ContentValues();
-        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 5");
-        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
-        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
-        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
-
-
-        cv = new ContentValues();
-        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 5");
-        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
-        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
-        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
-
-
-        cv = new ContentValues();
-        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 5");
-        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
-        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
-        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
+//        ContentValues cv = new ContentValues();
+//
+//        cv = new ContentValues();
+//        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge");
+//        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+//        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
+//        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
+//
+//        cv = new ContentValues();
+//        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 1");
+//        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+//        cv.put(Contract.ChallengeEntry.ACTIVE, 1);
+//        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
+//
+//        cv = new ContentValues();
+//        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 2 ");
+//        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+//        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
+//        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
+//
+//        cv = new ContentValues();
+//        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 3");
+//        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+//        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
+//        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
+//
+//        cv = new ContentValues();
+//        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 4");
+//        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+//        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
+//        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
+//
+//        cv = new ContentValues();
+//        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 5");
+//        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+//        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
+//        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
+//
+//
+//        cv = new ContentValues();
+//        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 5");
+//        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+//        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
+//        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
+//
+//
+//        cv = new ContentValues();
+//        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 5");
+//        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+//        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
+//        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
+//
+//
+//        cv = new ContentValues();
+//        cv.put(Contract.ChallengeEntry.TITLE, "Running Challenge 5");
+//        cv.put(Contract.ChallengeEntry.DESCRIPTION, "Run Forrest");
+//        cv.put(Contract.ChallengeEntry.ACTIVE, 0);
+//        writableDatabase.insert(Contract.ChallengeEntry.TABLE_NAME, null, cv);
 
     }
 

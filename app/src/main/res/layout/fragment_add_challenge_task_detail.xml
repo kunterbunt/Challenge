@@ -26,6 +26,12 @@
             android:tint="@android:color/white"/>
     </RelativeLayout>
 
+    <View
+        style="@style/separator"
+        android:layout_margin="0dp"
+        android:background="@color/dark_gray"
+    />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,6 +45,10 @@
         android:layout_marginRight="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp" />
+
+    <View
+        style="@style/separator"
+    />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -71,6 +81,10 @@
             android:gravity="center_vertical|center_horizontal"
             android:textColor="@color/light_gray" />
     </LinearLayout>
+
+    <View
+        style="@style/separator"
+    />
 
     <EditText
         android:layout_width="match_parent"

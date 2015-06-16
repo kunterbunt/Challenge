@@ -50,12 +50,6 @@ public class Challenge {
         mTaskList = new ArrayList<Task>();
     }
 
-    public void startNow(){
-        this.setActivatedTs(System.currentTimeMillis() / 1000);
-        this.setActive(true);
-
-    }
-
     /**
      *
      * @return  null if there is no due task at the moment otherwise return Task Object
@@ -90,8 +84,14 @@ public class Challenge {
 
     }
 
+    /**
+     * Activates or deactivates a challenge.
+     * @param value
+     */
     public void setActive(boolean value){
         this.mActive = value;
+        if (mActive)
+            setActivatedTs(System.currentTimeMillis() / 1000);
     }
 
     public void resetDismissedForTasks(){

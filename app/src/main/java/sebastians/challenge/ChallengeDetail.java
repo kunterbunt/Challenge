@@ -18,59 +18,18 @@ public class ChallengeDetail extends ActionBarActivity {
     /** Put an intent extra into the calling intent to provide the database id of the challenge you want to show. */
     public static final String INTENT_CHALLENGE_ID = "CHALLENGE_ID";
     public static final String LOG_TAG = "ChallengeDetail";
-    private long mAssociatedChallengeDatabaseId;
-    private DatabaseHelper db;
     private Challenge mChallenge;
-
-
-    public Challenge getChallenge(){
-        return this.mChallenge;
-    }
-
-    //views:
-    private TextView description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenge_detail);
 
-        DatabaseHelper.init(getApplicationContext());
-        db = DatabaseHelper.getInstance();
-
-        description = (TextView) findViewById(R.id.description);
-
-        mAssociatedChallengeDatabaseId = getIntent().getLongExtra(INTENT_CHALLENGE_ID, -1);
-
-
-        mChallenge = db.getChallengeById(mAssociatedChallengeDatabaseId);
-
-
-        if (mAssociatedChallengeDatabaseId == -1)
-            throw new IllegalArgumentException("No challenge database ID provided.");
-
-
-
-        final ImageButton addTaskButton = (ImageButton) findViewById(R.id.toggleChallengeActivityButton);
-        final ProgressView progressView = (ProgressView) findViewById(R.id.progressBar);
-        progressView.setChallenge(mChallenge);
-
-
-
-        if(mChallenge.isActive()){
-
-            addTaskButton.setImageResource(android.R.drawable.ic_media_rew);
-
-        }else{
-
-            addTaskButton.setImageResource(android.R.drawable.ic_media_play);
-        }
-
+        long challengeId = getIntent().getLongExtra(INTENT_CHALLENGE_ID, -1);
+        if (challengeId == -1)
+            throw new IllegalArgumentException("No challenge database ID provided to ChallengeDetail activity.");
+        mChallenge = DatabaseHelper.getInstance().getChallengeById(challengeId);
         setTitle(mChallenge.getName());
-        description.setText(Html.fromHtml(mChallenge.getDescription()));
-
-
-
     }
 
 
@@ -94,5 +53,9 @@ public class ChallengeDetail extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public Challenge getChallenge(){
+        return this.mChallenge;
     }
 }

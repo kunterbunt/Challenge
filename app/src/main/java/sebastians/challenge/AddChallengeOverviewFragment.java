@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sebastians.challenge.adapter.TaskListAdapter;
+import sebastians.challenge.data.Challenge;
 import sebastians.challenge.data.ImagePath;
 import sebastians.challenge.data.Task;
 
@@ -28,6 +29,7 @@ public class AddChallengeOverviewFragment extends Fragment {
     private ListView mTaskListView;
     private List<Task> mTaskList;
     private TaskListAdapter mTaskListAdapter;
+    /** Keeps track of the last challenge the user has clicked on to edit. */
     private int mPositionOfLastEditedTask;
 
     public AddChallengeOverviewFragment() {
@@ -78,17 +80,20 @@ public class AddChallengeOverviewFragment extends Fragment {
         switch (requestCode) {
             case (AddChallengeTaskDetail.REQUEST_SET_DETAIL):
                 if (resultCode == Activity.RESULT_OK) {
+                    // Get the last task that the user clicked and set its attributes to what the intent specifies.
                     Task task = mTaskList.get(mPositionOfLastEditedTask);
                     task.setTitle(data.getStringExtra(AddChallengeTaskDetail.INTENT_TITLE));
                     task.setDescription(data.getStringExtra(AddChallengeTaskDetail.INTENT_DESCRIPTION));
                     task.setDurationValidity(data.getIntExtra(AddChallengeTaskDetail.INTENT_TIMEAFTERPREV, 1));
                     task.setImagePaths(ImagePath.convertToImagePathList(data.getStringArrayListExtra(AddChallengeTaskDetail.INTENT_IMAGEPATHLIST)));
                     mTaskListAdapter.notifyDataSetChanged();
+
+                    // Pass that on to the activity.
+                    AddChallengeOverview activity = (AddChallengeOverview) getActivity();
+                    Challenge challenge = activity.getChallenge();
+                    challenge.setTaskList(mTaskList);
+                    activity.setChallenge(challenge);
                 }
         }
-    }
-
-    public boolean hasTasks() {
-        return mTaskList.size() > 0;
     }
 }

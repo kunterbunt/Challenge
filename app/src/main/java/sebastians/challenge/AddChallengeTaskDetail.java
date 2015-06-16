@@ -51,22 +51,24 @@ public class AddChallengeTaskDetail extends ActionBarActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.save:
-                Intent sendBackIntent = new Intent();
-                sendBackIntent.putExtra(INTENT_TITLE, getTaskTitle());
-                sendBackIntent.putExtra(INTENT_DESCRIPTION, getTaskDescription());
-                sendBackIntent.putExtra(INTENT_TIMEAFTERPREV, getTaskDuration());
-                sendBackIntent.putStringArrayListExtra(INTENT_IMAGEPATHLIST, (ArrayList) ImagePath.convertToStringList(task_imagePaths));
-                setResult(Activity.RESULT_OK, sendBackIntent);
-                finish();
-                break;
             // Up button.
             case android.R.id.home:
                 onBackPressed();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Save changed data.
+        Intent sendBackIntent = new Intent();
+        sendBackIntent.putExtra(INTENT_TITLE, getTaskTitle());
+        sendBackIntent.putExtra(INTENT_DESCRIPTION, getTaskDescription());
+        sendBackIntent.putExtra(INTENT_TIMEAFTERPREV, getTaskDuration());
+        sendBackIntent.putStringArrayListExtra(INTENT_IMAGEPATHLIST, (ArrayList) ImagePath.convertToStringList(task_imagePaths));
+        setResult(Activity.RESULT_OK, sendBackIntent);
+        finish();
     }
 
     @Override

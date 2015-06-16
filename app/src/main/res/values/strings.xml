@@ -11,6 +11,9 @@
     <string name="save">Save</string>
     <string name="saveChallenge">Give your challenge a name</string>
     <string name="cancel">Cancel</string>
+    <string name="discard">Discard</string>
+    <string name="TIMELINE">TIMELINE</string>
+    <string name="TASK">TASK</string>
 
     <string name="add_challenge_tab_title_overview">Overview</string>
     <string name="add_challenge_tab_title_detail">Detail</string>

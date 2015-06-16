@@ -27,7 +27,6 @@ import sebastians.challenge.data.DatabaseHelper;
 public class MyChallengesFragment extends Fragment {
 
     private List<Challenge> mChallengeList;
-    private List<Challenge> mChallengeListViewList;
     private ChallengeAdapter mChallengeAdapter;
 
     public MyChallengesFragment() {
@@ -37,40 +36,28 @@ public class MyChallengesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_challenges, container, false);
-        // Get ListView.
-        ListView challengeList = (ListView) view.findViewById(R.id.challenge_list);
         // Initialize database connection.
         DatabaseHelper.init(getActivity().getApplicationContext());
-        DatabaseHelper db = DatabaseHelper.getInstance();
-        // Load challenges from database.
-        mChallengeList = db.getAllChallenges();
-
-        mChallengeListViewList = new ArrayList<>();
-        mChallengeListViewList.add(null);
-        //add "VOID" Challenges to Challengelist.
-        boolean notActive = false;
-        for(int i = 0; i < mChallengeList.size(); i++){
-            if(mChallengeList.get(i).isActive() == false && notActive == false){
-                notActive = true;
-                mChallengeListViewList.add(null);
-            }
-            mChallengeListViewList.add(mChallengeList.get(i));
-        }
-        mChallengeAdapter = new ChallengeAdapter(getActivity().getApplicationContext(), mChallengeListViewList);
+        // Populate challenge list.
+        mChallengeList = getChallengeList();
+        mChallengeAdapter = new ChallengeAdapter(getActivity().getApplicationContext(), mChallengeList);
+        ListView challengeList = (ListView) view.findViewById(R.id.challenge_list);
         challengeList.setAdapter(mChallengeAdapter);
         challengeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(mChallengeListViewList.get(position) == null)
+                // Pinned headers should not be clickable.
+                if (mChallengeList.get(position) == null)
                     return;
 
                 // When a challenge card is clicked, start its detail activity.
                 // For that, pass the corresponding database id to the detail activity.
                 Intent intent = new Intent(getActivity().getApplicationContext(), ChallengeDetail.class);
-                intent.putExtra(ChallengeDetail.INTENT_CHALLENGE_ID, mChallengeListViewList.get(position).getDatabaseId());
+                intent.putExtra(ChallengeDetail.INTENT_CHALLENGE_ID, mChallengeList.get(position).getDatabaseId());
                 startActivity(intent);
             }
         });
+
         // Set add challenge button listener.
         ((ImageButton) view.findViewById(R.id.addChallengeButton)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,21 +71,30 @@ public class MyChallengesFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // This indicates that a challenge has been added to the database.
         if (requestCode == AddChallengeOverview.REQUEST_NEW_CHALLENGE && resultCode == Activity.RESULT_OK) {
-            Log.i("test", "intent recived");
-            mChallengeList = DatabaseHelper.getInstance().getAllChallenges();
-            mChallengeListViewList.clear();
-            mChallengeListViewList.add(null);
-            //add "VOID" Challenges to Challengelist.
-            boolean notActive = false;
-            for(int i = 0; i < mChallengeList.size(); i++){
-                if(mChallengeList.get(i).isActive() == false && notActive == false){
-                    notActive = true;
-                    mChallengeListViewList.add(null);
-                }
-                mChallengeListViewList.add(mChallengeList.get(i));
-            }
+            // Re-populate the list.
+            mChallengeList.clear();
+            mChallengeList.addAll(getChallengeList());
             mChallengeAdapter.notifyDataSetChanged();
         }
+    }
+
+    /**
+     * @return List of challenges as returned from the database with pinned header indicating objects.
+     */
+    private List<Challenge> getChallengeList() {
+        // Load challenges from database.
+        List<Challenge> list = DatabaseHelper.getInstance().getAllChallenges();
+        // null indicates a header, add one at start.
+        list.add(0, null);
+        // Find first inactive challenge.
+        for (int i = 1; i < list.size(); i++) {
+            if (!list.get(i).isActive()) {
+                list.add(i, null);
+                break;
+            }
+        }
+        return list;
     }
 }
