@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.support.annotation.Nullable;
@@ -24,8 +23,7 @@ import java.util.List;
 import sebastians.challenge.R;
 import sebastians.challenge.data.ImagePath;
 import sebastians.challenge.tools.PhotoManager;
-
-//import android.util.Log;
+import sebastians.challenge.tools.ViewDimensionGetter;
 
 /**
  * Created by kunterbunt on 14.06.15.
@@ -45,16 +43,20 @@ public class ViewPagerImageAdapter extends PagerAdapter {
     private Context mContext;
     private ImageView.ScaleType mScaleType;
     private int mTargetWidth = 0, mTargetHeight = 0;
+    final private ViewPager mViewPager;
 
-    public ViewPagerImageAdapter(Context context) {
-        this(context, new ArrayList<ImagePath>());
-    }
-
-    public ViewPagerImageAdapter(Context context, List<ImagePath> imagePaths) {
+    public ViewPagerImageAdapter(Context context, ViewPager viewPager) {
         mContext = context;
-        mImagePaths = imagePaths;
+        mImagePaths = new ArrayList<>();
         mViews = new ArrayList<>();
         mScaleType = ImageView.ScaleType.CENTER_CROP;
+        mViewPager = viewPager;
+        new ViewDimensionGetter(viewPager) {
+            @Override
+            public void sizeWasSet(int width, int height) {
+                setTargetSize(width, height);
+            }
+        };
     }
 
     @Override
@@ -68,8 +70,17 @@ public class ViewPagerImageAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        View view = mViews.get(position);
+    public Object instantiateItem(ViewGroup container, final int position) {
+        final View view = mViews.get(position);
+        // Set up animation click event.
+        if (mExpandedImageView != null) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    zoomImage((ImageView) view, mImagePaths.get(position));
+                }
+            });
+        }
         container.addView(view);
         return view;
     }
@@ -96,29 +107,16 @@ public class ViewPagerImageAdapter extends PagerAdapter {
         this.mScaleType = scaleType;
     }
 
-    public int add(ImagePath path) {
+    public int add(final ImagePath path) {
         mImagePaths.add(path);
 
         final ImageView imageView = new ImageView(mContext);
         imageView.setScaleType(mScaleType);
-        final Bitmap bitmap;
-        Log.i(LOG_TAG, "Width=" + mTargetWidth + " Height=" + mTargetHeight);
-        if (mTargetHeight <= 0 || mTargetWidth <= 0)
-            bitmap = PhotoManager.getBitmap(path);
-        else
-            bitmap = PhotoManager.getScaledBitmap(path, mTargetWidth, mTargetHeight);
+        if (mTargetHeight <= 0 || mTargetWidth <= 0) {
+            PhotoManager.setFullBitmap(path, imageView);
+        } else
+            PhotoManager.setFittingBitmap(path, imageView, mTargetWidth, mTargetHeight);
 
-        // Set up animation click event.
-        if (mExpandedImageView != null) {
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    zoomImage(imageView, bitmap);
-                }
-            });
-        }
-
-        imageView.setImageBitmap(bitmap);
         mViews.add(imageView);
         return mViews.size() - 1;
     }
@@ -169,6 +167,10 @@ public class ViewPagerImageAdapter extends PagerAdapter {
         return mTargetHeight;
     }
 
+    public ViewPager getViewPager() {
+        return mViewPager;
+    }
+
     /**
      * Your layout needs two additional views:
      * 1) An ImageView that is set to INVISIBLE with a size to cover the whole screen
@@ -178,6 +180,7 @@ public class ViewPagerImageAdapter extends PagerAdapter {
      * @param actionBar If you also want to hide the action bar, pass it on. Otherwise leave this null.
      */
     public void setUpForZoomAnimation(View rootView, @Nullable ActionBar actionBar) {
+        Log.i(LOG_TAG, "setup");
         mAnimationDuration = mContext.getResources().getInteger(android.R.integer.config_shortAnimTime);
         mExpandedImageView = (ImageView) rootView.findViewById(R.id.expanded_image);
         mContainerLayout = rootView;
@@ -187,13 +190,14 @@ public class ViewPagerImageAdapter extends PagerAdapter {
         mActionBar = actionBar;
     }
 
-    private void zoomImage(final View originalView, Bitmap bitmap) {
+    private void zoomImage(final View originalView, ImagePath path) {
+        Log.i(LOG_TAG, "called");
         // Cancel current animation and start this one.
         if (mAnimator != null)
             mAnimator.cancel();
 
         // Load zoomed-in image.
-        mExpandedImageView.setImageBitmap(bitmap);
+        mExpandedImageView.setImageBitmap(PhotoManager.getFullBitmap(path));
 
         // Calculate starting and ending bounds for zoomed-in image.
         final Rect startBounds = new Rect();
