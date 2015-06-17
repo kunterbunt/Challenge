@@ -68,6 +68,7 @@ public class AddChallengeTaskDetail extends ActionBarActivity {
         sendBackIntent.putStringArrayListExtra(INTENT_IMAGEPATHLIST, (ArrayList) ImagePath.convertToStringList(task_imagePaths));
         setResult(Activity.RESULT_OK, sendBackIntent);
         finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     @Override

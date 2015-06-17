@@ -5,4 +5,5 @@
     <color name="app_color_accent">#689F38</color>
     <color name="dark_gray">#242323</color>
     <color name="light_gray">#9E9E9E</color>
+    <color name="text_dark">#878787</color>
 </resources>

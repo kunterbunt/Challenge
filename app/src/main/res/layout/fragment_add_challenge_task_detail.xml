@@ -80,7 +80,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/timeAfterPrevious"
+                android:text="@string/task_duration"
                 android:id="@+id/textView"
                 android:gravity="center_vertical|center_horizontal"
                 android:textColor="@color/light_gray" />

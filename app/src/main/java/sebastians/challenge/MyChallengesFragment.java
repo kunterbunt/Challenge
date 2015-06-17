@@ -2,26 +2,22 @@ package sebastians.challenge;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import sebastians.challenge.adapter.ChallengeAdapter;
 import sebastians.challenge.data.Challenge;
-import sebastians.challenge.data.DatabaseHelper;
-import sebastians.challenge.data.ImagePath;
+import sebastians.challenge.tools.DatabaseHelper;
 import sebastians.challenge.dialogs.ButtonDialog;
-import sebastians.challenge.tools.PhotoManager;
 
 
 /**
@@ -34,7 +30,6 @@ public class MyChallengesFragment extends Fragment {
     private ChallengeAdapter mChallengeAdapter;
 
     private final MyChallengesFragment thisFragment = this;
-
     public MyChallengesFragment() {
     }
 
@@ -49,7 +44,6 @@ public class MyChallengesFragment extends Fragment {
         mChallengeAdapter = new ChallengeAdapter(getActivity().getApplicationContext(), mChallengeList);
         final ListView challengeList = (ListView) view.findViewById(R.id.challenge_list);
         challengeList.setAdapter(mChallengeAdapter);
-
         challengeList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -104,7 +98,6 @@ public class MyChallengesFragment extends Fragment {
 
 
         });
-
         challengeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -117,6 +110,7 @@ public class MyChallengesFragment extends Fragment {
                 Intent intent = new Intent(getActivity().getApplicationContext(), ChallengeDetail.class);
                 intent.putExtra(ChallengeDetail.INTENT_CHALLENGE_ID, mChallengeList.get(position).getDatabaseId());
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
@@ -125,6 +119,7 @@ public class MyChallengesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivityForResult(new Intent(getActivity().getApplicationContext(), AddChallengeOverview.class), AddChallengeOverview.REQUEST_NEW_CHALLENGE);
+                getActivity().overridePendingTransition(R.anim.abc_slide_in_bottom, R.anim.abc_fade_out);
             }
         });
         return view;

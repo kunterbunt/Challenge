@@ -44,6 +44,7 @@ public class ViewPagerImageAdapter extends PagerAdapter {
     private ImageView.ScaleType mScaleType;
     private int mTargetWidth = 0, mTargetHeight = 0;
     final private ViewPager mViewPager;
+    private boolean needsToRefresh;
 
     public ViewPagerImageAdapter(Context context, ViewPager viewPager) {
         mContext = context;
@@ -51,6 +52,7 @@ public class ViewPagerImageAdapter extends PagerAdapter {
         mViews = new ArrayList<>();
         mScaleType = ImageView.ScaleType.CENTER_CROP;
         mViewPager = viewPager;
+        needsToRefresh = false;
         new ViewDimensionGetter(viewPager) {
             @Override
             public void sizeWasSet(int width, int height) {
@@ -77,11 +79,11 @@ public class ViewPagerImageAdapter extends PagerAdapter {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    zoomImage((ImageView) view, mImagePaths.get(position));
+                    zoomImage(view, mImagePaths.get(position));
                 }
             });
         }
-        container.addView(view);
+        container.addView(view, 0);
         return view;
     }
 
@@ -93,9 +95,10 @@ public class ViewPagerImageAdapter extends PagerAdapter {
     @Override
     public int getItemPosition(Object object) {
         int index = mViews.indexOf(object);
-        if (index == -1)
+        if (needsToRefresh || index == -1) {
+            needsToRefresh = false;
             return POSITION_NONE;
-        else
+        } else
             return index;
     }
 
@@ -108,8 +111,6 @@ public class ViewPagerImageAdapter extends PagerAdapter {
     }
 
     public int add(final ImagePath path) {
-        mImagePaths.add(path);
-
         final ImageView imageView = new ImageView(mContext);
         imageView.setScaleType(mScaleType);
         if (mTargetHeight <= 0 || mTargetWidth <= 0) {
@@ -117,6 +118,7 @@ public class ViewPagerImageAdapter extends PagerAdapter {
         } else
             PhotoManager.setFittingBitmap(path, imageView, mTargetWidth, mTargetHeight);
 
+        mImagePaths.add(path);
         mViews.add(imageView);
         return mViews.size() - 1;
     }
@@ -132,16 +134,18 @@ public class ViewPagerImageAdapter extends PagerAdapter {
         return remove(pager, mImagePaths.indexOf(path));
     }
     public int remove(ViewPager pager, int position) {
-        mImagePaths.remove(position);
         pager.setAdapter(null);
+        mImagePaths.remove(position);
         mViews.remove(position);
         pager.setAdapter(this);
         return position;
     }
 
     public void clear(ViewPager pager) {
-        for (int i = 0; i < mImagePaths.size(); i++)
-            remove(pager, i);
+        pager.setAdapter(null);
+        mImagePaths.clear();
+        mViews.clear();
+        pager.setAdapter(this);
     }
 
     public List<ImagePath> getImagePaths() {
@@ -180,7 +184,6 @@ public class ViewPagerImageAdapter extends PagerAdapter {
      * @param actionBar If you also want to hide the action bar, pass it on. Otherwise leave this null.
      */
     public void setUpForZoomAnimation(View rootView, @Nullable ActionBar actionBar) {
-        Log.i(LOG_TAG, "setup");
         mAnimationDuration = mContext.getResources().getInteger(android.R.integer.config_shortAnimTime);
         mExpandedImageView = (ImageView) rootView.findViewById(R.id.expanded_image);
         mContainerLayout = rootView;
@@ -191,7 +194,6 @@ public class ViewPagerImageAdapter extends PagerAdapter {
     }
 
     private void zoomImage(final View originalView, ImagePath path) {
-        Log.i(LOG_TAG, "called");
         // Cancel current animation and start this one.
         if (mAnimator != null)
             mAnimator.cancel();

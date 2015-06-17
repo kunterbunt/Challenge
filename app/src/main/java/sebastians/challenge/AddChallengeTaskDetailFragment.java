@@ -91,7 +91,7 @@ public class AddChallengeTaskDetailFragment extends Fragment {
         // Populate spinner.
         final Spinner timeChoiceSpinner = (Spinner) getView().findViewById(R.id.timeAfterPreviousSpinner);
         ArrayAdapter<CharSequence> timeChoiceAdapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.timeAfterPreviousChoices, android.R.layout.simple_spinner_item);
+                R.array.task_duration_choices, android.R.layout.simple_spinner_item);
         timeChoiceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         timeChoiceSpinner.setAdapter(timeChoiceAdapter);
 
@@ -178,7 +178,7 @@ public class AddChallengeTaskDetailFragment extends Fragment {
         addImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ButtonDialog(getActivity(), null, "Camera", "Remove", "Gallery", null) {
+                new ButtonDialog(getActivity(), null, getString(R.string.camera), getString(R.string.remove), getString(R.string.gallery), null) {
                     @Override
                     public void onPositiveButtonClick() {
                         mCurrentImagePath = new ImagePath(PhotoManager.requestToTakePhoto(getActivity()));
