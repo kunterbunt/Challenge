@@ -421,13 +421,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(Contract.ChallengeEntry.ACTIVATEDTS, challenge.getActivatedTs());
 
         writableDatabase.update(Contract.ChallengeEntry.TABLE_NAME, cv, Contract.ChallengeEntry._ID + " = ?",
-                new String[] { String.valueOf(challenge.getDatabaseId()) });
+                new String[]{String.valueOf(challenge.getDatabaseId())});
 
         for(int i = 0; i < challenge.getTaskList().size(); i++){
             this.update(challenge.getTaskList().get(i));
         }
 
     }
+
+    /**
+     * Delete Challenge
+     * @param challenge
+     */
+    public void delete(Challenge challenge){
+
+        for(int i = 0; i < challenge.getTaskList().size(); i++){
+            this.delete(challenge.getTaskList().get(i));
+        }
+
+        writableDatabase.delete(Contract.ChallengeEntry.TABLE_NAME,Contract.ChallengeEntry._ID + "= ?", new String[]{String.valueOf(challenge.getDatabaseId())});
+    }
+
+    /**
+     * delete task and containing images
+     * delete selfie from task!!!
+     * @param task
+     */
+    public void delete(Task task){
+        for(int i = 0; i < task.getImagePaths().size(); i++){
+            this.delete(task.getImagePaths().get(i));
+        }
+
+        writableDatabase.delete(Contract.ChallengeItemEntry.TABLE_NAME,Contract.ChallengeItemEntry._ID + "= ?", new String[]{String.valueOf(task.getDatabaseId())});
+
+    }
+
+    /**
+     * TODO DELETE IMAGE FROM DEVICE SPACE! THIS IS HARDCORE IMPORTANT STUFF
+     * @param imagePath
+     */
+    public void delete(ImagePath imagePath){
+        writableDatabase.delete(Contract.ImageEntry.TABLE_NAME,Contract.ImageEntry._ID + "= ?", new String[]{String.valueOf(imagePath.getDatabaseId())});
+    }
+
 
     public void update(Task task){
         ContentValues cv = new ContentValues();
