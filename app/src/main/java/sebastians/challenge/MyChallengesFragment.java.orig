@@ -2,9 +2,8 @@ package sebastians.challenge;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,14 @@ import java.util.List;
 
 import sebastians.challenge.adapter.ChallengeAdapter;
 import sebastians.challenge.data.Challenge;
+<<<<<<< HEAD
 import sebastians.challenge.tools.DatabaseHelper;
+=======
+import sebastians.challenge.data.DatabaseHelper;
+import sebastians.challenge.data.ImagePath;
 import sebastians.challenge.dialogs.ButtonDialog;
+import sebastians.challenge.tools.PhotoManager;
+>>>>>>> 4f8791c1371e333b8708ecb2e8a605c3a9edff19
 
 
 /**
@@ -30,6 +35,7 @@ public class MyChallengesFragment extends Fragment {
     private ChallengeAdapter mChallengeAdapter;
 
     private final MyChallengesFragment thisFragment = this;
+
     public MyChallengesFragment() {
     }
 
@@ -44,6 +50,7 @@ public class MyChallengesFragment extends Fragment {
         mChallengeAdapter = new ChallengeAdapter(getActivity().getApplicationContext(), mChallengeList);
         final ListView challengeList = (ListView) view.findViewById(R.id.challenge_list);
         challengeList.setAdapter(mChallengeAdapter);
+
         challengeList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -98,6 +105,7 @@ public class MyChallengesFragment extends Fragment {
 
 
         });
+
         challengeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
