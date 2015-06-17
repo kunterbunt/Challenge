@@ -6,13 +6,16 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -144,22 +147,128 @@ public class PhotoManager {
     }
 
     /**
+     * Launches an asynchronous task that scales the image down to the required dimensions
+     * and sets it as the imageView source.
      * @param imagePath
      * @param width
      * @param height
-     * @return Bitmap that fits given dimensions decoded from the file.
      */
-    public static Bitmap getScaledBitmap(ImagePath imagePath, int width, int height) {
+    public static void setFittingBitmap(ImagePath imagePath, ImageView imageView, int width, int height) {
+        ScaledBitmapWorkerTask workerTask = new ScaledBitmapWorkerTask(imageView);
+        workerTask.execute(imagePath.getPath(), "" + width, "" + height);
+    }
+
+    /**
+     * Uses calling thread to decode the file into a bitmap.
+     * Depending on the file this can cause lag and/or memory issues.
+     * @param imagePath
+     * @return Decoded bitmap.
+     */
+    public static Bitmap getFullBitmap(ImagePath imagePath) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath.getPath(), options);
-        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
         return bitmap;
     }
 
-    public static Bitmap getBitmap(ImagePath imagePath) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath.getPath(), options);
-        return bitmap;
+    /**
+     * Launches an asynchronous background task that fetches the bitmap,
+     * leaves its resolution as it is and sets it as the imageView source.
+     * @param imagePath
+     * @param imageView
+     */
+    public static void setFullBitmap(ImagePath imagePath, ImageView imageView) {
+        BitmapWorkerTask workerTask = new BitmapWorkerTask(imageView);
+        workerTask.execute(imagePath.getPath());
     }
+
+    private static class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
+        private final WeakReference<ImageView> imageViewWeakReference;
+
+        public BitmapWorkerTask(ImageView imageView) {
+            // A weak reference ensures that this process does not prevent garbage collection
+            // from collecting imageView, which can happen if the user navigates away from the
+            // activity before this process has finished or some such.
+            imageViewWeakReference = new WeakReference<>(imageView);
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            Bitmap bitmap = BitmapFactory.decodeFile(params[0], options);
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (imageViewWeakReference != null && bitmap != null) {
+                final ImageView imageView = imageViewWeakReference.get();
+                if (imageView != null) {
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+        }
+    }
+
+    private static class ScaledBitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
+        private final WeakReference<ImageView> imageViewWeakReference;
+
+        public ScaledBitmapWorkerTask(ImageView imageView) {
+            // A weak reference ensures that this process does not prevent garbage collection
+            // from collecting imageView, which can happen if the user navigates away from the
+            // activity before this process has finished or some such.
+            imageViewWeakReference = new WeakReference<>(imageView);
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            return getScaledBitmap(params[0], imageViewWeakReference.get(),
+                    Integer.parseInt(params[1]), Integer.parseInt(params[2]));
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (imageViewWeakReference != null && bitmap != null) {
+                final ImageView imageView = imageViewWeakReference.get();
+                if (imageView != null) {
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+        }
+
+        private Bitmap getScaledBitmap(String path, ImageView imageView, int width, int height) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            // First decoding checks dimensions.
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(path, options); // returns null but sets size in options.
+            // Set inSampleSize.
+            options.inSampleSize = calculateInSampleSize(options, width, height);
+
+            // Decode bitmap with correct size.
+            options.inJustDecodeBounds = false;
+            return BitmapFactory.decodeFile(path, options);
+        }
+
+        private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+            // Raw height and width of image
+            final int height = options.outHeight;
+            final int width = options.outWidth;
+            int inSampleSize = 1;
+
+            if (height > reqHeight || width > reqWidth) {
+                final int halfHeight = height / 2;
+                final int halfWidth = width / 2;
+
+                // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+                // height and width larger than the requested height and width.
+                while ((halfHeight / inSampleSize) > reqHeight
+                        && (halfWidth / inSampleSize) > reqWidth) {
+                    inSampleSize *= 2;
+                }
+            }
+            return inSampleSize;
+        }
+    }
+
+
 
 }

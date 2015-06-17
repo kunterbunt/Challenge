@@ -16,6 +16,7 @@ import sebastians.challenge.data.Challenge;
 import sebastians.challenge.data.DatabaseHelper;
 import sebastians.challenge.data.ImagePath;
 import sebastians.challenge.data.Task;
+import sebastians.challenge.tools.ViewDimensionGetter;
 import sebastians.challenge.views.ProgressView;
 
 public class ChallengeDetailFragment extends Fragment {
@@ -44,7 +45,7 @@ public class ChallengeDetailFragment extends Fragment {
 
         // Populate ViewPager.
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.imageSwiper);
-        viewPagerAdapter = new ViewPagerImageAdapter(getActivity());
+        viewPagerAdapter = new ViewPagerImageAdapter(getActivity(), viewPager);
         for (ImagePath imagePath : mChallenge.getTaskList().get(0).getImagePaths())
             viewPagerAdapter.add(imagePath);
         viewPager.setAdapter(viewPagerAdapter);
