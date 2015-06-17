@@ -4,18 +4,24 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import sebastians.challenge.adapter.ChallengeAdapter;
 import sebastians.challenge.data.Challenge;
-import sebastians.challenge.tools.DatabaseHelper;
+import sebastians.challenge.data.DatabaseHelper;
+import sebastians.challenge.data.ImagePath;
+import sebastians.challenge.dialogs.ButtonDialog;
+import sebastians.challenge.tools.PhotoManager;
 
 
 /**
@@ -23,9 +29,11 @@ import sebastians.challenge.tools.DatabaseHelper;
  */
 public class MyChallengesFragment extends Fragment {
 
-    private List<Challenge> mChallengeList;
+    public static final String LOG_TAG = "MyChallengesFragment";
+    private  List<Challenge> mChallengeList;
     private ChallengeAdapter mChallengeAdapter;
 
+    private final MyChallengesFragment thisFragment = this;
     public MyChallengesFragment() {
     }
 
@@ -38,8 +46,62 @@ public class MyChallengesFragment extends Fragment {
         // Populate challenge list.
         mChallengeList = getChallengeList();
         mChallengeAdapter = new ChallengeAdapter(getActivity().getApplicationContext(), mChallengeList);
-        ListView challengeList = (ListView) view.findViewById(R.id.challenge_list);
+        final ListView challengeList = (ListView) view.findViewById(R.id.challenge_list);
         challengeList.setAdapter(mChallengeAdapter);
+        challengeList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final int listitem = i;
+
+                //instantiate database stuff
+
+                Log.i(LOG_TAG,"Item longclick");
+                new ButtonDialog(getActivity(), null, "Remove", "Doublicate", "Share?", null) {
+                    @Override
+                    public void onPositiveButtonClick() {
+                    //completely remove challenge from device
+                        new ButtonDialog(getActivity(), "Sure?!", "Okay", "Cancle", null, null) {
+                            @Override
+                            public void onPositiveButtonClick() {
+
+                                Log.i(LOG_TAG, "Delete Listview Item number -> " + mChallengeList.get(listitem).getName());
+                                DatabaseHelper.getInstance().delete(mChallengeList.get(listitem));
+
+                                mChallengeList = getChallengeList();
+                                mChallengeAdapter.clear();
+                                mChallengeAdapter.addAll(mChallengeList);
+                                challengeList.setAdapter(mChallengeAdapter);
+                                mChallengeAdapter.notifyDataSetInvalidated();
+                                challengeList.invalidateViews();
+
+                            }
+
+                            @Override
+                            public void onNeutralButtonClick() {
+                                //do nothing
+                            }
+
+                        };
+                    }
+
+                    @Override
+                    public void onNeutralButtonClick() {
+
+
+                    }
+
+                    @Override
+                    public void onNegativeButtonClick() {
+                        //
+                    }
+                };
+
+                //consume longclick, so onclick wont be called
+                return true;
+            }
+
+
+        });
         challengeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
