@@ -91,6 +91,7 @@ public class AddChallengeOverviewFragment extends Fragment {
                 intent.putExtra(AddChallengeTaskDetail.INTENT_DURATION, task.getDuration());
                 intent.putStringArrayListExtra(AddChallengeTaskDetail.INTENT_IMAGEPATHLIST, (ArrayList) ImagePath.convertToStringList(task.getImagePaths()));
                 startActivityForResult(intent, AddChallengeTaskDetail.REQUEST_SET_DETAIL);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 

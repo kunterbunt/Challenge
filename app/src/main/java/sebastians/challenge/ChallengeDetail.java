@@ -47,11 +47,19 @@ public class ChallengeDetail extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == android.R.id.home)
+            onBackPressed();
 
         return super.onOptionsItemSelected(item);
     }
 
     public Challenge getChallenge(){
         return this.mChallenge;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

@@ -62,12 +62,15 @@ public class AddChallengeOverview extends ActionBarActivity {
 
                         @Override
                         public void onNeutralButtonClick() {
+                            justPressedBackButton = true;
                             onBackPressed();
                         }
                     };
                     return true;
-                } else
-                    return super.onOptionsItemSelected(item);
+                } else {
+                    justPressedBackButton = true;
+                    onBackPressed();
+                }
         }
 
         return super.onOptionsItemSelected(item);
@@ -103,6 +106,7 @@ public class AddChallengeOverview extends ActionBarActivity {
                 Log.i(LOG_TAG, "Saved Challenge: " + dbChallenge.getName());
                 setResult(Activity.RESULT_OK);
                 finish();
+                overridePendingTransition(R.anim.abc_slide_in_top, R.anim.abc_fade_out);
             }
 
             @Override
@@ -135,6 +139,7 @@ public class AddChallengeOverview extends ActionBarActivity {
         } else {
             justPressedBackButton = false;
             super.onBackPressed();
+            overridePendingTransition(R.anim.abc_slide_in_top, R.anim.abc_fade_out);
         }
     }
 

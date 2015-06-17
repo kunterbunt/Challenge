@@ -14,19 +14,17 @@
     <string name="discard">Discard</string>
     <string name="TIMELINE">TIMELINE</string>
     <string name="TASK">TASK</string>
-
-    <string name="add_challenge_tab_title_overview">Overview</string>
-    <string name="add_challenge_tab_title_detail">Detail</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="remove">Remove</string>
     <string name="add_challenge_description_hint">Enter description...</string>
-    <array name="timeAfterPreviousChoices">
+
+    <array name="task_duration_choices">
         <item>hour(s)</item>
         <item>day(s)</item>
     </array>
-    <string name="timeAfterPrevious">task duration</string>
+    <string name="task_duration">task duration</string>
 
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_add_challenge_overview">New Challenge</string>
     <string name="title_activity_add_challenge_task_detail">Edit Task</string>
 </resources>

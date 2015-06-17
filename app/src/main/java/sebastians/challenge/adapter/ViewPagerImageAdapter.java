@@ -83,7 +83,6 @@ public class ViewPagerImageAdapter extends PagerAdapter {
                 }
             });
         }
-        Log.i(LOG_TAG, "There are " + mViews.size());
         container.addView(view, 0);
         return view;
     }
