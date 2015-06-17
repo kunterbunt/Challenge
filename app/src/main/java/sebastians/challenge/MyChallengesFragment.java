@@ -82,13 +82,13 @@ public class MyChallengesFragment extends Fragment {
 
                     @Override
                     public void onNeutralButtonClick() {
-
+                        //TODO DOOUBLICATE challenge....
 
                     }
 
                     @Override
                     public void onNegativeButtonClick() {
-                        //
+                        //TODO
                     }
                 };
 
