@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import sebastians.challenge.data.DatabaseHelper;
+import sebastians.challenge.tools.DatabaseHelper;
 import sebastians.challenge.data.Task;
 
 /**

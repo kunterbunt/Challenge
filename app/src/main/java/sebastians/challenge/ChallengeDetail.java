@@ -2,15 +2,11 @@ package sebastians.challenge;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import sebastians.challenge.data.Challenge;
-import sebastians.challenge.data.DatabaseHelper;
-import sebastians.challenge.views.ProgressView;
+import sebastians.challenge.tools.DatabaseHelper;
 
 
 public class ChallengeDetail extends ActionBarActivity {

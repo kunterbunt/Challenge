@@ -8,21 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import sebastians.challenge.adapter.ViewPagerImageAdapter;
 import sebastians.challenge.data.Challenge;
-import sebastians.challenge.data.DatabaseHelper;
+import sebastians.challenge.tools.DatabaseHelper;
 import sebastians.challenge.data.ImagePath;
 import sebastians.challenge.data.Task;
-import sebastians.challenge.tools.ViewDimensionGetter;
 import sebastians.challenge.views.ProgressView;
 
 public class ChallengeDetailFragment extends Fragment {
     private ChallengeDetail mActivity;
     private Challenge mChallenge;
     private ViewPagerImageAdapter viewPagerAdapter;
+    private int previousSelectedTask;
 
     public ChallengeDetailFragment() {
     }
@@ -71,6 +70,7 @@ public class ChallengeDetailFragment extends Fragment {
         // Assign challenge to progressView.
         final ProgressView progressView = (ProgressView) view.findViewById(R.id.progressBar);
         progressView.setChallenge(mChallenge);
+        previousSelectedTask = 0;
 
         // Set name.
         final TextView nameField = (TextView) view.findViewById(R.id.name);
@@ -94,9 +94,15 @@ public class ChallengeDetailFragment extends Fragment {
                 descriptionField.setText(Html.fromHtml(selectedTask.getDescription()));
 
                 // Update images.
+//                viewPagerAdapter = new ViewPagerImageAdapter(getActivity(), viewPager);
+//                viewPagerAdapter.setUpForZoomAnimation(getView(), null);
+//                viewPager.setAdapter(viewPagerAdapter);
                 viewPagerAdapter.clear(viewPager);
-                viewPagerAdapter.add(selectedTask.getImagePaths());
+                for (ImagePath path : selectedTask.getImagePaths())
+                    viewPagerAdapter.add(path);
                 viewPagerAdapter.notifyDataSetChanged();
+
+                viewPager.setCurrentItem(0, false);
             }
         });
     }

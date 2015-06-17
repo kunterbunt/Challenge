@@ -1,7 +1,6 @@
 package sebastians.challenge.services;
 
 import android.app.AlarmManager;
-import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -10,14 +9,13 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import sebastians.challenge.ChallengeDetail;
 import sebastians.challenge.R;
 import sebastians.challenge.data.Challenge;
-import sebastians.challenge.data.DatabaseHelper;
+import sebastians.challenge.tools.DatabaseHelper;
 import sebastians.challenge.data.Task;
 
 /**

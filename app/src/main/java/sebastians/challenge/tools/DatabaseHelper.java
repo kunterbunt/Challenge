@@ -1,4 +1,4 @@
-package sebastians.challenge.data;
+package sebastians.challenge.tools;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,6 +11,9 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import sebastians.challenge.data.Challenge;
+import sebastians.challenge.data.ImagePath;
+import sebastians.challenge.data.Task;
 import sebastians.challenge.data.interfaces.TitleDescriptionColumns;
 
 /**
@@ -236,7 +239,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @return created id!
      */
     public Challenge create(Challenge challenge){
-
         //create challenge in database
         ContentValues cv = new ContentValues();
         cv.put(Contract.ChallengeEntry.TITLE, challenge.getName());

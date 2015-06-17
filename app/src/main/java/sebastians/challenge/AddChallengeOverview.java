@@ -1,8 +1,6 @@
 package sebastians.challenge;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,11 +9,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 import sebastians.challenge.data.Challenge;
-import sebastians.challenge.data.DatabaseHelper;
-import sebastians.challenge.data.ImagePath;
+import sebastians.challenge.tools.DatabaseHelper;
 import sebastians.challenge.dialogs.ButtonDialog;
 import sebastians.challenge.dialogs.EditTextDialog;
 
@@ -26,6 +21,10 @@ public class AddChallengeOverview extends ActionBarActivity {
     public static final int REQUEST_NEW_CHALLENGE = 12;
 
     private Challenge challenge;
+    /** If the user presses the back button and chooses to discard, this keeps track of it
+     * and allows going back then.
+     */
+    private boolean justPressedBackButton = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,22 +48,26 @@ public class AddChallengeOverview extends ActionBarActivity {
                 save();
                 return true;
             case android.R.id.home:
-                new ButtonDialog(this, null, getString(R.string.save), getString(R.string.discard), getString(R.string.cancel), null) {
-                    @Override
-                    public void onPositiveButtonClick() {
-                        save();
-                    }
+                if (getChallenge().getTaskList().size() > 0) {
+                    new ButtonDialog(this, null, getString(R.string.save), getString(R.string.discard), getString(R.string.cancel), null) {
+                        @Override
+                        public void onPositiveButtonClick() {
+                            save();
+                        }
 
-                    @Override
-                    public void onNegativeButtonClick() {
-                        // Do nothing.
-                    }
+                        @Override
+                        public void onNegativeButtonClick() {
+                            // Do nothing.
+                        }
 
-                    @Override
-                    public void onNeutralButtonClick() {
-                        onBackPressed();
-                    }
-                };
+                        @Override
+                        public void onNeutralButtonClick() {
+                            onBackPressed();
+                        }
+                    };
+                    return true;
+                } else
+                    return super.onOptionsItemSelected(item);
         }
 
         return super.onOptionsItemSelected(item);
@@ -107,6 +110,32 @@ public class AddChallengeOverview extends ActionBarActivity {
                 // Do nothing.
             }
         };
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!justPressedBackButton && getChallenge().getTaskList().size() > 0) {
+            new ButtonDialog(this, null, getString(R.string.save), getString(R.string.discard), getString(R.string.cancel), null) {
+                @Override
+                public void onPositiveButtonClick() {
+                    save();
+                }
+
+                @Override
+                public void onNegativeButtonClick() {
+                    // Do nothing.
+                }
+
+                @Override
+                public void onNeutralButtonClick() {
+                    justPressedBackButton = true;
+                    onBackPressed();
+                }
+            };
+        } else {
+            justPressedBackButton = false;
+            super.onBackPressed();
+        }
     }
 
     public Challenge getChallenge() {
