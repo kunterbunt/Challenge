@@ -119,7 +119,7 @@ public class MyChallengesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivityForResult(new Intent(getActivity().getApplicationContext(), AddChallengeOverview.class), AddChallengeOverview.REQUEST_NEW_CHALLENGE);
-                getActivity().overridePendingTransition(R.anim.abc_slide_in_bottom, R.anim.abc_fade_out);
+                getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.slide_out_top);
             }
         });
         return view;
