@@ -112,12 +112,16 @@ public class TaskListItemView extends View {
                     canvas.drawCircle(curPoint.x, curPoint.y, mRadius, currentPaint);
 
 
-                }
+                }else if(i > dueTaskId) {
 
-                if (challenge.getTaskList().get(i).isDone()) {
-                    canvas.drawCircle(curPoint.x, curPoint.y, mRadius, donePaint);
-                } else {
-                    canvas.drawCircle(curPoint.x, curPoint.y, mRadius, notDonePaint);
+                    if (challenge.getTaskList().get(i).isDone()) {
+                        canvas.drawCircle(curPoint.x, curPoint.y, mRadius, donePaint);
+                    } else {
+                        canvas.drawCircle(curPoint.x, curPoint.y, mRadius, notDonePaint);
+                    }
+
+                }else{
+                    canvas.drawCircle(curPoint.x, curPoint.y, mRadius, inactivePaint);
                 }
 
             }  else {

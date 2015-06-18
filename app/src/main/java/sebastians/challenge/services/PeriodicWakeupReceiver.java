@@ -35,6 +35,8 @@ public class PeriodicWakeupReceiver extends BroadcastReceiver {
         DatabaseHelper.init(context);
         DatabaseHelper db = DatabaseHelper.getInstance();
         ArrayList<Challenge> activeChallenges = (ArrayList<Challenge>) db.getActiveChallenges();
+        NotificationManager mNotificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 //        Log.i(LOG_TAG, "Active Challenges: " + activeChallenges.size());
 
         for(int i = 0; i < activeChallenges.size(); i++){
@@ -47,6 +49,11 @@ public class PeriodicWakeupReceiver extends BroadcastReceiver {
                 //set challenge not active! if all tasks are done
                 challenge.setActive(false);
                 db.update(challenge);
+
+                //remove last task notification from notification bar
+                Task myTask = challenge.getTaskList().get((int) challenge.getTaskList().get(challenge.getTaskList().size() - 1).getDatabaseId());
+                mNotificationManager.cancel((int) myTask.getDatabaseId());
+
                 //TODO SEND MESSAGE TO USER -> NOTIFICATION bla bla bla
                 //INFORM CONNECTED FRIENDS
             }else{
@@ -82,8 +89,7 @@ public class PeriodicWakeupReceiver extends BroadcastReceiver {
 
 
                     mBuilder.setContentIntent(resultPendingIntent);
-                    NotificationManager mNotificationManager =
-                            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
                     // mId allows you to update the notification later on.
                     mNotificationManager.notify((int)task.getDatabaseId(), mBuilder.build());
 
