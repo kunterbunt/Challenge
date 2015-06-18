@@ -42,8 +42,11 @@ public class PeriodicWakeupReceiver extends BroadcastReceiver {
 
 
             Task task = challenge.getDueTask();
-
-            if(task != null) {
+            if(task == null){
+                //set challenge not active! if all tasks are done
+                challenge.setActive(false);
+                db.update(challenge);
+            }else{
                 Log.i(LOG_TAG, "Active Task: " + task.getTitle());
 
                 if(!task.isDone() && !task.isDismissed()){
