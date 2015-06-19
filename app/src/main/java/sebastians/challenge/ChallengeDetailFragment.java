@@ -7,11 +7,13 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import sebastians.challenge.adapter.ViewPagerImageAdapter;
 import sebastians.challenge.data.Challenge;
+import sebastians.challenge.dialogs.ButtonDialog;
 import sebastians.challenge.tools.DatabaseHelper;
 import sebastians.challenge.data.ImagePath;
 import sebastians.challenge.data.Task;
@@ -64,6 +66,35 @@ public class ChallengeDetailFragment extends Fragment {
                                 ? android.R.drawable.ic_media_rew
                                 : android.R.drawable.ic_media_play);
                 DatabaseHelper.getInstance().update(mChallenge);
+            }
+        });
+
+        final Button doneButton = (Button) view.findViewById(R.id.doneButton);
+        if(!mChallenge.isActive() )
+            doneButton.setVisibility(View.INVISIBLE);
+
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //set task as doen and save in db!
+                //but first ask for selfie and stuff
+                new ButtonDialog(getActivity(), "Sure?!", "Yep", "Selfie Proof", "Cancel", null) {
+
+
+                    @Override
+                    public void onPositiveButtonClick() {
+
+                    }
+                    @Override
+                    public void onNegativeButtonClick() {
+
+                    }
+                    @Override
+                    public void onNeutralButtonClick() {
+
+                    }
+                };
+
             }
         });
 

@@ -21,7 +21,6 @@ public class TaskListItemView extends View {
 
     private Challenge challenge;
 
-    private PointF touchPoint = new PointF();
     private int width;
     private int height;
     private int dueTaskId;
@@ -47,10 +46,12 @@ public class TaskListItemView extends View {
         inactivePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         inactivePaint.setStyle(Paint.Style.FILL);
         inactivePaint.setColor(Color.rgb(100, 100, 100));
+
         notDonePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         notDonePaint.setStyle(Paint.Style.STROKE);
         notDonePaint.setStrokeWidth(circRadius / 5);
         notDonePaint.setColor(Color.rgb(255, 0, 0));
+
         donePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         donePaint.setStyle(Paint.Style.STROKE);
         donePaint.setStrokeWidth(circRadius / 5);
@@ -112,7 +113,7 @@ public class TaskListItemView extends View {
                     canvas.drawCircle(curPoint.x, curPoint.y, mRadius, currentPaint);
 
 
-                }else if(i > dueTaskId) {
+                }else if(i < dueTaskId) {
 
                     if (challenge.getTaskList().get(i).isDone()) {
                         canvas.drawCircle(curPoint.x, curPoint.y, mRadius, donePaint);
