@@ -7,14 +7,13 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import sebastians.challenge.adapter.TaskShowListAdapter;
 import sebastians.challenge.adapter.ViewPagerImageAdapter;
 import sebastians.challenge.data.Challenge;
+import sebastians.challenge.dialogs.ButtonDialog;
 import sebastians.challenge.tools.DatabaseHelper;
 import sebastians.challenge.data.ImagePath;
 import sebastians.challenge.data.Task;
@@ -70,20 +69,70 @@ public class ChallengeDetailFragment extends Fragment {
             }
         });
 
-        // Show respective images when a task is clicked.
-        ListView taskList = (ListView) view.findViewById(R.id.task_list);
-        final TaskShowListAdapter taskListAdapter = new TaskShowListAdapter(getActivity(), mChallenge.getTaskList());
-        taskList.setAdapter(taskListAdapter);
-        taskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                taskListAdapter.setSelectedPosition(position);
-                taskListAdapter.notifyDataSetChanged();
+        final Button doneButton = (Button) view.findViewById(R.id.doneButton);
+        if(!mChallenge.isActive() )
+            doneButton.setVisibility(View.INVISIBLE);
 
-                Task task = mChallenge.getTaskList().get(position);
-                viewPagerAdapter.clear();
-                viewPagerAdapter.add(task.getImagePaths());
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //set task as doen and save in db!
+                //but first ask for selfie and stuff
+                new ButtonDialog(getActivity(), "Sure?!", "Yep", "Selfie Proof", "Cancel", null) {
+
+                    @Override
+                    public void onPositiveButtonClick() {
+
+                    }
+                    @Override
+                    public void onNegativeButtonClick() {
+
+                    }
+                    @Override
+                    public void onNeutralButtonClick() {
+
+                    }
+                };
+
+            }
+        });
+
+        // Assign challenge to progressView.
+        final ProgressView progressView = (ProgressView) view.findViewById(R.id.progressBar);
+        progressView.setChallenge(mChallenge);
+        previousSelectedTask = 0;
+
+        // Set name.
+        final TextView nameField = (TextView) view.findViewById(R.id.name);
+        nameField.setText(mChallenge.getTaskList().get(0).getTitle().toUpperCase());
+
+        // Set description.
+        final TextView descriptionField = (TextView) view.findViewById(R.id.description);
+        descriptionField.setText(mChallenge.getTaskList().get(0).getDescription());
+
+        progressView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get selected task.
+                int taskId = progressView.getClosestPointIdToTouch();
+                Task selectedTask = mChallenge.getTaskList().get(taskId);
+
+                // Update name.
+                nameField.setText(selectedTask.getTitle().toUpperCase());
+
+                // Update description field.
+                descriptionField.setText(Html.fromHtml(selectedTask.getDescription()));
+
+                // Update images.
+//                viewPagerAdapter = new ViewPagerImageAdapter(getActivity(), viewPager);
+//                viewPagerAdapter.setUpForZoomAnimation(getView(), null);
+//                viewPager.setAdapter(viewPagerAdapter);
+                viewPagerAdapter.clear(viewPager);
+                for (ImagePath path : selectedTask.getImagePaths())
+                    viewPagerAdapter.add(path);
                 viewPagerAdapter.notifyDataSetChanged();
+
+                viewPager.setCurrentItem(0, false);
             }
         });
     }

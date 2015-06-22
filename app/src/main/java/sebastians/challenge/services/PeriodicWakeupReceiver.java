@@ -35,6 +35,8 @@ public class PeriodicWakeupReceiver extends BroadcastReceiver {
         DatabaseHelper.init(context);
         DatabaseHelper db = DatabaseHelper.getInstance();
         ArrayList<Challenge> activeChallenges = (ArrayList<Challenge>) db.getActiveChallenges();
+        NotificationManager mNotificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 //        Log.i(LOG_TAG, "Active Challenges: " + activeChallenges.size());
 
         for(int i = 0; i < activeChallenges.size(); i++){
@@ -42,8 +44,19 @@ public class PeriodicWakeupReceiver extends BroadcastReceiver {
 
 
             Task task = challenge.getDueTask();
+            int dueTaskId = challenge.getDueTaskId();
+            if(task == null){
+                //set challenge not active! if all tasks are done
+                challenge.setActive(false);
+                db.update(challenge);
 
-            if(task != null) {
+                //remove last task notification from notification bar
+                Task myTask = challenge.getTaskList().get((int) challenge.getTaskList().get(challenge.getTaskList().size() - 1).getDatabaseId());
+                mNotificationManager.cancel((int) myTask.getDatabaseId());
+
+                //TODO SEND MESSAGE TO USER -> NOTIFICATION bla bla bla
+                //INFORM CONNECTED FRIENDS
+            }else{
                 Log.i(LOG_TAG, "Active Task: " + task.getTitle());
 
                 if(!task.isDone() && !task.isDismissed()){
@@ -76,10 +89,16 @@ public class PeriodicWakeupReceiver extends BroadcastReceiver {
 
 
                     mBuilder.setContentIntent(resultPendingIntent);
-                    NotificationManager mNotificationManager =
-                            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
                     // mId allows you to update the notification later on.
                     mNotificationManager.notify((int)task.getDatabaseId(), mBuilder.build());
+
+                    for(int tskId = 0; tskId < dueTaskId; tskId++){
+                        //delete potential old task notifications from notificationbar
+                        Task myTask = challenge.getTaskList().get(tskId);
+                        mNotificationManager.cancel((int)myTask.getDatabaseId());
+                    }
+
 
                 }
 

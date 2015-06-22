@@ -7,6 +7,14 @@
         android:layout_height="match_parent"
 
         >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Done"
+            android:id="@+id/doneButton"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
@@ -36,6 +44,15 @@
 
                 <TextView
                     android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/progressBar"
+
+                    android:clickable="true"
+                    android:layout_weight="0.1"
+                 />
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/TASKS"
@@ -96,6 +113,7 @@
                 <!--</FrameLayout>-->
 
             </LinearLayout>
+
 
 
         </LinearLayout>
