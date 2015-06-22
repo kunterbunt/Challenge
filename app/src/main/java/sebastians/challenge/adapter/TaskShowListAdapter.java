@@ -41,6 +41,7 @@ public class TaskShowListAdapter extends ListAdapter<Task> {
         // Color the circle green if it is the selected task.
         if (position == mSelectedPosition) {
             final View circle = view.findViewById(R.id.circle);
+            nameField.setTextColor(getContext().getResources().getColor(R.color.app_color_accent));
             circle.setPressed(true);
             view.setOnTouchListener(new View.OnTouchListener() {
                 @Override

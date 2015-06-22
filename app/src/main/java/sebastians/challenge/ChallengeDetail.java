@@ -2,6 +2,10 @@ package sebastians.challenge;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,6 +24,11 @@ public class ChallengeDetail extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenge_detail);
+
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            getWindow().setEnterTransition(new Slide(Gravity.RIGHT));
+            getWindow().setReturnTransition(new Explode());
+        }
 
         long challengeId = getIntent().getLongExtra(INTENT_CHALLENGE_ID, -1);
         if (challengeId == -1)

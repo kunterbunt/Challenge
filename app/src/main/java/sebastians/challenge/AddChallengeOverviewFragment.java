@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.database.DataSetObserver;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.TransitionManager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +42,7 @@ public class AddChallengeOverviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_challenge_overview, container, false);
-
+        final View view = inflater.inflate(R.layout.fragment_add_challenge_overview, container, false);
         // Set list view adapter.
         mTaskListView = (ListView) view.findViewById(R.id.task_list);
         mTaskList = new ArrayList<>();
@@ -71,6 +74,10 @@ public class AddChallengeOverviewFragment extends Fragment {
                 else
                     name = "Task " + (mTaskList.size() / 2 + 1);
                 mTaskList.add(new Task(name, ""));
+                // Play fancy animation.
+                if (android.os.Build.VERSION.SDK_INT >= 21) {
+                    TransitionManager.beginDelayedTransition(mTaskListView, new Slide(Gravity.TOP));
+                }
                 mTaskEditListAdapter.notifyDataSetChanged();
             }
         });
@@ -89,6 +96,7 @@ public class AddChallengeOverviewFragment extends Fragment {
                 intent.putExtra(AddChallengeTaskDetail.INTENT_DESCRIPTION, task.getDescription());
                 intent.putExtra(AddChallengeTaskDetail.INTENT_DURATION, task.getDuration());
                 intent.putStringArrayListExtra(AddChallengeTaskDetail.INTENT_IMAGEPATHLIST, (ArrayList) ImagePath.convertToStringList(task.getImagePaths()));
+
                 startActivityForResult(intent, AddChallengeTaskDetail.REQUEST_SET_DETAIL);
                 getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }

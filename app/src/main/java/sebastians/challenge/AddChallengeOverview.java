@@ -3,7 +3,10 @@ package sebastians.challenge;
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -31,6 +34,10 @@ public class AddChallengeOverview extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_challenge_overview);
         challenge = new Challenge();
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            getWindow().setEnterTransition(new Slide(Gravity.BOTTOM));
+            getWindow().setReturnTransition(new Slide(Gravity.BOTTOM));
+        }
     }
 
     @Override

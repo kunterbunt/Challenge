@@ -57,7 +57,7 @@
         android:layout_marginRight="12dp"
         android:layout_weight="0.25"
         android:layout_marginLeft="6dp"
-        android:textColor="@color/app_color_accent" />
+        android:textColor="@color/text_dark" />
 
     <TextView
         android:layout_width="0dp"

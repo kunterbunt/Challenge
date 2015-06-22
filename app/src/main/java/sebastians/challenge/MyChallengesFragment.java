@@ -1,10 +1,15 @@
 package sebastians.challenge;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.TransitionManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +33,7 @@ public class MyChallengesFragment extends Fragment {
     public static final String LOG_TAG = "MyChallengesFragment";
     private  List<Challenge> mChallengeList;
     private ChallengeAdapter mChallengeAdapter;
+    private ListView mChallengeListView;
 
     private final MyChallengesFragment thisFragment = this;
     public MyChallengesFragment() {
@@ -42,9 +48,12 @@ public class MyChallengesFragment extends Fragment {
         // Populate challenge list.
         mChallengeList = getChallengeList();
         mChallengeAdapter = new ChallengeAdapter(getActivity().getApplicationContext(), mChallengeList);
-        final ListView challengeList = (ListView) view.findViewById(R.id.challenge_list);
-        challengeList.setAdapter(mChallengeAdapter);
-        challengeList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        mChallengeListView = (ListView) view.findViewById(R.id.challenge_list);
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            TransitionManager.beginDelayedTransition(mChallengeListView, new Slide(Gravity.TOP));
+        }
+        mChallengeListView.setAdapter(mChallengeAdapter);
+        mChallengeListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 final int listitem = i;
@@ -66,9 +75,9 @@ public class MyChallengesFragment extends Fragment {
                                 mChallengeList = getChallengeList();
                                 mChallengeAdapter.clear();
                                 mChallengeAdapter.addAll(mChallengeList);
-                                challengeList.setAdapter(mChallengeAdapter);
+                                mChallengeListView.setAdapter(mChallengeAdapter);
                                 mChallengeAdapter.notifyDataSetInvalidated();
-                                challengeList.invalidateViews();
+                                mChallengeListView.invalidateViews();
 
                             }
 
@@ -98,7 +107,7 @@ public class MyChallengesFragment extends Fragment {
 
 
         });
-        challengeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mChallengeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Pinned headers should not be clickable.
@@ -109,8 +118,13 @@ public class MyChallengesFragment extends Fragment {
                 // For that, pass the corresponding database id to the detail activity.
                 Intent intent = new Intent(getActivity().getApplicationContext(), ChallengeDetail.class);
                 intent.putExtra(ChallengeDetail.INTENT_CHALLENGE_ID, mChallengeList.get(position).getDatabaseId());
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                Bundle bundle = null;
+                if (android.os.Build.VERSION.SDK_INT >= 21)
+                    bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle();
+
+                getActivity().startActivity(intent, bundle);
+                if (android.os.Build.VERSION.SDK_INT < 21)
+                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
@@ -118,7 +132,12 @@ public class MyChallengesFragment extends Fragment {
         ((ImageButton) view.findViewById(R.id.addChallengeButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(getActivity().getApplicationContext(), AddChallengeOverview.class), AddChallengeOverview.REQUEST_NEW_CHALLENGE);
+//                Bundle bundle = null;
+//                if (android.os.Build.VERSION.SDK_INT >= 21)
+//                    bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle();
+                Intent intent = new Intent(getActivity(), AddChallengeOverview.class);
+//                intent.putExtras(bundle);
+                startActivityForResult(intent, AddChallengeOverview.REQUEST_NEW_CHALLENGE);
                 getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.slide_out_top);
             }
         });

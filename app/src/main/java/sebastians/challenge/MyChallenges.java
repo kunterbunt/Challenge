@@ -6,7 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -24,6 +28,10 @@ public class MyChallenges extends ActionBarActivity {
         setContentView(R.layout.activity_my_challenges);
         setTitle(getResources().getString(R.string.overview_title));
         PeriodicWakeupReceiver.setAlarm(this);
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            getWindow().setReenterTransition(new Slide(Gravity.LEFT));
+            getWindow().setExitTransition(new Fade(Fade.OUT));
+        }
     }
 
 
