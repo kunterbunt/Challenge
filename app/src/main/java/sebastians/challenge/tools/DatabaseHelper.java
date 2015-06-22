@@ -41,8 +41,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (instance == null) {
             instance = new DatabaseHelper(context);
 
-            if (instance.getAllChallenges().size() == 0)
-                instance.createDefaultData();
+//            if (instance.getAllChallenges().size() == 0)
+//                instance.createDefaultData();
             Log.d(LOG_TAG, "Database instantiated.");
         }
     }

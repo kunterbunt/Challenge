@@ -12,6 +12,7 @@ import sebastians.challenge.data.Challenge;
 import sebastians.challenge.data.ImagePath;
 import sebastians.challenge.data.Task;
 import sebastians.challenge.tools.PhotoManager;
+import sebastians.challenge.tools.TimeManager;
 import sebastians.challenge.views.TaskListItemView;
 
 /**
@@ -32,8 +33,8 @@ public class ChallengeAdapter extends ListAdapterHeader<Challenge> {
         ((TextView) view.findViewById(R.id.name)).setText(challenge.getName());
         ((TextView) view.findViewById(R.id.tasks)).setText(challenge.getTaskList().size() + " tasks");
 
-        TaskListItemView taskListItemView = (TaskListItemView) view.findViewById(R.id.task_list);
-        taskListItemView.setChallenge(challenge);
+//        TaskListItemView taskListItemView = (TaskListItemView) view.findViewById(R.id.task_list);
+//        taskListItemView.setChallenge(challenge);
 
 
         // Find first image path.
@@ -44,11 +45,17 @@ public class ChallengeAdapter extends ListAdapterHeader<Challenge> {
                 break;
             }
         }
-
+        // Set image if there is one.
         if (path != null) {
             ImageView imageView = (ImageView) view.findViewById(R.id.image);
             PhotoManager.setFittingBitmap(path, imageView, 96, 96);
         }
+
+        // Set total duration.
+        long taskDurationSum = 0;
+        for (Task task : challenge.getTaskList())
+            taskDurationSum += task.getDuration();
+        ((TextView) view.findViewById(R.id.time)).setText(TimeManager.convertMillisecondsToDateString(taskDurationSum));
     }
 
     @Override

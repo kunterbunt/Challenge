@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme.Base" parent="Base.Theme.AppCompat.Light">
         <item name="android:windowBackground">@color/white</item>
+        <item name="android:textColor">@color/text_dark</item>
     </style>
 
     <style name="AppTheme" parent="AppTheme.Base">
@@ -12,7 +13,7 @@
     <style name="separator">
         <item name="android:layout_width">fill_parent</item>>
         <item name="android:layout_height">1dp</item>>
-        <item name="android:background">@color/app_color_dark</item>
+        <item name="android:background">@color/text_light</item>
         <item name="android:layout_marginTop">4dp</item>
         <item name="android:layout_marginBottom">4dp</item>
         <item name="android:layout_marginLeft">24dp</item>

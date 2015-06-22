@@ -5,12 +5,16 @@
     android:layout_marginRight="20dp"
     android:layout_marginLeft="20dp"
     android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:paddingRight="20dp"
+    android:background="@android:color/transparent"
+>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_rounded_shadowed">
+        android:background="@drawable/selectable_background_gray"
+        android:elevation="@dimen/elevation_mid"
+    >
 
         <TextView
             android:layout_width="0dp"

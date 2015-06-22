@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -231,6 +232,7 @@ public class PhotoManager {
                 final ImageView imageView = imageViewWeakReference.get();
                 if (imageView != null) {
                     imageView.setImageBitmap(bitmap);
+                    imageView.setVisibility(View.VISIBLE);
                 }
             }
         }
