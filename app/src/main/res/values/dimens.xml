@@ -20,4 +20,7 @@
     <dimen name="task_distance_small">10dp</dimen>
     <dimen name="task_distance_medium">15dp</dimen>
     <dimen name="task_distance_large">20dp</dimen>
+
+    <dimen name="challenge_detail_timeline_width">64dp</dimen>
+    <dimen name="challenge_detail_circle_diameter">16dp</dimen>
 </resources>

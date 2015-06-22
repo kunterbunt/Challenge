@@ -32,91 +32,70 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.1">
-
-                <sebastians.challenge.views.ProgressView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:id="@+id/progressBar"
-
-                    android:clickable="true"
-                    android:layout_weight="0.1"
-                 />
+                android:layout_weight="0.05">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/TIMELINE"
-                    android:layout_gravity="left|center_horizontal"
+                    android:text="@string/TASKS"
+                    android:layout_gravity="left"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentEnd="false"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="false"
+                    android:gravity="center_vertical|right"
                     android:layout_marginRight="64dp"
-                    android:layout_marginEnd="64dp" />
+                    android:layout_alignParentTop="true" />
+
+                <View
+                    android:background="@color/app_color_dark"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@+id/frameLayout"
+                    android:layout_toEndOf="@+id/frameLayout" />
+
+                <FrameLayout
+                    android:layout_width="@dimen/challenge_detail_timeline_width"
+                    android:layout_height="match_parent"
+                    android:id="@+id/frameLayout">
+
+                    <View
+                        android:layout_width="4dp"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@color/text_light"/>
+                </FrameLayout>
+
             </RelativeLayout>
 
-            <View
-                style="@style/separator"
-            />
-            <ScrollView
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="0.5"
-                android:fillViewport="true" >
+                android:layout_weight="0.56">
 
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                <ListView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/task_list"
+                    android:dividerHeight="1dp"
+                    android:divider="@drawable/list_divider_challenge_detail"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="@string/TASK"
-                        android:layout_gravity="left"
-                        android:layout_marginLeft="256dp" />
+                <!--<FrameLayout-->
+                    <!--android:layout_width="@dimen/challenge_detail_timeline_width"-->
+                    <!--android:layout_height="fill_parent">-->
 
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="@string/name"
-                        android:id="@+id/name"
-                        android:textColor="@color/app_color_dark"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp" />
+                    <!--<View-->
+                        <!--android:layout_width="@dimen/challenge_detail_timeline_width"-->
+                        <!--android:layout_height="2dp"-->
+                        <!--android:layout_gravity="center_horizontal"-->
+                        <!--android:background="@color/app_color_dark"/>-->
+                <!--</FrameLayout>-->
 
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/description"
-                        android:id="@+id/description"
-                        android:textColor="@color/dark_gray"
-                        android:layout_marginLeft="32dp"
-                        android:layout_marginRight="32dp"
-                        android:layout_marginBottom="16dp" />
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="fill_parent"
-                        android:gravity="bottom|center_horizontal">
-
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:background="@color/dark_gray"></LinearLayout>
-                    </LinearLayout>
-
-                </LinearLayout>
-            </ScrollView>
-
+            </LinearLayout>
 
 
         </LinearLayout>
@@ -130,20 +109,20 @@
     </RelativeLayout>
 
     <View
-    android:id="@+id/expanded_image_overlay"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@android:color/black"
-    android:visibility="invisible"
-    android:alpha="1"
+        android:id="@+id/expanded_image_overlay"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/black"
+        android:visibility="invisible"
+        android:alpha="1"
         />
 
     <ImageView
-    android:id="@+id/expanded_image"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:visibility="invisible"
-    android:src="@android:color/black"
+        android:id="@+id/expanded_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:src="@android:color/black"
         />
 
 </FrameLayout>

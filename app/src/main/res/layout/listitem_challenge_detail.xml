@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="48dp"
+    android:orientation="horizontal"
+    android:weightSum="1">
+
+    <LinearLayout
+    android:layout_width="@dimen/challenge_detail_timeline_width"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
+        <View
+            android:layout_width="4dp"
+            android:layout_height="0dp"
+            android:id="@+id/tailBefore"
+            android:background="@color/text_light"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.5"
+        />
+        <ImageView
+            android:layout_width="@dimen/challenge_detail_circle_diameter"
+            android:layout_height="@dimen/challenge_detail_circle_diameter"
+            android:id="@+id/circle"
+            android:src="@drawable/circle"
+            android:layout_gravity="center_horizontal"
+        />
+        <View
+            android:layout_width="4dp"
+            android:layout_height="0dp"
+            android:id="@+id/tailAfter"
+            android:background="@color/text_light"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.5"
+        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="duration"
+            android:id="@+id/duration"
+            android:textColor="@color/text_light"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_gravity="center_horizontal"
+        />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/name"
+        android:id="@+id/name"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="12dp"
+        android:layout_weight="0.25"
+        android:layout_marginLeft="6dp"
+        android:textColor="@color/app_color_accent" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/description"
+        android:id="@+id/description"
+        android:textColor="@color/text_dark"
+        android:layout_weight="0.75" />
+
+
+</LinearLayout>
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:minHeight="64dp">-->
+    <!--<RelativeLayout-->
+        <!--android:orientation="horizontal" android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="@dimen/challenge_detail_timeline_width"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/relative"-->
+            <!--android:layout_alignBottom="@+id/name"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:layout_alignParentTop="true">-->
+
+            <!--<View-->
+                <!--android:layout_width="4dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/tailBefore"-->
+                <!--android:background="@color/app_color_dark"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:layout_above="@+id/imageView"-->
+                <!--android:layout_alignParentTop="true" />-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="@dimen/challenge_detail_circle_diameter"-->
+                <!--android:layout_height="@dimen/challenge_detail_circle_diameter"-->
+                <!--android:id="@+id/imageView"-->
+                <!--android:src="@drawable/circle"-->
+                <!--android:layout_centerInParent="true" />-->
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+                <!--android:text="duration"-->
+                <!--android:id="@+id/duration"-->
+                <!--android:textColor="@color/app_color_dark"-->
+                <!--android:gravity="center_vertical|center_horizontal"-->
+                <!--android:layout_gravity="center_horizontal"-->
+
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_centerHorizontal="true" />-->
+
+            <!--<View-->
+                <!--android:layout_width="4dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/tailAfter"-->
+                <!--android:background="@color/app_color_dark"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:layout_below="@+id/imageView"-->
+                <!--android:layout_above="@id/duration"-->
+                <!--android:layout_centerHorizontal="true"-->
+                 <!--/>-->
+
+
+        <!--</RelativeLayout>-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+            <!--android:text="@string/name"-->
+            <!--android:id="@+id/name"-->
+            <!--android:gravity="center_vertical|center_horizontal"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_toRightOf="@id/relative"-->
+            <!--android:layout_toEndOf="@id/relative"-->
+            <!--android:layout_marginRight="12dp"-->
+            <!--android:layout_alignBottom="@+id/description" />-->
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+            <!--android:text="abasdasbasdasbasdaihjwquiherquhruqherhabasdasbasdasbasdaihjwquiherquhruqherhabasdasbasdasbasdaihjwquiherquhruqherhabasdasbasdasbasdaihjwquiherquhruqherh"-->
+            <!--android:id="@+id/description"-->
+            <!--android:layout_toRightOf="@+id/name"-->
+            <!--android:layout_toEndOf="@+id/name" />-->
+
+
+
+
+    <!--</RelativeLayout>-->
+<!--</LinearLayout>-->
+

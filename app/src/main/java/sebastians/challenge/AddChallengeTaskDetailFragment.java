@@ -186,7 +186,7 @@ public class AddChallengeTaskDetailFragment extends Fragment {
 
                     @Override
                     public void onNeutralButtonClick() {
-                        int pos = mViewPagerImageAdapter.remove(mViewPager, mViewPager.getCurrentItem());
+                        int pos = mViewPagerImageAdapter.remove(mViewPager.getCurrentItem());
                         mViewPagerImageAdapter.notifyDataSetChanged();
                         if (pos > -1)
                             mViewPager.setCurrentItem(pos, true);

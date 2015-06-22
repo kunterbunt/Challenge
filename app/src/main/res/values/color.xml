@@ -2,8 +2,12 @@
 <resources>
     <color name="app_color">#E0E0E0</color>
     <color name="app_color_dark">#9E9EAD</color>
-    <color name="app_color_accent">#689F38</color>
+    <!--<color name="app_color_accent">#689F38</color> ORI-->
+    <!--<color name="app_color_accent">#4BC977</color>-->
+    <color name="app_color_accent">#45BA6E</color>
+    <color name="dark_green">#ff2f814c</color>
     <color name="dark_gray">#242323</color>
-    <color name="light_gray">#9E9E9E</color>
+    <color name="text_light">#DEDEDE</color>
     <color name="text_dark">#878787</color>
+    <color name="white">#FFFFFF</color>
 </resources>

@@ -130,22 +130,22 @@ public class ViewPagerImageAdapter extends PagerAdapter {
         return position;
     }
 
-    public int remove(ViewPager pager, ImagePath path) {
-        return remove(pager, mImagePaths.indexOf(path));
+    public int remove(ImagePath path) {
+        return remove(mImagePaths.indexOf(path));
     }
-    public int remove(ViewPager pager, int position) {
-        pager.setAdapter(null);
+    public int remove(int position) {
+        mViewPager.setAdapter(null);
         mImagePaths.remove(position);
         mViews.remove(position);
-        pager.setAdapter(this);
+        mViewPager.setAdapter(this);
         return position;
     }
 
-    public void clear(ViewPager pager) {
-        pager.setAdapter(null);
+    public void clear() {
+        mViewPager.setAdapter(null);
         mImagePaths.clear();
         mViews.clear();
-        pager.setAdapter(this);
+        mViewPager.setAdapter(this);
     }
 
     public List<ImagePath> getImagePaths() {

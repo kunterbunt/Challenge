@@ -16,11 +16,11 @@ import sebastians.challenge.data.Task;
 /**
  * Created by kunterbunt on 14.06.15.
  */
-public class TaskListAdapter extends ListAdapter<Task> {
+public class TaskEditListAdapter extends ListAdapter<Task> {
 
     private List<Task> list;
 
-    public TaskListAdapter(Context context, List<Task> objects) {
+    public TaskEditListAdapter(Context context, List<Task> objects) {
         super(context, R.layout.listitem_task, objects);
         list = objects;
     }

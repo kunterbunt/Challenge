@@ -21,7 +21,7 @@
             android:id="@+id/image"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:src="@color/app_color_accent"
+            android:src="@color/text_light"
             app:border_width="2dp"
             app:border_color="@color/app_color_dark"
             android:layout_gravity="center_vertical"
