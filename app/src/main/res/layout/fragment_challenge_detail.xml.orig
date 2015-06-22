@@ -1,0 +1,150 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="sebastians.challenge.ChallengeDetailFragment"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout  android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Done"
+            android:id="@+id/doneButton"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="sebastians.challenge.ChallengeDetailFragment"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <android.support.v4.view.ViewPager
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/imageSwiper"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.4"
+                android:background="@color/app_color_dark" />
+
+            <View
+                style="@style/separator"
+                android:layout_margin="0dp"
+                android:background="@color/dark_gray"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.05">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/TASKS"
+                    android:layout_gravity="left"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="false"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="false"
+                    android:gravity="center_vertical|right"
+                    android:layout_marginRight="64dp"
+                    android:layout_alignParentTop="true" />
+
+                <View
+                    android:background="@color/app_color_dark"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@+id/frameLayout"
+                    android:layout_toEndOf="@+id/frameLayout" />
+
+                <FrameLayout
+                    android:layout_width="@dimen/challenge_detail_timeline_width"
+                    android:layout_height="match_parent"
+                    android:id="@+id/frameLayout">
+
+                    <View
+                        android:layout_width="4dp"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@color/text_light"/>
+                </FrameLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.56">
+
+                <ListView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/task_list"
+                    android:dividerHeight="1dp"
+                    android:divider="@drawable/list_divider_challenge_detail"/>
+
+                <!--<FrameLayout-->
+                    <!--android:layout_width="@dimen/challenge_detail_timeline_width"-->
+                    <!--android:layout_height="fill_parent">-->
+
+                    <!--<View-->
+                        <!--android:layout_width="@dimen/challenge_detail_timeline_width"-->
+                        <!--android:layout_height="2dp"-->
+                        <!--android:layout_gravity="center_horizontal"-->
+                        <!--android:background="@color/app_color_dark"/>-->
+                <!--</FrameLayout>-->
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <ImageButton
+            style="@style/FAB.Final"
+            android:id="@+id/toggleChallengeActivityButton"
+            android:src="@android:drawable/ic_media_play"
+            />
+
+    </RelativeLayout>
+
+    <View
+<<<<<<< HEAD
+        android:id="@+id/expanded_image_overlay"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/black"
+        android:visibility="invisible"
+        android:alpha="1"
+        />
+=======
+    android:id="@+id/expanded_image_overlay"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/black"
+    android:visibility="invisible"
+    android:alpha="1"
+        >
+
+
+    </View>
+
+>>>>>>> 808b79f9fa84ad2501318b4bbb0946afc6b9fefc
+
+    <ImageView
+        android:id="@+id/expanded_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:src="@android:color/black"
+        />
+
+</FrameLayout>
