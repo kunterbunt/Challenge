@@ -34,7 +34,7 @@ public class MyChallengesFragment extends Fragment {
     private  List<Challenge> mChallengeList;
     private ChallengeAdapter mChallengeAdapter;
     private ListView mChallengeListView;
-
+    
     private final MyChallengesFragment thisFragment = this;
     public MyChallengesFragment() {
     }

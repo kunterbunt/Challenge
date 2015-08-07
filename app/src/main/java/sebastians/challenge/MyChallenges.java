@@ -15,7 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import org.apache.log4j.BasicConfigurator;
+
+import sebastians.challenge.services.FriendsRepository;
 import sebastians.challenge.services.PeriodicWakeupReceiver;
+import sebastians.challenge.tools.MyCredentials;
 
 
 public class MyChallenges extends ActionBarActivity {
@@ -32,6 +36,10 @@ public class MyChallenges extends ActionBarActivity {
             getWindow().setReenterTransition(new Slide(Gravity.LEFT));
             getWindow().setExitTransition(new Fade(Fade.OUT));
         }
+
+        //this needs to be done for jlogger
+        BasicConfigurator.configure();
+
     }
 
 
@@ -53,6 +61,13 @@ public class MyChallenges extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+
+        if(id == R.id.action_verification) {
+            //start verification activity
+            Intent intent = new Intent(this, IdentitiyVerificationActivity.class);
+            startActivity(intent);
+
         }
 
         return super.onOptionsItemSelected(item);
