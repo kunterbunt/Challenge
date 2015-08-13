@@ -4,7 +4,7 @@
 
     <!-- ContentProvider that passes an image picked from gallery needs this permission to work. Don't ask me why. -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- Use for inet access !-->
+    <!-- Use for inet access ! -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Use device camera. -->
     <uses-feature
@@ -78,6 +78,10 @@
         <activity
             android:name=".IdentitiyVerificationActivity"
             android:label="@string/title_activity_identitiy_verification" >
+        </activity>
+        <activity
+            android:name=".ShareActivity"
+            android:label="@string/title_activity_share" >
         </activity>
     </application>
 

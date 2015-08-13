@@ -1,9 +1,9 @@
 package sebastians.challenge;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.transition.Explode;
-import android.transition.Fade;
 import android.transition.Slide;
 import android.view.Gravity;
 import android.view.Menu;
@@ -58,6 +58,14 @@ public class ChallengeDetail extends ActionBarActivity {
         }
         if (id == android.R.id.home)
             onBackPressed();
+
+
+        if(id == R.id.action_share) {
+            //start verification activity
+            Intent intent = new Intent(this, ShareActivity.class);
+            startActivity(intent);
+
+        }
 
         return super.onOptionsItemSelected(item);
     }
