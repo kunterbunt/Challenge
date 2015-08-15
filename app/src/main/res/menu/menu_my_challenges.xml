@@ -5,4 +5,6 @@
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_verification" android:title="@string/action_verification"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_profile" android:title="@string/action_profile"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>

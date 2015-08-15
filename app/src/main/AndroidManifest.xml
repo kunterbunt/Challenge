@@ -83,6 +83,23 @@
             android:name=".ShareActivity"
             android:label="@string/title_activity_share" >
         </activity>
+        <activity
+            android:name=".OpenFromLinkActivity"
+            android:label="@string/title_activity_open_from_link" >
+
+            <!-- TODO UPDATE THIS URL TO NEW ONE -->
+            <intent-filter>
+                <data
+                    android:host="sofen.de"
+                    android:scheme="http" />
+
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".UserProfileActivity"
+            android:label="@string/title_activity_user_profile" >
+        </activity>
     </application>
 
 </manifest>

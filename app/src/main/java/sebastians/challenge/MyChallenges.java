@@ -1,25 +1,17 @@
 package sebastians.challenge;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.transition.Explode;
+import android.support.v7.app.ActionBarActivity;
 import android.transition.Fade;
 import android.transition.Slide;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import org.apache.log4j.BasicConfigurator;
 
-import sebastians.challenge.services.FriendsRepository;
 import sebastians.challenge.services.PeriodicWakeupReceiver;
-import sebastians.challenge.tools.MyCredentials;
 
 
 public class MyChallenges extends ActionBarActivity {
@@ -66,6 +58,13 @@ public class MyChallenges extends ActionBarActivity {
         if(id == R.id.action_verification) {
             //start verification activity
             Intent intent = new Intent(this, IdentitiyVerificationActivity.class);
+            startActivity(intent);
+
+        }
+
+        if(id == R.id.action_profile) {
+            //start verification activity
+            Intent intent = new Intent(this, UserProfileActivity.class);
             startActivity(intent);
 
         }

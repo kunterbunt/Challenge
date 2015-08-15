@@ -3,9 +3,8 @@ package sebastians.challenge;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.DataSetObserver;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.transition.Fade;
+import android.support.v4.app.Fragment;
 import android.transition.Slide;
 import android.transition.TransitionManager;
 import android.view.Gravity;
@@ -62,9 +61,11 @@ public class AddChallengeOverviewFragment extends Fragment {
         });
         // Add button action.
         ImageButton addTaskButton = (ImageButton) view.findViewById(R.id.addTaskButton);
+
         addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
+
                 // null indicates arrow.
                 if (mTaskList.size() > 0)
                     mTaskList.add(null);
@@ -85,8 +86,7 @@ public class AddChallengeOverviewFragment extends Fragment {
         // Go to detail view when task item is clicked.
         mTaskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Every second item is an arrow.
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 if (position % 2 == 1)
                     return;
                 Task task = mTaskList.get(position);
